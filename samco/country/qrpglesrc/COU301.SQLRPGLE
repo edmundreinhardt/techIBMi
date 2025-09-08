@@ -8,286 +8,307 @@ ctl-opt nomain;
 // SQL Definitions
 exec sql set option commit=*none, datfmt=*iso, closqlcsr=*endmod;
 
-dcl-f cou301d workstn infds(INFO) sfile(SFL01:RRN01) indds(indds);
+dcl-f cou301d workstn infds(displayInfo) sfile(SFL01:subfileRelativeRecord) indds(indicators);
 
-dcl-ds INFO;
-  LRRN int(5) pos(378);
+dcl-ds displayInfo;
+  lastRecordNumber int(5) pos(378);
 end-ds;
 
 /copy qprotosrc,country
 
-dcl-ds indds;
+// Indicator data structure for display file
+dcl-ds indicators;
   help ind pos(1);
   exit ind pos(3);
   prompt ind pos(4);
   refresh ind pos(5);
   create ind pos(6);
-  cf08 ind pos(8);
+  functionKey8 ind pos(8);
   cancel ind pos(12);
-  morekeys ind pos(24);
-  pagedown ind pos(25);
-  sflclr ind pos(30);
-  sfldsp ind pos(31);
-  sfldspctl ind pos(32);
-  sflnxtchg ind pos(33);
-  dspatrri ind pos(34);
-  InvalidOpt ind pos(35);
-  OneSelect ind pos(36);
-  bydesc ind pos(40);
-  InvalidOptC ind pos(41);
-  NotAvail ind pos(42);
-  sflend ind pos(80);
+  moreKeys ind pos(24);
+  pageDown ind pos(25);
+  subfileClear ind pos(30);
+  subfileDisplay ind pos(31);
+  subfileControl ind pos(32);
+  subfileNextChange ind pos(33);
+  reverseImage ind pos(34);
+  invalidOption ind pos(35);
+  multipleSelection ind pos(36);
+  searchByName ind pos(40);
+  invalidPositionOption ind pos(41);
+  positionNotAvailable ind pos(42);
+  subfileEnd ind pos(80);
 end-ds;
 
-dcl-s rrn01 int(5);
+// Subfile relative record number
+dcl-s subfileRelativeRecord int(5);
 
-dcl-c prp 'prp';
-dcl-c lod 'lod';
-dcl-c dsp 'dsp';
-dcl-c key 'key';
-dcl-c chk 'chk';
-dcl-c chkctl 'chc';
-dcl-c actctl 'acc';
-dcl-c act 'act';
+// State machine constants
+dcl-c STATE_PREPARE 'prp';
+dcl-c STATE_LOAD 'lod';
+dcl-c STATE_DISPLAY 'dsp';
+dcl-c STATE_PROCESS_KEYS 'key';
+dcl-c STATE_CHECK_INPUT 'chk';
+dcl-c STATE_PROCESS_ACTION 'act';
 
-// SQL Cursor for country data
+// SQL Cursor for country data by ID
 exec sql declare country_cursor cursor for
   select COID, COUNTR, COISO
   from COUNTRY
-  where COID >= :keycod
+  where COID >= :searchByIdValue
   order by COID;
 
 // SQL Cursor for country data by name
 exec sql declare countr1_cursor cursor for
   select COID, COUNTR, COISO
   from COUNTRY
-  where COUNTR >= :keydes
+  where COUNTR >= :searchByNameValue
   order by COUNTR;
 
 //=============================================
-dcl-proc sltcountry export;
+// Main procedure to select a country
+dcl-proc selectCountry export;
   dcl-pi *n like(coid);
-    pcod like(coid);
+    defaultCountryId like(coid);
   end-pi;
   
-  dcl-s dft like(coid);
-  dcl-s step01 char(3) inz(prp);
-  dcl-s in08 ind;
-  dcl-s sts01 ind;
-  dcl-s rrs01 int(5);
-  dcl-s teller int(5);
-  dcl-s err01 ind;
-  dcl-s slt01 ind;
-  dcl-s keycod like(coid);
-  dcl-s savcod like(coid);
-  dcl-s pdes like(countr);
-  dcl-s keydes like(countr);
-  dcl-s savdes like(countr);
+  // Return value
+  dcl-s selectedCountryId like(coid);
+  
+  // State machine variables
+  dcl-s currentState char(3) inz(STATE_PREPARE);
+  dcl-s functionKey8Pressed ind;
+  dcl-s optionSelected ind;
+  dcl-s subfileRecordCount int(5);
+  dcl-s recordCounter int(5);
+  dcl-s errorOccurred ind;
+  dcl-s selectionMade ind;
+  
+  // Search variables
+  dcl-s searchByIdValue like(coid);
+  dcl-s savedCountryId like(coid);
+  dcl-s positionDescription like(countr);
+  dcl-s searchByNameValue like(countr);
+  dcl-s savedCountryName like(countr);
   
   // SQL work variables
-  dcl-s sqlCOID like(coid);
-  dcl-s sqlCOUNTR like(countr) varying;
-  dcl-s sqlCOISO like(coiso);
+  dcl-s tempId like(coid);
+  dcl-s tempName like(countr) varying;
+  dcl-s tempIsoCode like(coiso);
   
+  // Initialize
   if not %open(cou301d);
     open cou301d;
   endif;
-  keycod = pcod;
-  dft = pcod;
-  bydesc = *off;
-  dow step01 <> ' ';
+  
+  searchByIdValue = defaultCountryId;
+  selectedCountryId = defaultCountryId;
+  searchByName = *off;
+  
+  // State machine loop
+  dow currentState <> ' ';
     select;
-    when step01 = prp;
-      s01prp();
-    when step01 = lod;
-      s01lod();
-    when step01 = dsp;
-      s01dsp();
-    when step01 = key;
-      s01key();
-    when step01 = chk;
-      s01chk();
-    when step01 = act;
-      s01act();
+    when currentState = STATE_PREPARE;
+      prepareSubfile();
+    when currentState = STATE_LOAD;
+      loadSubfile();
+    when currentState = STATE_DISPLAY;
+      displaySubfile();
+    when currentState = STATE_PROCESS_KEYS;
+      processKeys();
+    when currentState = STATE_CHECK_INPUT;
+      checkInput();
+    when currentState = STATE_PROCESS_ACTION;
+      processAction();
     endsl;
   enddo;
-  return dft;
   
-  //--- Clear Subfile -----------------------------------------------------
-  dcl-proc s01prp;
-    RRS01 = 0;
+  return selectedCountryId;
+end-proc;  
+  //--- Prepare Subfile -----------------------------------------------------
+  dcl-proc prepareSubfile;
+    subfileRecordCount = 0;
     clear CTL01;
-    sflclr = *on;
-    sfldsp = *off;
-    sfldspctl = *off;
+    subfileClear = *on;
+    subfileDisplay = *off;
+    subfileControl = *off;
     write CTL01;
-    sflclr = *off;
+    subfileClear = *off;
     
     // Close any open cursors
     exec sql close country_cursor;
     exec sql close countr1_cursor;
     
-    if not bydesc;
+    if not searchByName;
       // Open cursor for access by code
       exec sql open country_cursor;
       // Fetch first record
-      exec sql fetch country_cursor into :sqlCOID, :sqlCOUNTR, :sqlCOISO;
-      sflend = (SQLSTT <> '00000' and SQLSTT <> '01000');
+      exec sql fetch country_cursor into :tempId, :tempName, :tempIsoCode;
+      subfileEnd = (SQLSTT <> '00000' and SQLSTT <> '01000');
     else;
       // Open cursor for access by name
       exec sql open countr1_cursor;
       // Fetch first record
-      exec sql fetch countr1_cursor into :sqlCOID, :sqlCOUNTR, :sqlCOISO;
-      sflend = (SQLSTT <> '00000' and SQLSTT <> '01000');
+      exec sql fetch countr1_cursor into :tempId, :tempName, :tempIsoCode;
+      subfileEnd = (SQLSTT <> '00000' and SQLSTT <> '01000');
     endif;
     
     // Set fields for display
-    coid = sqlCOID;
-    countr = sqlCOUNTR;
-    coiso = sqlCOISO;
+    coid = tempId;
+    countr = tempName;
+    coiso = tempIsoCode;
     
-    SAVCOD = coid;
-    SAVDES = countr;
-    Step01 = lod;
+    savedCountryId = coid;
+    savedCountryName = countr;
+    currentState = STATE_LOAD;
   end-proc;
   
   //--- Load Subfile -----------------------------------------------------
-  dcl-proc S01lod;
-    RRN01 = RRS01;
-    RRB01 = RRS01 + 1;
-    TELLER = 0;
+  dcl-proc loadSubfile;
+    subfileRelativeRecord = subfileRecordCount;
+    RRB01 = subfileRecordCount + 1;
+    recordCounter = 0;
     OPT01 = 0;
-    SflNxtChg = *OFF;
-    coid = SAVCOD;
-    countr = SAVDES;
-    coiso = sqlCOISO;
+    subfileNextChange = *OFF;
+    coid = savedCountryId;
+    countr = savedCountryName;
+    coiso = tempIsoCode;
     
-    dow not sflend and TELLER < 20;
-      RRN01 = RRN01 + 1;
-      TELLER = TELLER + 1;
+    dow not subfileEnd and recordCounter < 20;
+      subfileRelativeRecord += 1;
+      recordCounter += 1;
       write SFL01;
       
-      if not bydesc;
+      if not searchByName;
         // Fetch next record by code
-        exec sql fetch country_cursor into :sqlCOID, :sqlCOUNTR, :sqlCOISO;
+        exec sql fetch country_cursor into :tempId, :tempName, :tempIsoCode;
       else;
         // Fetch next record by name
-        exec sql fetch countr1_cursor into :sqlCOID, :sqlCOUNTR, :sqlCOISO;
+        exec sql fetch countr1_cursor into :tempId, :tempName, :tempIsoCode;
       endif;
       
       // Set fields for display
-      coid = sqlCOID;
-      countr = sqlCOUNTR;
-      coiso = sqlCOISO;
+      coid = tempId;
+      countr = tempName;
+      coiso = tempIsoCode;
       
-      SflEnd = (SQLSTT <> '00000' and SQLSTT <> '01000');
+      subfileEnd = (SQLSTT <> '00000' and SQLSTT <> '01000');
     enddo;
     
-    SAVCOD = coid;
-    SAVDES = countr;
-    RRS01 = RRN01;
-    Step01 = dsp;
+    savedCountryId = coid;
+    savedCountryName = countr;
+    subfileRecordCount = subfileRelativeRecord;
+    currentState = STATE_DISPLAY;
   end-proc;
   
   //--- Display Subfile --------------------------------------------------
-  dcl-proc S01dsp;
-    sfldsp = rrs01 > 0;
-    sfldspctl = *on;
+  dcl-proc displaySubfile;
+    subfileDisplay = subfileRecordCount > 0;
+    subfileControl = *on;
     write KEY01;
     exfmt CTL01;
-    IN08 = CF08;
-    RRB01 = LRRN;
-    Step01 = key;
+    functionKey8Pressed = functionKey8;
+    RRB01 = lastRecordNumber;
+    currentState = STATE_PROCESS_KEYS;
   end-proc;
   
-  //--- Command Keys -----------------------------------------------------
-  dcl-proc S01key;
+  //--- Process Function Keys -----------------------------------------------------
+  dcl-proc processKeys;
     select;
     when exit;
-      step01 = ' ';
+      currentState = ' ';
     when cancel;
-      Step01 = ' ';
-    when PageDown;
-      Step01 = lod;
+      currentState = ' ';
+    when pageDown;
+      currentState = STATE_LOAD;
     other;
-      Step01 = chk;
+      currentState = STATE_CHECK_INPUT;
     endsl;
   end-proc;
   
-  //--- Check Subfile ----------------------------------------------------
-  dcl-proc S01chk;
-    // SET FLAG SELECTION MADE OFF
-    SLT01 = *OFF;
-    // SET FLAG OPTION  MADE OFF
-    STS01 = *OFF;
-    // SET FLAG ERROR   MADE OFF
-    ERR01 = *OFF;
-    Step01 = act;
+  //--- Check User Input ----------------------------------------------------
+  dcl-proc checkInput;
+    // Reset flags
+    selectionMade = *OFF;
+    optionSelected = *OFF;
+    errorOccurred = *OFF;
+    currentState = STATE_PROCESS_ACTION;
+    
+    // Process subfile options
     readc(E) SFL01;
-    SflNxtChg = *ON;
+    subfileNextChange = *ON;
+    
     dow not %error and not %eof;
       select;
       when OPT01 = 0;
-        // NO ERROR
+        // No option entered - no action needed
       when OPT01 <> 1;
-        STS01 = *ON;
-        Step01 = dsp;
-        dspatrRi = *on;
-        InvalidOpt = *on;
-        if ERR01 = *OFF;
-          RRB01 = RRN01;
-          ERR01 = *ON;
+        // Invalid option entered
+        optionSelected = *ON;
+        currentState = STATE_DISPLAY;
+        reverseImage = *on;
+        invalidOption = *on;
+        if not errorOccurred;
+          RRB01 = subfileRelativeRecord;
+          errorOccurred = *ON;
         endif;
-        //OPTION = 1 BUT SELECTION ALREADY MADE
-      when SLT01 = *ON;
-        Step01 = dsp;
-        dspatrRi = *on;
-        OneSelect = *on;
-        if ERR01 = *OFF;
-          RRB01 = RRN01;
-          ERR01 = *ON;
+      when selectionMade;
+        // Multiple selections not allowed
+        currentState = STATE_DISPLAY;
+        reverseImage = *on;
+        multipleSelection = *on;
+        if not errorOccurred;
+          RRB01 = subfileRelativeRecord;
+          errorOccurred = *ON;
         endif;
       other;
-        //OPTION = 1
-        SLT01 = *ON;
-        STS01 = *ON;
+        // Valid option 1 selected
+        selectionMade = *ON;
+        optionSelected = *ON;
       endsl;
+      
       update SFL01;
-      dspatrRi = *off;
+      reverseImage = *off;
       readc SFL01;
     enddo;
+    
+    // Process position to option
     select;
     when OPTC1 <> 8 and OPTC1 <> 0;
-      InvalidOptC = *ON;
-      Step01 = dsp;
-    when SLT01 = *ON and OPTC1 <> 0;
-      NotAvail = *ON;
-      Step01 = dsp;
-    when STS01 = *ON and IN08 = *ON;
-      Step01 = dsp;
+      invalidPositionOption = *ON;
+      currentState = STATE_DISPLAY;
+    when selectionMade and OPTC1 <> 0;
+      positionNotAvailable = *ON;
+      currentState = STATE_DISPLAY;
+    when optionSelected and functionKey8Pressed;
+      currentState = STATE_DISPLAY;
     endsl;
   end-proc;
   
-  //--- Write Subfile ----------------------------------------------------
-  dcl-proc S01act;
-    Step01 = dsp;
+  //--- Process Actions ----------------------------------------------------
+  dcl-proc processAction;
+    currentState = STATE_DISPLAY;
+    
     select;
-    when IN08;
-      Step01 = prp;
-      bydesc = not bydesc;
-      if bydesc;
-        clear KEYdes;
+    when functionKey8Pressed;
+      // Toggle between search by ID and search by name
+      currentState = STATE_PREPARE;
+      searchByName = not searchByName;
+      if searchByName;
+        clear searchByNameValue;
       else;
-        clear KEYcod;
+        clear searchByIdValue;
       endif;
     when OPTC1 = 8;
-      Step01 = prp;
-      if not bydesc;
-        KEYCOD = POSCOD;
+      // Position to specified value
+      currentState = STATE_PREPARE;
+      if not searchByName;
+        searchByIdValue = POSCOD;
       else;
-        KEYDES = POSDES;
+        searchByNameValue = POSDES;
       endif;
     other;
+      // Process selection
       readc(E) SFL01;
       dow not %error and not %eof;
         if OPT01 = 1;
@@ -297,3 +318,4 @@ dcl-proc sltcountry export;
       enddo;
     endsl;
   end-proc;
+

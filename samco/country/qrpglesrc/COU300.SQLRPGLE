@@ -10,65 +10,69 @@ exec sql set option commit=*none, datfmt=*iso, closqlcsr=*endmod;
 
 /copy qprotosrc,COUNTRY
 
-dcl-pr chainCOUNTRY;
-  P_COID char(2) value;
+// Procedure prototype for retrieving country by ID
+dcl-pr retrieveCountryById;
+  countryId char(2) value;
 end-pr;
 
-dcl-ds FCOUN qualified;
-  COID char(2);
-  COUNTR varchar(50);
-  COISO char(3);
+// Country data structure
+dcl-ds countryData qualified;
+  id char(2);
+  name varchar(50);
+  isoCode char(3);
 end-ds;
 
 //=============================================
+// Get country name by country ID
 dcl-proc GetCountryName export;
-  dcl-pi *n like(FCOUN.countr);
-    P_COID char(2) value;
+  dcl-pi *n like(countryData.name);
+    countryId char(2) value;
   end-pi;
   
-  chainCOUNTRY(P_COID);
-  return FCOUN.COUNTR;
+  retrieveCountryById(countryId);
+  return countryData.name;
 end-proc;
 
 //=============================================
+// Get country ISO code by country ID
 dcl-proc GetCountryIso3 export;
-  dcl-pi *n like(FCOUN.coiso);
-    P_COID char(2) value;
+  dcl-pi *n like(countryData.isoCode);
+    countryId char(2) value;
   end-pi;
   
-  chainCOUNTRY(P_COID);
-  return FCOUN.COISO;
+  retrieveCountryById(countryId);
+  return countryData.isoCode;
 end-proc;
 
 //=============================================
+// Check if country exists by country ID
 dcl-proc ExistCountry export;
   dcl-pi *n ind;
-    P_COID char(2) value;
+    countryId char(2) value;
   end-pi;
   
-  dcl-s found ind;
+  dcl-s recordExists ind;
   
   exec sql
     SELECT 1
-    INTO :found
+    INTO :recordExists
     FROM COUNTRY
-    WHERE COID = :P_COID;
+    WHERE COID = :countryId;
     
   return SQLSTT = '00000' or SQLSTT = '01000';
 end-proc;
 
-dcl-proc chainCOUNTRY;
+// Retrieve country data by ID
+dcl-proc retrieveCountryById;
   dcl-pi *n;
-    P_COID char(2) value;
+    countryId char(2) value;
   end-pi;
   
-  clear FCOUN;
+  clear countryData;
   
   exec sql
     SELECT COID, COUNTR, COISO
-    INTO :FCOUN.COID, :FCOUN.COUNTR, :FCOUN.COISO
+    INTO :countryData.id, :countryData.name, :countryData.isoCode
     FROM COUNTRY
-    WHERE COID = :P_COID;
+    WHERE COID = :countryId;
 end-proc;
-
-// No need for closeCOUNTRY procedure with SQL
