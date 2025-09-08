@@ -1,68 +1,74 @@
-      *%METADATA                                                                          *
-      * %TEXT Functions Country                                                           *
-      *%EMETADATA                                                                         *
-     h nomain
+**FREE
+/////////////////////////////////////////////////////////////////////////
+// %TEXT Functions Country
+/////////////////////////////////////////////////////////////////////////
 
-     // SQL Definitions
-     exec sql set option commit=*none, datfmt=*iso, closqlcsr=*endmod;
+ctl-opt nomain;
 
-      /copy qprotosrc,COUNTRY
+// SQL Definitions
+exec sql set option commit=*none, datfmt=*iso, closqlcsr=*endmod;
 
-     d chainCOUNTRY    pr
-     D P_COID                         2A    value
+/copy qprotosrc,COUNTRY
 
-     D FCOUN           ds                   qualified
-     D  COID                          2A
-     D  COUNTR                       50A    varying
-     D  COISO                         3A
+dcl-pr chainCOUNTRY;
+  P_COID char(2) value;
+end-pr;
 
-      *=============================================
-     PGetCountryName   B                     export
-     DGetCountryName   PI                   like(FCOUN.countr)
-     D P_COID                         2A    value
-      /free
-         chainCOUNTRY(P_COID);
-         return FCOUN.COUNTR;
-      /end-free
-     pGetCountryName   e
-      *=============================================
-     PGetCountryIso3   B                     export
-     DGetCountryIso3   PI                   like(FCOUN.coiso)
-     D P_COID                         2A    value
-      /free
-         chainCOUNTRY(P_COID);
-         return FCOUN.COISO;
-      /end-free
-     pGetCountryIso3   e
+dcl-ds FCOUN qualified;
+  COID char(2);
+  COUNTR varchar(50);
+  COISO char(3);
+end-ds;
 
-      *=============================================
-     P ExistCountry    B                     export
-     D ExistCountry    PI              n
-     D P_COID                         2A    value
-     D found           s               n
-      /free
-         exec sql
-           SELECT 1
-           INTO :found
-           FROM COUNTRY
-           WHERE COID = :P_COID;
-           
-         return SQLSTT = '00000' or SQLSTT = '01000';
-      /end-free
-     p ExistCountry    e
+//=============================================
+dcl-proc GetCountryName export;
+  dcl-pi *n like(FCOUN.countr);
+    P_COID char(2) value;
+  end-pi;
+  
+  chainCOUNTRY(P_COID);
+  return FCOUN.COUNTR;
+end-proc;
 
-     p chainCOUNTRY    b
-     d chainCOUNTRY    pi
-     D P_COID                         2A    value
-      /free
-         clear FCOUN;
-         
-         exec sql
-           SELECT COID, COUNTR, COISO
-           INTO :FCOUN.COID, :FCOUN.COUNTR, :FCOUN.COISO
-           FROM COUNTRY
-           WHERE COID = :P_COID;
-      /end-free
-     p chainCOUNTRY    e
+//=============================================
+dcl-proc GetCountryIso3 export;
+  dcl-pi *n like(FCOUN.coiso);
+    P_COID char(2) value;
+  end-pi;
+  
+  chainCOUNTRY(P_COID);
+  return FCOUN.COISO;
+end-proc;
 
-     // No need for closeCOUNTRY procedure with SQL
+//=============================================
+dcl-proc ExistCountry export;
+  dcl-pi *n ind;
+    P_COID char(2) value;
+  end-pi;
+  
+  dcl-s found ind;
+  
+  exec sql
+    SELECT 1
+    INTO :found
+    FROM COUNTRY
+    WHERE COID = :P_COID;
+    
+  return SQLSTT = '00000' or SQLSTT = '01000';
+end-proc;
+
+dcl-proc chainCOUNTRY;
+  dcl-pi *n;
+    P_COID char(2) value;
+  end-pi;
+  
+  clear FCOUN;
+  
+  exec sql
+    SELECT COID, COUNTR, COISO
+    INTO :FCOUN.COID, :FCOUN.COUNTR, :FCOUN.COISO
+    FROM COUNTRY
+    WHERE COID = :P_COID;
+end-proc;
+
+// No need for closeCOUNTRY procedure with SQL
