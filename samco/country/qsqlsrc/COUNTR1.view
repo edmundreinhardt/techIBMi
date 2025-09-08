@@ -1,0 +1,14 @@
+-- DDL SQL statement for COUNTR1 view (converted from DDS logical file)
+-- Original file: COUNTR1.LF
+
+-- Drop view if it exists
+DROP VIEW IF EXISTS COUNTR1;
+
+-- Create the view
+CREATE VIEW COUNTR1 AS
+SELECT COID, COUNTR, COISO
+FROM COUNTRY
+ORDER BY COUNTR;
+
+-- Add view description
+LABEL ON TABLE COUNTR1 IS 'Country file by name';

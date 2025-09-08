@@ -1,0 +1,24 @@
+-- DDL SQL statement for COUNTRY table (converted from DDS)
+-- Original file: COUNTRY.PF
+
+-- Drop table if it exists
+DROP TABLE IF EXISTS COUNTRY;
+
+-- Create the table
+CREATE TABLE COUNTRY (
+    COID CHAR(2) NOT NULL,
+    COUNTR VARCHAR(50) NOT NULL,
+    COISO CHAR(3) NOT NULL,
+    PRIMARY KEY (COID)
+);
+
+-- Add table description
+LABEL ON TABLE COUNTRY IS 'Country file';
+
+-- Add column descriptions
+LABEL ON COLUMN COUNTRY.COID IS 'Country ID';
+LABEL ON COLUMN COUNTRY.COUNTR IS 'Country Name';
+LABEL ON COLUMN COUNTRY.COISO IS 'ISO Country Code';
+
+-- Create unique index on COID (primary key)
+CREATE UNIQUE INDEX COUNTRY_PK ON COUNTRY (COID);
