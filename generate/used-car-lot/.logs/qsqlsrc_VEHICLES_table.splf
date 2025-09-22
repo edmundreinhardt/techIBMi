@@ -1,0 +1,86 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+>> Temporarily set curlib to ERCARLOT
+CPF2104: Library ERCARLOT not removed from the library list.
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: RUNSQLSTM srcstmf('/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLES.table') DBGVIEW(*SOURCE) TGTRLS() OUTPUT(*PRINT) MARGINS(1024) COMMIT(*NONE )
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.57.55.00
+
+QSYSPRT   *LIBL     
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLES                           09/17/25 18:57:55   PAGE   1
+Source stream file......../home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLES.table
+Target release............V7R4M0
+Commit....................*NONE
+Naming....................*SYS
+Generation level..........10
+Date format...............*JOB
+Date separator............*JOB
+Time format...............*HMS
+Time separator ...........*JOB
+Right margin..............1024
+Default collection........*NONE
+IBM SQL flagging..........*NOFLAG
+ANS flagging..............*NONE
+Decimal point.............*JOB
+Sort sequence.............*JOB
+Language ID...............*JOB
+Printer file..............*LIBL/QSYSPRT
+Source file CCSID.........1208
+Job CCSID.................65535
+Statement processing......*RUN
+Allow copy of data........*OPTIMIZE
+Allow blocking............*ALLREAD
+SQL rules.................*DB2
+Decimal result options:
+  Maximum precision.......31
+  Maximum scale...........31
+  Minimum divide scale....0
+Concurrent access
+  resolution..............*DFT
+System time sensitive.....*YES
+Source member changed on 09/17/25  17:21:46
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLES                           09/17/25 18:57:55   PAGE     2
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8   SEQNBR  Last change
+      1 -- Create VEHICLES table to store vehicle information
+      2 CREATE TABLE VEHICLES FOR SYSTEM NAME VEHICLES (
+      3     VEHICLE_ID INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      4     MAKE VARCHAR(50) NOT NULL,
+      5     MODEL VARCHAR(50) NOT NULL,
+      6     TRIM VARCHAR(50),
+      7     YEAR INT NOT NULL,
+      8     VIN VARCHAR(17) NOT NULL UNIQUE,
+      9     COLOR VARCHAR(30),
+     10     ODOMETER INT NOT NULL,
+     11     CONDITION_RATING INT CHECK (CONDITION_RATING BETWEEN 1 AND 10),
+     12     ACQUISITION_PRICE DECIMAL(10,2) NOT NULL,
+     13     ASKING_PRICE DECIMAL(10,2) NOT NULL,
+     14     DATE_ACQUIRED DATE NOT NULL,
+     15     DATE_SOLD DATE,
+     16     STATUS VARCHAR(10) NOT NULL CHECK (STATUS IN ('AVAILABLE', 'SOLD', 'ON_HOLD'
+     16 )),
+     17     NOTES VARCHAR(1000),
+     18     LAST_UPDATED TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     19     CONSTRAINT CHK_YEAR CHECK (YEAR BETWEEN 1900 AND 2100)
+     20 );
+     21
+     22 -- Create indexes for VEHICLES table
+     23 CREATE INDEX IDX_VEHICLES_STATUS ON VEHICLES(STATUS);
+     24 CREATE INDEX IDX_VEHICLES_MAKE_MODEL ON VEHICLES(MAKE, MODEL);
+     25 CREATE INDEX IDX_VEHICLES_DATE_ACQUIRED ON VEHICLES(DATE_ACQUIRED);
+     26 CREATE INDEX IDX_VEHICLES_DATE_SOLD ON VEHICLES(DATE_SOLD);
+                                 * * * * *  E N D  O F  S O U R C E  * * * * *
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLES                           09/17/25 18:57:55   PAGE     3
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8   SEQNBR  Last change
+MSG ID  SEV  RECORD  TEXT
+SQL7029  30       2  Position 39 System name VEHICLES cannot be specified.
+                    Message Summary
+  Total     Info   Warning      Error   Severe  Terminal
+      1        0         0          0        1         0
+30 level severity errors found in source
+                                * * * * *  E N D  O F  L I S T I N G  * * * * *
+CPD000D: Command *LIBL/CHGOBJD not safe for a multithreaded job.
+CPF2105: Object VEHICLES in ERCARLOT type *FILE not found.
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

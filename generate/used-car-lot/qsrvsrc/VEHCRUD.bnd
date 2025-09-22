@@ -1,0 +1,10 @@
+/* VEHCRUD Service Program Binding Source */
+STRPGMEXP PGMLVL(*CURRENT)
+   EXPORT SYMBOL("AddVehicle")
+   EXPORT SYMBOL("GetVehicleById")
+   EXPORT SYMBOL("UpdateVehicle")
+   EXPORT SYMBOL("DeleteVehicle")
+   EXPORT SYMBOL("UpdateVehicleStatus")
+   EXPORT SYMBOL("ListVehicles")
+   EXPORT SYMBOL("GetVehicleHistory")
+ENDPGMEXP

@@ -1,0 +1,78 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+>> Temporarily set curlib to ERCARLOT
+CPF2104: Library ERCARLOT not removed from the library list.
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: RUNSQLSTM srcstmf('/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLE_HISTORY.table') DBGVIEW(*SOURCE) TGTRLS() OUTPUT(*PRINT) MARGINS(1024) COMMIT(*NONE )
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.57.56.00
+
+QSYSPRT   *LIBL     
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLE_HI                         09/17/25 18:57:56   PAGE   1
+Source stream file......../home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLE_HISTORY.table
+Target release............V7R4M0
+Commit....................*NONE
+Naming....................*SYS
+Generation level..........10
+Date format...............*JOB
+Date separator............*JOB
+Time format...............*HMS
+Time separator ...........*JOB
+Right margin..............1024
+Default collection........*NONE
+IBM SQL flagging..........*NOFLAG
+ANS flagging..............*NONE
+Decimal point.............*JOB
+Sort sequence.............*JOB
+Language ID...............*JOB
+Printer file..............*LIBL/QSYSPRT
+Source file CCSID.........1208
+Job CCSID.................65535
+Statement processing......*RUN
+Allow copy of data........*OPTIMIZE
+Allow blocking............*ALLREAD
+SQL rules.................*DB2
+Decimal result options:
+  Maximum precision.......31
+  Maximum scale...........31
+  Minimum divide scale....0
+Concurrent access
+  resolution..............*DFT
+System time sensitive.....*YES
+Source member changed on 09/17/25  17:22:03
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLE_HI                         09/17/25 18:57:56   PAGE     2
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8   SEQNBR  Last change
+      1 -- Create VEHICLE_HISTORY table to track status changes and other historical dat
+      1 a
+      2 CREATE TABLE VEHICLE_HISTORY FOR SYSTEM NAME VEHHISTORY (
+      3     HISTORY_ID INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      4     VEHICLE_ID INT NOT NULL,
+      5     EVENT_TYPE VARCHAR(20) NOT NULL,
+      6     EVENT_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+      7     OLD_STATUS VARCHAR(10),
+      8     NEW_STATUS VARCHAR(10),
+      9     OLD_PRICE DECIMAL(10,2),
+     10     NEW_PRICE DECIMAL(10,2),
+     11     USER_ID VARCHAR(10),
+     12     NOTES VARCHAR(1000),
+     13     FOREIGN KEY (VEHICLE_ID) REFERENCES VEHICLES(VEHICLE_ID) ON DELETE CASCADE
+     14 );
+     15
+     16 -- Create indexes for VEHICLE_HISTORY table
+     17 CREATE INDEX IDX_VEHICLE_HISTORY_VEHICLE_ID ON VEHICLE_HISTORY(VEHICLE_ID);
+     18 CREATE INDEX IDX_VEHICLE_HISTORY_EVENT_DATE ON VEHICLE_HISTORY(EVENT_DATE);
+                                 * * * * *  E N D  O F  S O U R C E  * * * * *
+5770SS1 V7R4M0 190621               Run SQL Statements             VEHICLE_HI                         09/17/25 18:57:56   PAGE     3
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8   SEQNBR  Last change
+MSG ID  SEV  RECORD  TEXT
+SQL0204  30       1  Position 1 VEHICLES in *LIBL type *FILE not found.
+                    Message Summary
+  Total     Info   Warning      Error   Severe  Terminal
+      1        0         0          0        1         0
+30 level severity errors found in source
+                                * * * * *  E N D  O F  L I S T I N G  * * * * *
+CPD000D: Command *LIBL/CHGOBJD not safe for a multithreaded job.
+CPF2105: Object VEHHISTORY in ERCARLOT type *FILE not found.
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

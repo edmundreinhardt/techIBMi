@@ -1,0 +1,11 @@
+/* VEHBIZ Service Program Binding Source */
+STRPGMEXP PGMLVL(*CURRENT)
+   EXPORT SYMBOL("CalculateVehicleProfit")
+   EXPORT SYMBOL("CalculateAggregateProfitByDate")
+   EXPORT SYMBOL("CalculateSalesMetricsByTimeframe")
+   EXPORT SYMBOL("CalculateInventoryValuation")
+   EXPORT SYMBOL("CalculateAverageTimeToSale")
+   EXPORT SYMBOL("CalculateTopSellingModels")
+   EXPORT SYMBOL("CalculateProfitMargin")
+   EXPORT SYMBOL("CalculateMonthlyProfitLast12Months")
+ENDPGMEXP

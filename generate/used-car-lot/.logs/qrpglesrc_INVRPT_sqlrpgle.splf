@@ -1,0 +1,309 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/INVRPT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/INVRPT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.58.01.00
+
+SQL9019: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   INVRPT
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/INVRP
+                                       T.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  18:09:32
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   INVRPT
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // INVRPT - Inventory Status Report                                                                                  000002
+     3 // This program displays current inventory status and valuation                                                      000003
+     4                                                                                                                      000004
+     5 CTL-OPT DFTACTGRP(*NO) ACTGRP(*NEW);                                                                                 000005
+     6 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000006
+     7 CTL-OPT DECEDIT('0.');                                                                                               000007
+     8 CTL-OPT ALWNULL(*USRCTL);                                                                                            000008
+     9 CTL-OPT BNDDIR('VEHBND');                                                                                            000009
+    10 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000010
+    11 CTL-OPT MAIN(Main);                                                                                                  000011
+    12                                                                                                                      000012
+    13 // Include service program headers                                                                                   000013
+    14 /COPY QRPGLESRC,VEHCRUD_H                                                                                            000014
+======>      aaaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000014  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    15 /COPY QRPGLESRC,VEHBIZ_H                                                                                             000015
+======>      aaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000015  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    16                                                                                                                      000016
+    17 // Display file                                                                                                      000017
+    18 DCL-F INVRPTD WORKSTN SFILE(SFLRCD:SFLRRN) INDDS(DSPIND);                                                            000018
+    19                                                                                                                      000019
+    20 // Indicators                                                                                                        000020
+    21 DCL-DS DSPIND;                                                                                                       000021
+    22   Exit IND POS(3);                                                                                                   000022
+    23   Refresh IND POS(5);                                                                                                000023
+    24   Cancel IND POS(12);                                                                                                000024
+    25   SflDsp IND POS(31);                                                                                                000025
+    26   SflDspCtl IND POS(32);                                                                                             000026
+    27   SflClr IND POS(33);                                                                                                000027
+    28   SflEnd IND POS(34);                                                                                                000028
+    29 END-DS;                                                                                                              000029
+    30                                                                                                                      000030
+    31 // Program variables                                                                                                 000031
+    32 DCL-S ProgramStatus CHAR(10) INZ('RUNNING');                                                                         000032
+    33 DCL-S VehicleCount INT(10);                                                                                          000033
+    34 DCL-S i INT(10);                                                                                                     000034
+    35 DCL-S CurrentDate DATE;                                                                                              000035
+    36 DCL-S AvailableCount INT(10);                                                                                        000036
+    37 DCL-S OnHoldCount INT(10);                                                                                           000037
+    38 DCL-S DaysInInventory INT(10);                                                                                       000038
+    39                                                                                                                      000039
+    40 // Array to hold vehicle data                                                                                        000040
+    41 DCL-DS VehicleArray LIKEDS(VehicleDS) DIM(999);                                                                      000041
+    42                                                                                                                      000042
+    43 // Inventory valuation data                                                                                          000043
+    44 DCL-DS InventoryValue LIKEDS(InventoryValueDS);                                                                      000044
+    45                                                                                                                      000045
+    46 // Main procedure                                                                                                    000046
+    47 DCL-PROC Main;                                                                                                       000047
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    48   // Initialize display                                                                                              000048
+    49   ExecInit();                                                                                                        000049
+    50                                                                                                                      000050
+    51   // Process until exit                                                                                              000051
+    52   DOW ProgramStatus = 'RUNNING';                                                                                     000052
+    53     ExecDisplay();                                                                                                   000053
+    54     ExecCommand();                                                                                                   000054
+    55   ENDDO;                                                                                                             000055
+    56                                                                                                                      000056
+    57   // Clean up and exit                                                                                               000057
+    58   *INLR = *ON;                                                                                                       000058
+    59   RETURN;                                                                                                            000059
+    60 END-PROC;                                                                                                            000060
+    61                                                                                                                      000061
+    62 // Initialize the program                                                                                            000062
+    63 DCL-PROC ExecInit;                                                                                                   000063
+    64   // Get current date                                                                                                000064
+    65   CurrentDate = %DATE();                                                                                             000065
+    66                                                                                                                      000066
+    67   // Load data                                                                                                       000067
+    68   LoadData();                                                                                                        000068
+    69                                                                                                                      000069
+    70   RETURN;                                                                                                            000070
+    71 END-PROC;                                                                                                            000071
+    72                                                                                                                      000072
+    73 // Load data from service programs                                                                                   000073
+    74 DCL-PROC LoadData;                                                                                                   000074
+    75   DCL-S Result INT(10);                                                                                              000075
+    76   DCL-DS Filter LIKEDS(VehicleFilterDS);                                                                             000076
+    77                                                                                                                      000077
+    78   // Get inventory valuation                                                                                         000078
+    79   Result = CalculateInventoryValuation(InventoryValue);                                                              000079
+    80                                                                                                                      000080
+    81   // Set header information                                                                                          000081
+    82   TOTVEH = InventoryValue.TotalVehicles;                                                                             000082
+    83   TOTVAL = InventoryValue.TotalValue;                                                                                000083
+    84   AVGDAYS = InventoryValue.AverageDaysInInventory;                                                                   000084
+    85                                                                                                                      000085
+    86   // Clear and initialize the subfile                                                                                000086
+    87   SflClr = *ON;                                                                                                      000087
+    88   WRITE SFCTL;                                                                                                       000088
+    89   SflClr = *OFF;                                                                                                     000089
+    90                                                                                                                      000090
+    91   // Filter for available and on-hold vehicles only                                                                  000091
+    92   Filter.Status = 'AVAILABLE';                                                                                       000092
+    93                                                                                                                      000093
+    94   // Get available vehicles                                                                                          000094
+    95   Result = ListVehicles(Filter : VehicleArray : VehicleCount);                                                       000095
+    96                                                                                                                      000096
+    97   // Initialize counters                                                                                             000097
+    98   AvailableCount = 0;                                                                                                000098
+    99   OnHoldCount = 0;                                                                                                   000099
+   100                                                                                                                      000100
+   101   // If no data, display empty subfile                                                                               000101
+   102   IF Result <= 0;                                                                                                    000102
+   103     SflDsp = *OFF;                                                                                                   000103
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   104     SflDspCtl = *ON;                                                                                                 000104
+   105     RETURN;                                                                                                          000105
+   106   ENDIF;                                                                                                             000106
+   107                                                                                                                      000107
+   108   // Load subfile with available vehicles                                                                            000108
+   109   SFLRRN = 0;                                                                                                        000109
+   110                                                                                                                      000110
+   111   FOR i = 1 TO VehicleCount;                                                                                         000111
+   112     // Increment record number                                                                                       000112
+   113     SFLRRN += 1;                                                                                                     000113
+   114                                                                                                                      000114
+   115     // Set subfile record fields                                                                                     000115
+   116     VEHID = VehicleArray(i).VehicleId;                                                                               000116
+   117     MAKE = VehicleArray(i).Make;                                                                                     000117
+   118     MODEL = VehicleArray(i).Model;                                                                                   000118
+   119     YEAR = VehicleArray(i).Year;                                                                                     000119
+   120     VIN = VehicleArray(i).VIN;                                                                                       000120
+   121     STATUS = VehicleArray(i).Status;                                                                                 000121
+   122     PRICE = VehicleArray(i).AskingPrice;                                                                             000122
+   123                                                                                                                      000123
+   124     // Calculate days in inventory                                                                                   000124
+   125     DAYSINV = %DIFF(CurrentDate : VehicleArray(i).DateAcquired : *DAYS);                                             000125
+   126                                                                                                                      000126
+   127     // Write subfile record                                                                                          000127
+   128     WRITE SFLRCD;                                                                                                    000128
+   129                                                                                                                      000129
+   130     // Count available vehicles                                                                                      000130
+   131     AvailableCount += 1;                                                                                             000131
+   132   ENDFOR;                                                                                                            000132
+   133                                                                                                                      000133
+   134   // Now get on-hold vehicles                                                                                        000134
+   135   Filter = *ALLX'00';                                                                                                000135
+   136   Filter.Status = 'ON_HOLD';                                                                                         000136
+   137                                                                                                                      000137
+   138   Result = ListVehicles(Filter : VehicleArray : VehicleCount);                                                       000138
+   139                                                                                                                      000139
+   140   // Add on-hold vehicles to subfile                                                                                 000140
+   141   FOR i = 1 TO VehicleCount;                                                                                         000141
+   142     // Increment record number                                                                                       000142
+   143     SFLRRN += 1;                                                                                                     000143
+   144                                                                                                                      000144
+   145     // Set subfile record fields                                                                                     000145
+   146     VEHID = VehicleArray(i).VehicleId;                                                                               000146
+   147     MAKE = VehicleArray(i).Make;                                                                                     000147
+   148     MODEL = VehicleArray(i).Model;                                                                                   000148
+   149     YEAR = VehicleArray(i).Year;                                                                                     000149
+   150     VIN = VehicleArray(i).VIN;                                                                                       000150
+   151     STATUS = VehicleArray(i).Status;                                                                                 000151
+   152     PRICE = VehicleArray(i).AskingPrice;                                                                             000152
+   153                                                                                                                      000153
+   154     // Calculate days in inventory                                                                                   000154
+   155     DAYSINV = %DIFF(CurrentDate : VehicleArray(i).DateAcquired : *DAYS);                                             000155
+   156                                                                                                                      000156
+   157     // Write subfile record                                                                                          000157
+   158     WRITE SFLRCD;                                                                                                    000158
+   159                                                                                                                      000159
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      5
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   160     // Count on-hold vehicles                                                                                        000160
+   161     OnHoldCount += 1;                                                                                                000161
+   162   ENDFOR;                                                                                                            000162
+   163                                                                                                                      000163
+   164   // Set summary information                                                                                         000164
+   165   AVAILCNT = AvailableCount;                                                                                         000165
+   166   HOLDCNT = OnHoldCount;                                                                                             000166
+   167   TOTVAL2 = InventoryValue.TotalValue;                                                                               000167
+   168                                                                                                                      000168
+   169   // Turn on subfile display                                                                                         000169
+   170   SflDsp = *ON;                                                                                                      000170
+   171   SflDspCtl = *ON;                                                                                                   000171
+   172   SflEnd = *ON;                                                                                                      000172
+   173                                                                                                                      000173
+   174   RETURN;                                                                                                            000174
+   175 END-PROC;                                                                                                            000175
+   176                                                                                                                      000176
+   177 // Display the screen                                                                                                000177
+   178 DCL-PROC ExecDisplay;                                                                                                000178
+   179   // Write header                                                                                                    000179
+   180   WRITE SFCTL;                                                                                                       000180
+   181                                                                                                                      000181
+   182   // Write footer                                                                                                    000182
+   183   WRITE FOOTER;                                                                                                      000183
+   184                                                                                                                      000184
+   185   // Write summary                                                                                                   000185
+   186   WRITE SUMMARY;                                                                                                     000186
+   187                                                                                                                      000187
+   188   // Display screen and read input                                                                                   000188
+   189   EXFMT SFCTL;                                                                                                       000189
+   190                                                                                                                      000190
+   191   RETURN;                                                                                                            000191
+   192 END-PROC;                                                                                                            000192
+   193                                                                                                                      000193
+   194 // Process command keys                                                                                              000194
+   195 DCL-PROC ExecCommand;                                                                                                000195
+   196   // Check function keys                                                                                             000196
+   197   SELECT;                                                                                                            000197
+   198     WHEN Exit;                                                                                                       000198
+   199       ProgramStatus = 'EXIT';                                                                                        000199
+   200                                                                                                                      000200
+   201     WHEN Refresh;                                                                                                    000201
+   202       LoadData();                                                                                                    000202
+   203                                                                                                                      000203
+   204     WHEN Cancel;                                                                                                     000204
+   205       ProgramStatus = 'EXIT';                                                                                        000205
+   206   ENDSL;                                                                                                             000206
+   207                                                                                                                      000207
+   208   RETURN;                                                                                                            000208
+   209 END-PROC;                                                                                                            000209
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      6
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      7
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+*RNF0273 40      2 Compiler not able to open the /COPY or /INCLUDE file;
+                   directive ignored.
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/INVRPT          COMMON1    09/17/25 18:58:01        Page      8
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        2
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        2
+  Source Totals:
+    Records . . . . . . . . . . . . :      209
+    Specifications  . . . . . . . . :      105
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :       91
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Compilation stopped. Severity 40 errors found in program.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

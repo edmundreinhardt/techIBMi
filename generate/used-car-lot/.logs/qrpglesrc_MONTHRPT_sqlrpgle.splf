@@ -1,0 +1,288 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/MONTHRPT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/MONTHRPT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.57.59.00
+
+SQL9019: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   MONTHRPT
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/MONTH
+                                       RPT.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  18:07:56
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   MONTHRPT
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // MONTHRPT - Monthly Sales and Profit Report                                                                        000002
+     3 // This program displays monthly sales and profit data for the last 12 months                                        000003
+     4                                                                                                                      000004
+     5 CTL-OPT DFTACTGRP(*NO) ACTGRP(*NEW);                                                                                 000005
+     6 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000006
+     7 CTL-OPT DECEDIT('0.');                                                                                               000007
+     8 CTL-OPT ALWNULL(*USRCTL);                                                                                            000008
+     9 CTL-OPT BNDDIR('VEHBND');                                                                                            000009
+    10 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000010
+    11 CTL-OPT MAIN(Main);                                                                                                  000011
+    12                                                                                                                      000012
+    13 // Include service program headers                                                                                   000013
+    14 /COPY QRPGLESRC,VEHCRUD_H                                                                                            000014
+======>      aaaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000014  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    15 /COPY QRPGLESRC,VEHBIZ_H                                                                                             000015
+======>      aaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000015  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    16                                                                                                                      000016
+    17 // Display file                                                                                                      000017
+    18 DCL-F MONTHRPTD WORKSTN SFILE(SFLRCD:SFLRRN) INDDS(DSPIND);                                                          000018
+    19                                                                                                                      000019
+    20 // Indicators                                                                                                        000020
+    21 DCL-DS DSPIND;                                                                                                       000021
+    22   Exit IND POS(3);                                                                                                   000022
+    23   Refresh IND POS(5);                                                                                                000023
+    24   Cancel IND POS(12);                                                                                                000024
+    25   SflDsp IND POS(31);                                                                                                000025
+    26   SflDspCtl IND POS(32);                                                                                             000026
+    27   SflClr IND POS(33);                                                                                                000027
+    28   SflEnd IND POS(34);                                                                                                000028
+    29 END-DS;                                                                                                              000029
+    30                                                                                                                      000030
+    31 // Program variables                                                                                                 000031
+    32 DCL-S ProgramStatus CHAR(10) INZ('RUNNING');                                                                         000032
+    33 DCL-S MetricsCount INT(10);                                                                                          000033
+    34 DCL-S i INT(10);                                                                                                     000034
+    35 DCL-S TotalSold INT(10);                                                                                             000035
+    36 DCL-S TotalRevenue PACKED(15:2);                                                                                     000036
+    37 DCL-S TotalCost PACKED(15:2);                                                                                        000037
+    38 DCL-S TotalProfit PACKED(15:2);                                                                                      000038
+    39 DCL-S AvgProfit PACKED(10:2);                                                                                        000039
+    40 DCL-S AvgDaysToSell INT(10);                                                                                         000040
+    41                                                                                                                      000041
+    42 // Array to hold monthly metrics                                                                                     000042
+    43 DCL-DS MetricsArray LIKEDS(SalesMetricsDS) DIM(12);                                                                  000043
+    44                                                                                                                      000044
+    45 // Main procedure                                                                                                    000045
+    46 DCL-PROC Main;                                                                                                       000046
+    47   // Initialize display                                                                                              000047
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    48   ExecInit();                                                                                                        000048
+    49                                                                                                                      000049
+    50   // Process until exit                                                                                              000050
+    51   DOW ProgramStatus = 'RUNNING';                                                                                     000051
+    52     ExecDisplay();                                                                                                   000052
+    53     ExecCommand();                                                                                                   000053
+    54   ENDDO;                                                                                                             000054
+    55                                                                                                                      000055
+    56   // Clean up and exit                                                                                               000056
+    57   *INLR = *ON;                                                                                                       000057
+    58   RETURN;                                                                                                            000058
+    59 END-PROC;                                                                                                            000059
+    60                                                                                                                      000060
+    61 // Initialize the program                                                                                            000061
+    62 DCL-PROC ExecInit;                                                                                                   000062
+    63   // Set period description                                                                                          000063
+    64   PERIOD = 'Last 12 Months';                                                                                         000064
+    65                                                                                                                      000065
+    66   // Load data                                                                                                       000066
+    67   LoadData();                                                                                                        000067
+    68                                                                                                                      000068
+    69   RETURN;                                                                                                            000069
+    70 END-PROC;                                                                                                            000070
+    71                                                                                                                      000071
+    72 // Load data from business logic service program                                                                     000072
+    73 DCL-PROC LoadData;                                                                                                   000073
+    74   DCL-S Result INT(10);                                                                                              000074
+    75                                                                                                                      000075
+    76   // Clear totals                                                                                                    000076
+    77   TotalSold = 0;                                                                                                     000077
+    78   TotalRevenue = 0;                                                                                                  000078
+    79   TotalCost = 0;                                                                                                     000079
+    80   TotalProfit = 0;                                                                                                   000080
+    81   AvgProfit = 0;                                                                                                     000081
+    82   AvgDaysToSell = 0;                                                                                                 000082
+    83                                                                                                                      000083
+    84   // Get monthly profit data for last 12 months                                                                      000084
+    85   Result = CalculateMonthlyProfitLast12Months(MetricsArray : MetricsCount);                                          000085
+    86                                                                                                                      000086
+    87   // Clear and initialize the subfile                                                                                000087
+    88   SflClr = *ON;                                                                                                      000088
+    89   WRITE SFCTL;                                                                                                       000089
+    90   SflClr = *OFF;                                                                                                     000090
+    91                                                                                                                      000091
+    92   // If no data, display empty subfile                                                                               000092
+    93   IF Result <= 0;                                                                                                    000093
+    94     SflDsp = *OFF;                                                                                                   000094
+    95     SflDspCtl = *ON;                                                                                                 000095
+    96     RETURN;                                                                                                          000096
+    97   ENDIF;                                                                                                             000097
+    98                                                                                                                      000098
+    99   // Load subfile with data                                                                                          000099
+   100   SFLRRN = 0;                                                                                                        000100
+   101                                                                                                                      000101
+   102   FOR i = 1 TO MetricsCount;                                                                                         000102
+   103     // Increment record number                                                                                       000103
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   104     SFLRRN += 1;                                                                                                     000104
+   105                                                                                                                      000105
+   106     // Set subfile record fields                                                                                     000106
+   107     MONTH = MetricsArray(i).Period;                                                                                  000107
+   108     SOLD = MetricsArray(i).VehiclesSold;                                                                             000108
+   109     REVENUE = MetricsArray(i).TotalRevenue;                                                                          000109
+   110     COST = MetricsArray(i).TotalRevenue - MetricsArray(i).TotalProfit;                                               000110
+   111     PROFIT = MetricsArray(i).TotalProfit;                                                                            000111
+   112     AVGPROFIT = MetricsArray(i).AverageProfit;                                                                       000112
+   113     AVGDAYS = MetricsArray(i).AverageDaysToSell;                                                                     000113
+   114                                                                                                                      000114
+   115     // Write subfile record                                                                                          000115
+   116     WRITE SFLRCD;                                                                                                    000116
+   117                                                                                                                      000117
+   118     // Accumulate totals                                                                                             000118
+   119     TotalSold += SOLD;                                                                                               000119
+   120     TotalRevenue += REVENUE;                                                                                         000120
+   121     TotalCost += COST;                                                                                               000121
+   122     TotalProfit += PROFIT;                                                                                           000122
+   123   ENDFOR;                                                                                                            000123
+   124                                                                                                                      000124
+   125   // Calculate averages                                                                                              000125
+   126   IF TotalSold > 0;                                                                                                  000126
+   127     AvgProfit = TotalProfit / TotalSold;                                                                             000127
+   128                                                                                                                      000128
+   129     // Calculate weighted average days to sell                                                                       000129
+   130     AvgDaysToSell = 0;                                                                                               000130
+   131     FOR i = 1 TO MetricsCount;                                                                                       000131
+   132       IF MetricsArray(i).VehiclesSold > 0;                                                                           000132
+   133         AvgDaysToSell += MetricsArray(i).AverageDaysToSell *                                                         000133
+   134                          MetricsArray(i).VehiclesSold;                                                               000134
+   135       ENDIF;                                                                                                         000135
+   136     ENDFOR;                                                                                                          000136
+   137     AvgDaysToSell /= TotalSold;                                                                                      000137
+   138   ENDIF;                                                                                                             000138
+   139                                                                                                                      000139
+   140   // Set totals for display                                                                                          000140
+   141   TOTALSOLD = TotalSold;                                                                                             000141
+   142   TOTALREV = TotalRevenue;                                                                                           000142
+   143   TOTALCOST = TotalCost;                                                                                             000143
+   144   TOTALPROF = TotalProfit;                                                                                           000144
+   145   AVGPROF = AvgProfit;                                                                                               000145
+   146   AVGDAYSTOT = AvgDaysToSell;                                                                                        000146
+   147                                                                                                                      000147
+   148   // Turn on subfile display                                                                                         000148
+   149   SflDsp = *ON;                                                                                                      000149
+   150   SflDspCtl = *ON;                                                                                                   000150
+   151   SflEnd = *ON;                                                                                                      000151
+   152                                                                                                                      000152
+   153   RETURN;                                                                                                            000153
+   154 END-PROC;                                                                                                            000154
+   155                                                                                                                      000155
+   156 // Display the screen                                                                                                000156
+   157 DCL-PROC ExecDisplay;                                                                                                000157
+   158   // Write header                                                                                                    000158
+   159   WRITE SFCTL;                                                                                                       000159
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      5
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   160                                                                                                                      000160
+   161   // Write footer                                                                                                    000161
+   162   WRITE FOOTER;                                                                                                      000162
+   163                                                                                                                      000163
+   164   // Write totals                                                                                                    000164
+   165   WRITE TOTALS;                                                                                                      000165
+   166                                                                                                                      000166
+   167   // Display screen and read input                                                                                   000167
+   168   EXFMT SFCTL;                                                                                                       000168
+   169                                                                                                                      000169
+   170   RETURN;                                                                                                            000170
+   171 END-PROC;                                                                                                            000171
+   172                                                                                                                      000172
+   173 // Process command keys                                                                                              000173
+   174 DCL-PROC ExecCommand;                                                                                                000174
+   175   // Check function keys                                                                                             000175
+   176   SELECT;                                                                                                            000176
+   177     WHEN Exit;                                                                                                       000177
+   178       ProgramStatus = 'EXIT';                                                                                        000178
+   179                                                                                                                      000179
+   180     WHEN Refresh;                                                                                                    000180
+   181       LoadData();                                                                                                    000181
+   182                                                                                                                      000182
+   183     WHEN Cancel;                                                                                                     000183
+   184       ProgramStatus = 'EXIT';                                                                                        000184
+   185   ENDSL;                                                                                                             000185
+   186                                                                                                                      000186
+   187   RETURN;                                                                                                            000187
+   188 END-PROC;                                                                                                            000188
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      6
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      7
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+*RNF0273 40      2 Compiler not able to open the /COPY or /INCLUDE file;
+                   directive ignored.
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/MONTHRPT        COMMON1    09/17/25 18:57:59        Page      8
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        2
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        2
+  Source Totals:
+    Records . . . . . . . . . . . . :      188
+    Specifications  . . . . . . . . :      104
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :       71
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Compilation stopped. Severity 40 errors found in program.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

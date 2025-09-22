@@ -1,0 +1,638 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/VEHBIZ) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHBIZ.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.57.58.00
+
+SQL9019: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   VEHBIZ
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/VEHBI
+                                       Z.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  17:33:59
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   VEHBIZ
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // VEHBIZ - Vehicle Business Logic Implementation                                                                    000002
+     3 // This module implements the procedures for the VEHBIZ service program                                              000003
+     4 // which provides business logic and financial calculations for the vehicle inventory system.                        000004
+     5                                                                                                                      000005
+     6 CTL-OPT NOMAIN;                                                                                                      000006
+     7 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000007
+     8 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000008
+     9 CTL-OPT DECEDIT('0.');                                                                                               000009
+    10 CTL-OPT ALWNULL(*USRCTL);                                                                                            000010
+    11 CTL-OPT BNDDIR('VEHBND');                                                                                            000011
+    12                                                                                                                      000012
+    13 /COPY QRPGLESRC,VEHBIZ_H                                                                                             000013
+======>      aaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000013  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    14                                                                                                                      000014
+    15 // Global variables                                                                                                  000015
+    16 DCL-S SQLState CHAR(5);                                                                                              000016
+    17 DCL-S ErrorMsg VARCHAR(1000);                                                                                        000017
+    18                                                                                                                      000018
+    19 // Calculate profit for a specific vehicle                                                                           000019
+    20 DCL-PROC CalculateVehicleProfit EXPORT;                                                                              000020
+    21   DCL-PI *N PACKED(10:2);                                                                                            000021
+    22     VehicleId INT(10) CONST;                                                                                         000022
+    23   END-PI;                                                                                                            000023
+    24                                                                                                                      000024
+    25   DCL-S AcquisitionPrice PACKED(10:2);                                                                               000025
+    26   DCL-S SellingPrice PACKED(10:2);                                                                                   000026
+    27   DCL-S Profit PACKED(10:2);                                                                                         000027
+    28   DCL-S Status VARCHAR(10);                                                                                          000028
+    29   DCL-S Found IND;                                                                                                   000029
+    30                                                                                                                      000030
+    31   // Get vehicle information                                                                                         000031
+    32   EXEC SQL                                                                                                           000032
+    33     SELECT ACQUISITION_PRICE, ASKING_PRICE, STATUS                                                                   000033
+    34     INTO :AcquisitionPrice, :SellingPrice, :Status                                                                   000034
+    35     FROM VEHICLES                                                                                                    000035
+    36     WHERE VEHICLE_ID = :VehicleId;                                                                                   000036
+    37                                                                                                                      000037
+    38   IF SQLSTATE = '02000' THEN                                                                                         000038
+    39     RETURN VEHBIZ_NO_DATA;                                                                                           000039
+    40   ELSEIF SQLSTATE <> '00000' THEN                                                                                    000040
+    41     RETURN VEHBIZ_ERROR;                                                                                             000041
+    42   ENDIF;                                                                                                             000042
+    43                                                                                                                      000043
+    44   // For sold vehicles, use actual selling price                                                                     000044
+    45   IF Status = 'SOLD' THEN                                                                                            000045
+    46     EXEC SQL                                                                                                         000046
+    47       SELECT NEW_PRICE INTO :SellingPrice                                                                            000047
+    48       FROM VEHICLE_HISTORY                                                                                           000048
+    49       WHERE VEHICLE_ID = :VehicleId                                                                                  000049
+    50         AND EVENT_TYPE = 'STATUS_CHANGE'                                                                             000050
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    51         AND NEW_STATUS = 'SOLD'                                                                                      000051
+    52       ORDER BY EVENT_DATE DESC                                                                                       000052
+    53       FETCH FIRST 1 ROW ONLY;                                                                                        000053
+    54                                                                                                                      000054
+    55     IF SQLSTATE <> '00000' AND SQLSTATE <> '02000' THEN                                                              000055
+    56       RETURN VEHBIZ_ERROR;                                                                                           000056
+    57     ENDIF;                                                                                                           000057
+    58   ENDIF;                                                                                                             000058
+    59                                                                                                                      000059
+    60   // Calculate profit                                                                                                000060
+    61   Profit = SellingPrice - AcquisitionPrice;                                                                          000061
+    62                                                                                                                      000062
+    63   RETURN Profit;                                                                                                     000063
+    64 END-PROC;                                                                                                            000064
+    65                                                                                                                      000065
+    66 // Calculate aggregate profit within a date range                                                                    000066
+    67 DCL-PROC CalculateAggregateProfitByDate EXPORT;                                                                      000067
+    68   DCL-PI *N INT(10);                                                                                                 000068
+    69     Timeframe LIKEDS(TimeframeDS) CONST;                                                                             000069
+    70     ProfitSummary LIKEDS(ProfitSummaryDS);                                                                           000070
+    71   END-PI;                                                                                                            000071
+    72                                                                                                                      000072
+    73   DCL-S StartDateValue DATE;                                                                                         000073
+    74   DCL-S EndDateValue DATE;                                                                                           000074
+    75                                                                                                                      000075
+    76   // Initialize summary                                                                                              000076
+    77   ProfitSummary.TotalVehicles = 0;                                                                                   000077
+    78   ProfitSummary.TotalRevenue = 0;                                                                                    000078
+    79   ProfitSummary.TotalCost = 0;                                                                                       000079
+    80   ProfitSummary.TotalProfit = 0;                                                                                     000080
+    81   ProfitSummary.AverageProfit = 0;                                                                                   000081
+    82   ProfitSummary.AverageDaysToSell = 0;                                                                               000082
+    83                                                                                                                      000083
+    84   // Set default dates if not provided                                                                               000084
+    85   IF Timeframe.StartDate = *LOVAL THEN                                                                               000085
+    86     StartDateValue = %DATE('0001-01-01');                                                                            000086
+    87   ELSE                                                                                                               000087
+    88     StartDateValue = Timeframe.StartDate;                                                                            000088
+    89   ENDIF;                                                                                                             000089
+    90                                                                                                                      000090
+    91   IF Timeframe.EndDate = *LOVAL THEN                                                                                 000091
+    92     EndDateValue = %DATE();                                                                                          000092
+    93   ELSE                                                                                                               000093
+    94     EndDateValue = Timeframe.EndDate;                                                                                000094
+    95   ENDIF;                                                                                                             000095
+    96                                                                                                                      000096
+    97   // Calculate total vehicles sold, revenue, cost, and days to sell                                                  000097
+    98   EXEC SQL                                                                                                           000098
+    99     SELECT                                                                                                           000099
+   100       COUNT(*) AS TotalVehicles,                                                                                     000100
+   101       SUM(CASE                                                                                                       000101
+   102             WHEN H.NEW_PRICE IS NOT NULL THEN H.NEW_PRICE                                                            000102
+   103             ELSE V.ASKING_PRICE                                                                                      000103
+   104           END) AS TotalRevenue,                                                                                      000104
+   105       SUM(V.ACQUISITION_PRICE) AS TotalCost,                                                                         000105
+   106       AVG(DAYS(V.DATE_SOLD) - DAYS(V.DATE_ACQUIRED)) AS AvgDaysToSell                                                000106
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   107     INTO                                                                                                             000107
+   108       :ProfitSummary.TotalVehicles,                                                                                  000108
+   109       :ProfitSummary.TotalRevenue,                                                                                   000109
+   110       :ProfitSummary.TotalCost,                                                                                      000110
+   111       :ProfitSummary.AverageDaysToSell                                                                               000111
+   112     FROM VEHICLES V                                                                                                  000112
+   113     LEFT JOIN (                                                                                                      000113
+   114       SELECT VEHICLE_ID, NEW_PRICE                                                                                   000114
+   115       FROM VEHICLE_HISTORY                                                                                           000115
+   116       WHERE EVENT_TYPE = 'STATUS_CHANGE'                                                                             000116
+   117         AND NEW_STATUS = 'SOLD'                                                                                      000117
+   118       ORDER BY EVENT_DATE DESC                                                                                       000118
+   119     ) H ON V.VEHICLE_ID = H.VEHICLE_ID                                                                               000119
+   120     WHERE V.STATUS = 'SOLD'                                                                                          000120
+   121       AND V.DATE_SOLD BETWEEN :StartDateValue AND :EndDateValue;                                                     000121
+   122                                                                                                                      000122
+   123   IF SQLSTATE <> '00000' THEN                                                                                        000123
+   124     RETURN VEHBIZ_ERROR;                                                                                             000124
+   125   ENDIF;                                                                                                             000125
+   126                                                                                                                      000126
+   127   // Calculate total profit and average profit                                                                       000127
+   128   IF ProfitSummary.TotalVehicles > 0 THEN                                                                            000128
+   129     ProfitSummary.TotalProfit = ProfitSummary.TotalRevenue - ProfitSummary.TotalCost;                                000129
+   130     ProfitSummary.AverageProfit = ProfitSummary.TotalProfit / ProfitSummary.TotalVehicles;                           000130
+   131   ENDIF;                                                                                                             000131
+   132                                                                                                                      000132
+   133   RETURN VEHBIZ_SUCCESS;                                                                                             000133
+   134 END-PROC;                                                                                                            000134
+   135                                                                                                                      000135
+   136 // Calculate sales metrics by timeframe (daily, weekly, monthly, yearly)                                             000136
+   137 DCL-PROC CalculateSalesMetricsByTimeframe EXPORT;                                                                    000137
+   138   DCL-PI *N INT(10);                                                                                                 000138
+   139     Timeframe LIKEDS(TimeframeDS) CONST;                                                                             000139
+   140     TimeframeType VARCHAR(10) CONST;                                                                                 000140
+   141     MetricsArray LIKEDS(SalesMetricsDS) DIM(999) OPTIONS(*VARSIZE);                                                  000141
+   142     MetricsCount INT(10);                                                                                            000142
+   143   END-PI;                                                                                                            000143
+   144                                                                                                                      000144
+   145   DCL-S StartDateValue DATE;                                                                                         000145
+   146   DCL-S EndDateValue DATE;                                                                                           000146
+   147   DCL-S SQLStatement VARCHAR(2000);                                                                                  000147
+   148   DCL-S GroupByClause VARCHAR(200);                                                                                  000148
+   149   DCL-S SelectClause VARCHAR(200);                                                                                   000149
+   150   DCL-S i INT(10);                                                                                                   000150
+   151                                                                                                                      000151
+   152   // Initialize count                                                                                                000152
+   153   MetricsCount = 0;                                                                                                  000153
+   154                                                                                                                      000154
+   155   // Set default dates if not provided                                                                               000155
+   156   IF Timeframe.StartDate = *LOVAL THEN                                                                               000156
+   157     StartDateValue = %DATE('0001-01-01');                                                                            000157
+   158   ELSE                                                                                                               000158
+   159     StartDateValue = Timeframe.StartDate;                                                                            000159
+   160   ENDIF;                                                                                                             000160
+   161                                                                                                                      000161
+   162   IF Timeframe.EndDate = *LOVAL THEN                                                                                 000162
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      5
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   163     EndDateValue = %DATE();                                                                                          000163
+   164   ELSE                                                                                                               000164
+   165     EndDateValue = Timeframe.EndDate;                                                                                000165
+   166   ENDIF;                                                                                                             000166
+   167                                                                                                                      000167
+   168   // Set GROUP BY and SELECT clauses based on timeframe type                                                         000168
+   169   SELECT;                                                                                                            000169
+   170     WHEN TimeframeType = 'DAILY' OR TimeframeType = 'DAY';                                                           000170
+   171       GroupByClause = 'GROUP BY DATE(V.DATE_SOLD)';                                                                  000171
+   172       SelectClause = 'VARCHAR_FORMAT(DATE(V.DATE_SOLD), ''YYYY-MM-DD'') AS Period';                                  000172
+   173                                                                                                                      000173
+   174     WHEN TimeframeType = 'WEEKLY' OR TimeframeType = 'WEEK';                                                         000174
+   175       GroupByClause = 'GROUP BY YEAR(V.DATE_SOLD), WEEK(V.DATE_SOLD)';                                               000175
+   176       SelectClause = 'CONCAT(CHAR(YEAR(V.DATE_SOLD)), ''-W'', CHAR(WEEK(V.DATE_SOLD))) AS Period';                   000176
+   177                                                                                                                      000177
+   178     WHEN TimeframeType = 'MONTHLY' OR TimeframeType = 'MONTH';                                                       000178
+   179       GroupByClause = 'GROUP BY YEAR(V.DATE_SOLD), MONTH(V.DATE_SOLD)';                                              000179
+   180       SelectClause = 'CONCAT(CHAR(YEAR(V.DATE_SOLD)), ''-'', RIGHT(''0'' || CHAR(MONTH(V.DATE_SOLD))                 000180
+ ...   , 2)) AS Period';
+   181                                                                                                                      000181
+   182     WHEN TimeframeType = 'YEARLY' OR TimeframeType = 'YEAR';                                                         000182
+   183       GroupByClause = 'GROUP BY YEAR(V.DATE_SOLD)';                                                                  000183
+   184       SelectClause = 'CHAR(YEAR(V.DATE_SOLD)) AS Period';                                                            000184
+   185                                                                                                                      000185
+   186     OTHER;                                                                                                           000186
+   187       RETURN VEHBIZ_ERROR; // Invalid timeframe type                                                                 000187
+   188   ENDSL;                                                                                                             000188
+   189                                                                                                                      000189
+   190   // Build dynamic SQL statement                                                                                     000190
+   191   SQLStatement = 'SELECT ' +                                                                                         000191
+   192                  SelectClause + ', ' +                                                                               000192
+   193                  'COUNT(*) AS VehiclesSold, ' +                                                                      000193
+   194                  'SUM(CASE WHEN H.NEW_PRICE IS NOT NULL THEN H.NEW_PRICE ELSE V.ASKING_PRICE END) AS                 000194
+ ...    TotalRevenue, ' +
+   195                  'SUM(CASE WHEN H.NEW_PRICE IS NOT NULL THEN H.NEW_PRICE ELSE V.ASKING_PRICE END) -                  000195
+ ...   ' +
+   196                  'SUM(V.ACQUISITION_PRICE) AS TotalProfit, ' +                                                       000196
+   197                  'AVG(DAYS(V.DATE_SOLD) - DAYS(V.DATE_ACQUIRED)) AS AvgDaysToSell ' +                                000197
+   198                  'FROM VEHICLES V ' +                                                                                000198
+   199                  'LEFT JOIN (SELECT VEHICLE_ID, NEW_PRICE FROM VEHICLE_HISTORY ' +                                   000199
+   200                  'WHERE EVENT_TYPE = ''STATUS_CHANGE'' AND NEW_STATUS = ''SOLD'' ' +                                 000200
+   201                  'ORDER BY EVENT_DATE DESC) H ON V.VEHICLE_ID = H.VEHICLE_ID ' +                                     000201
+   202                  'WHERE V.STATUS = ''SOLD'' ' +                                                                      000202
+   203                  'AND V.DATE_SOLD BETWEEN ? AND ? ' +                                                                000203
+   204                  GroupByClause + ' ' +                                                                               000204
+   205                  'ORDER BY Period';                                                                                  000205
+   206                                                                                                                      000206
+   207   // Prepare and execute the dynamic SQL                                                                             000207
+   208   EXEC SQL                                                                                                           000208
+   209     PREPARE MetricsStmt FROM :SQLStatement;                                                                          000209
+   210                                                                                                                      000210
+   211   IF SQLSTATE <> '00000' THEN                                                                                        000211
+   212     RETURN VEHBIZ_ERROR;                                                                                             000212
+   213   ENDIF;                                                                                                             000213
+   214                                                                                                                      000214
+   215   EXEC SQL                                                                                                           000215
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      6
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   216     DECLARE MetricsCursor CURSOR FOR MetricsStmt;                                                                    000216
+   217                                                                                                                      000217
+   218   EXEC SQL                                                                                                           000218
+   219     OPEN MetricsCursor USING :StartDateValue, :EndDateValue;                                                         000219
+   220                                                                                                                      000220
+   221   IF SQLSTATE <> '00000' THEN                                                                                        000221
+   222     RETURN VEHBIZ_ERROR;                                                                                             000222
+   223   ENDIF;                                                                                                             000223
+   224                                                                                                                      000224
+   225   // Fetch results                                                                                                   000225
+   226   i = 0;                                                                                                             000226
+   227   DOW i < %ELEM(MetricsArray) AND SQLSTATE = '00000';                                                                000227
+   228     EXEC SQL                                                                                                         000228
+   229       FETCH NEXT FROM MetricsCursor INTO                                                                             000229
+   230         :MetricsArray(i+1).Period,                                                                                   000230
+   231         :MetricsArray(i+1).VehiclesSold,                                                                             000231
+   232         :MetricsArray(i+1).TotalRevenue,                                                                             000232
+   233         :MetricsArray(i+1).TotalProfit,                                                                              000233
+   234         :MetricsArray(i+1).AverageDaysToSell;                                                                        000234
+   235                                                                                                                      000235
+   236     IF SQLSTATE = '00000' THEN                                                                                       000236
+   237       // Calculate average profit                                                                                    000237
+   238       IF MetricsArray(i+1).VehiclesSold > 0 THEN                                                                     000238
+   239         MetricsArray(i+1).AverageProfit = MetricsArray(i+1).TotalProfit / MetricsArray(i+1).Vehicles                 000239
+ ...   Sold;
+   240       ELSE                                                                                                           000240
+   241         MetricsArray(i+1).AverageProfit = 0;                                                                         000241
+   242       ENDIF;                                                                                                         000242
+   243                                                                                                                      000243
+   244       i += 1;                                                                                                        000244
+   245     ENDIF;                                                                                                           000245
+   246   ENDDO;                                                                                                             000246
+   247                                                                                                                      000247
+   248   MetricsCount = i;                                                                                                  000248
+   249                                                                                                                      000249
+   250   EXEC SQL                                                                                                           000250
+   251     CLOSE MetricsCursor;                                                                                             000251
+   252                                                                                                                      000252
+   253   RETURN MetricsCount;                                                                                               000253
+   254 END-PROC;                                                                                                            000254
+   255                                                                                                                      000255
+   256 // Calculate current inventory valuation                                                                             000256
+   257 DCL-PROC CalculateInventoryValuation EXPORT;                                                                         000257
+   258   DCL-PI *N INT(10);                                                                                                 000258
+   259     InventoryValue LIKEDS(InventoryValueDS);                                                                         000259
+   260   END-PI;                                                                                                            000260
+   261                                                                                                                      000261
+   262   DCL-S CurrentDate DATE;                                                                                            000262
+   263                                                                                                                      000263
+   264   // Initialize values                                                                                               000264
+   265   InventoryValue.TotalVehicles = 0;                                                                                  000265
+   266   InventoryValue.TotalValue = 0;                                                                                     000266
+   267   InventoryValue.AverageValue = 0;                                                                                   000267
+   268   InventoryValue.OldestVehicleDays = 0;                                                                              000268
+   269   InventoryValue.AverageDaysInInventory = 0;                                                                         000269
+   270                                                                                                                      000270
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      7
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   271   CurrentDate = %DATE();                                                                                             000271
+   272                                                                                                                      000272
+   273   // Calculate inventory metrics                                                                                     000273
+   274   EXEC SQL                                                                                                           000274
+   275     SELECT                                                                                                           000275
+   276       COUNT(*) AS TotalVehicles,                                                                                     000276
+   277       SUM(ASKING_PRICE) AS TotalValue,                                                                               000277
+   278       AVG(ASKING_PRICE) AS AverageValue,                                                                             000278
+   279       MAX(DAYS(:CurrentDate) - DAYS(DATE_ACQUIRED)) AS OldestVehicleDays,                                            000279
+   280       AVG(DAYS(:CurrentDate) - DAYS(DATE_ACQUIRED)) AS AverageDaysInInventory                                        000280
+   281     INTO                                                                                                             000281
+   282       :InventoryValue.TotalVehicles,                                                                                 000282
+   283       :InventoryValue.TotalValue,                                                                                    000283
+   284       :InventoryValue.AverageValue,                                                                                  000284
+   285       :InventoryValue.OldestVehicleDays,                                                                             000285
+   286       :InventoryValue.AverageDaysInInventory                                                                         000286
+   287     FROM VEHICLES                                                                                                    000287
+   288     WHERE STATUS = 'AVAILABLE' OR STATUS = 'ON_HOLD';                                                                000288
+   289                                                                                                                      000289
+   290   IF SQLSTATE <> '00000' THEN                                                                                        000290
+   291     RETURN VEHBIZ_ERROR;                                                                                             000291
+   292   ENDIF;                                                                                                             000292
+   293                                                                                                                      000293
+   294   RETURN VEHBIZ_SUCCESS;                                                                                             000294
+   295 END-PROC;                                                                                                            000295
+   296                                                                                                                      000296
+   297 // Calculate average time to sale for sold vehicles                                                                  000297
+   298 DCL-PROC CalculateAverageTimeToSale EXPORT;                                                                          000298
+   299   DCL-PI *N INT(10);                                                                                                 000299
+   300     Timeframe LIKEDS(TimeframeDS) CONST OPTIONS(*NOPASS);                                                            000300
+   301   END-PI;                                                                                                            000301
+   302                                                                                                                      000302
+   303   DCL-S StartDateValue DATE;                                                                                         000303
+   304   DCL-S EndDateValue DATE;                                                                                           000304
+   305   DCL-S AvgDaysToSell INT(10);                                                                                       000305
+   306                                                                                                                      000306
+   307   // Set default dates if parameter not passed or values not provided                                                000307
+   308   IF %PARMS >= 1 AND %ADDR(Timeframe) <> *NULL THEN                                                                  000308
+   309     IF Timeframe.StartDate = *LOVAL THEN                                                                             000309
+   310       StartDateValue = %DATE('0001-01-01');                                                                          000310
+   311     ELSE                                                                                                             000311
+   312       StartDateValue = Timeframe.StartDate;                                                                          000312
+   313     ENDIF;                                                                                                           000313
+   314                                                                                                                      000314
+   315     IF Timeframe.EndDate = *LOVAL THEN                                                                               000315
+   316       EndDateValue = %DATE();                                                                                        000316
+   317     ELSE                                                                                                             000317
+   318       EndDateValue = Timeframe.EndDate;                                                                              000318
+   319     ENDIF;                                                                                                           000319
+   320   ELSE                                                                                                               000320
+   321     StartDateValue = %DATE('0001-01-01');                                                                            000321
+   322     EndDateValue = %DATE();                                                                                          000322
+   323   ENDIF;                                                                                                             000323
+   324                                                                                                                      000324
+   325   // Calculate average days to sell                                                                                  000325
+   326   EXEC SQL                                                                                                           000326
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      8
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   327     SELECT AVG(DAYS(DATE_SOLD) - DAYS(DATE_ACQUIRED)) AS AvgDaysToSell                                               000327
+   328     INTO :AvgDaysToSell                                                                                              000328
+   329     FROM VEHICLES                                                                                                    000329
+   330     WHERE STATUS = 'SOLD'                                                                                            000330
+   331       AND DATE_SOLD BETWEEN :StartDateValue AND :EndDateValue;                                                       000331
+   332                                                                                                                      000332
+   333   IF SQLSTATE <> '00000' THEN                                                                                        000333
+   334     RETURN VEHBIZ_ERROR;                                                                                             000334
+   335   ENDIF;                                                                                                             000335
+   336                                                                                                                      000336
+   337   IF AvgDaysToSell = *NULL THEN                                                                                      000337
+   338     RETURN VEHBIZ_NO_DATA;                                                                                           000338
+   339   ENDIF;                                                                                                             000339
+   340                                                                                                                      000340
+   341   RETURN AvgDaysToSell;                                                                                              000341
+   342 END-PROC;                                                                                                            000342
+   343                                                                                                                      000343
+   344 // Calculate top selling models by quantity                                                                          000344
+   345 DCL-PROC CalculateTopSellingModels EXPORT;                                                                           000345
+   346   DCL-PI *N INT(10);                                                                                                 000346
+   347     Timeframe LIKEDS(TimeframeDS) CONST OPTIONS(*NOPASS);                                                            000347
+   348     TopCount INT(10) CONST OPTIONS(*NOPASS);                                                                         000348
+   349     ResultArray LIKEDS(VehicleDS) DIM(999) OPTIONS(*VARSIZE);                                                        000349
+   350     ResultCount INT(10);                                                                                             000350
+   351   END-PI;                                                                                                            000351
+   352                                                                                                                      000352
+   353   DCL-S StartDateValue DATE;                                                                                         000353
+   354   DCL-S EndDateValue DATE;                                                                                           000354
+   355   DCL-S LimitValue INT(10);                                                                                          000355
+   356   DCL-S SQLStatement VARCHAR(2000);                                                                                  000356
+   357   DCL-S i INT(10);                                                                                                   000357
+   358                                                                                                                      000358
+   359   // Initialize result count                                                                                         000359
+   360   ResultCount = 0;                                                                                                   000360
+   361                                                                                                                      000361
+   362   // Set default dates if parameter not passed or values not provided                                                000362
+   363   IF %PARMS >= 1 AND %ADDR(Timeframe) <> *NULL THEN                                                                  000363
+   364     IF Timeframe.StartDate = *LOVAL THEN                                                                             000364
+   365       StartDateValue = %DATE('0001-01-01');                                                                          000365
+   366     ELSE                                                                                                             000366
+   367       StartDateValue = Timeframe.StartDate;                                                                          000367
+   368     ENDIF;                                                                                                           000368
+   369                                                                                                                      000369
+   370     IF Timeframe.EndDate = *LOVAL THEN                                                                               000370
+   371       EndDateValue = %DATE();                                                                                        000371
+   372     ELSE                                                                                                             000372
+   373       EndDateValue = Timeframe.EndDate;                                                                              000373
+   374     ENDIF;                                                                                                           000374
+   375   ELSE                                                                                                               000375
+   376     StartDateValue = %DATE('0001-01-01');                                                                            000376
+   377     EndDateValue = %DATE();                                                                                          000377
+   378   ENDIF;                                                                                                             000378
+   379                                                                                                                      000379
+   380   // Set default limit if not provided                                                                               000380
+   381   IF %PARMS >= 2 AND %ADDR(TopCount) <> *NULL AND TopCount > 0 THEN                                                  000381
+   382     LimitValue = TopCount;                                                                                           000382
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page      9
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   383   ELSE                                                                                                               000383
+   384     LimitValue = 10; // Default to top 10                                                                            000384
+   385   ENDIF;                                                                                                             000385
+   386                                                                                                                      000386
+   387   // Build dynamic SQL statement                                                                                     000387
+   388   SQLStatement = 'SELECT MAKE, MODEL, YEAR, COUNT(*) AS SoldCount ' +                                                000388
+   389                  'FROM VEHICLES ' +                                                                                  000389
+   390                  'WHERE STATUS = ''SOLD'' ' +                                                                        000390
+   391                  'AND DATE_SOLD BETWEEN ? AND ? ' +                                                                  000391
+   392                  'GROUP BY MAKE, MODEL, YEAR ' +                                                                     000392
+   393                  'ORDER BY SoldCount DESC ' +                                                                        000393
+   394                  'FETCH FIRST ' + %CHAR(LimitValue) + ' ROWS ONLY';                                                  000394
+   395                                                                                                                      000395
+   396   // Prepare and execute the dynamic SQL                                                                             000396
+   397   EXEC SQL                                                                                                           000397
+   398     PREPARE TopModelStmt FROM :SQLStatement;                                                                         000398
+   399                                                                                                                      000399
+   400   IF SQLSTATE <> '00000' THEN                                                                                        000400
+   401     RETURN VEHBIZ_ERROR;                                                                                             000401
+   402   ENDIF;                                                                                                             000402
+   403                                                                                                                      000403
+   404   EXEC SQL                                                                                                           000404
+   405     DECLARE TopModelCursor CURSOR FOR TopModelStmt;                                                                  000405
+   406                                                                                                                      000406
+   407   EXEC SQL                                                                                                           000407
+   408     OPEN TopModelCursor USING :StartDateValue, :EndDateValue;                                                        000408
+   409                                                                                                                      000409
+   410   IF SQLSTATE <> '00000' THEN                                                                                        000410
+   411     RETURN VEHBIZ_ERROR;                                                                                             000411
+   412   ENDIF;                                                                                                             000412
+   413                                                                                                                      000413
+   414   // Fetch results                                                                                                   000414
+   415   i = 0;                                                                                                             000415
+   416   DOW i < %ELEM(ResultArray) AND SQLSTATE = '00000';                                                                 000416
+   417     EXEC SQL                                                                                                         000417
+   418       FETCH NEXT FROM TopModelCursor INTO                                                                            000418
+   419         :ResultArray(i+1).Make,                                                                                      000419
+   420         :ResultArray(i+1).Model,                                                                                     000420
+   421         :ResultArray(i+1).Year,                                                                                      000421
+   422         :ResultArray(i+1).VehicleId; // Using VehicleId to store count                                               000422
+   423                                                                                                                      000423
+   424     IF SQLSTATE = '00000' THEN                                                                                       000424
+   425       i += 1;                                                                                                        000425
+   426     ENDIF;                                                                                                           000426
+   427   ENDDO;                                                                                                             000427
+   428                                                                                                                      000428
+   429   ResultCount = i;                                                                                                   000429
+   430                                                                                                                      000430
+   431   EXEC SQL                                                                                                           000431
+   432     CLOSE TopModelCursor;                                                                                            000432
+   433                                                                                                                      000433
+   434   RETURN ResultCount;                                                                                                000434
+   435 END-PROC;                                                                                                            000435
+   436                                                                                                                      000436
+   437 // Calculate profit margin percentage for a vehicle                                                                  000437
+   438 DCL-PROC CalculateProfitMargin EXPORT;                                                                               000438
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page     10
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   439   DCL-PI *N PACKED(5:2);                                                                                             000439
+   440     VehicleId INT(10) CONST;                                                                                         000440
+   441   END-PI;                                                                                                            000441
+   442                                                                                                                      000442
+   443   DCL-S AcquisitionPrice PACKED(10:2);                                                                               000443
+   444   DCL-S SellingPrice PACKED(10:2);                                                                                   000444
+   445   DCL-S ProfitMargin PACKED(5:2);                                                                                    000445
+   446   DCL-S Status VARCHAR(10);                                                                                          000446
+   447                                                                                                                      000447
+   448   // Get vehicle information                                                                                         000448
+   449   EXEC SQL                                                                                                           000449
+   450     SELECT ACQUISITION_PRICE, ASKING_PRICE, STATUS                                                                   000450
+   451     INTO :AcquisitionPrice, :SellingPrice, :Status                                                                   000451
+   452     FROM VEHICLES                                                                                                    000452
+   453     WHERE VEHICLE_ID = :VehicleId;                                                                                   000453
+   454                                                                                                                      000454
+   455   IF SQLSTATE = '02000' THEN                                                                                         000455
+   456     RETURN VEHBIZ_NO_DATA;                                                                                           000456
+   457   ELSEIF SQLSTATE <> '00000' THEN                                                                                    000457
+   458     RETURN VEHBIZ_ERROR;                                                                                             000458
+   459   ENDIF;                                                                                                             000459
+   460                                                                                                                      000460
+   461   // For sold vehicles, use actual selling price                                                                     000461
+   462   IF Status = 'SOLD' THEN                                                                                            000462
+   463     EXEC SQL                                                                                                         000463
+   464       SELECT NEW_PRICE INTO :SellingPrice                                                                            000464
+   465       FROM VEHICLE_HISTORY                                                                                           000465
+   466       WHERE VEHICLE_ID = :VehicleId                                                                                  000466
+   467         AND EVENT_TYPE = 'STATUS_CHANGE'                                                                             000467
+   468         AND NEW_STATUS = 'SOLD'                                                                                      000468
+   469       ORDER BY EVENT_DATE DESC                                                                                       000469
+   470       FETCH FIRST 1 ROW ONLY;                                                                                        000470
+   471                                                                                                                      000471
+   472     IF SQLSTATE <> '00000' AND SQLSTATE <> '02000' THEN                                                              000472
+   473       RETURN VEHBIZ_ERROR;                                                                                           000473
+   474     ENDIF;                                                                                                           000474
+   475   ENDIF;                                                                                                             000475
+   476                                                                                                                      000476
+   477   // Calculate profit margin percentage                                                                              000477
+   478   IF AcquisitionPrice > 0 THEN                                                                                       000478
+   479     ProfitMargin = ((SellingPrice - AcquisitionPrice) / AcquisitionPrice) * 100;                                     000479
+   480   ELSE                                                                                                               000480
+   481     ProfitMargin = 0;                                                                                                000481
+   482   ENDIF;                                                                                                             000482
+   483                                                                                                                      000483
+   484   RETURN ProfitMargin;                                                                                               000484
+   485 END-PROC;                                                                                                            000485
+   486                                                                                                                      000486
+   487 // Calculate monthly sales and profit for the last 12 months                                                         000487
+   488 DCL-PROC CalculateMonthlyProfitLast12Months EXPORT;                                                                  000488
+   489   DCL-PI *N INT(10);                                                                                                 000489
+   490     MetricsArray LIKEDS(SalesMetricsDS) DIM(12) OPTIONS(*VARSIZE);                                                   000490
+   491     MetricsCount INT(10);                                                                                            000491
+   492   END-PI;                                                                                                            000492
+   493                                                                                                                      000493
+   494   DCL-S EndDate DATE;                                                                                                000494
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page     11
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   495   DCL-S StartDate DATE;                                                                                              000495
+   496   DCL-S TimeframeValue LIKEDS(TimeframeDS);                                                                          000496
+   497   DCL-S Result INT(10);                                                                                              000497
+   498                                                                                                                      000498
+   499   // Set date range for last 12 months                                                                               000499
+   500   EndDate = %DATE();                                                                                                 000500
+   501   StartDate = %DATE(                                                                                                 000501
+   502     %YEAR(EndDate) - %DIV(%MONTH(EndDate) - 1, 12),                                                                  000502
+   503     %MONTH(EndDate) - 1 + %REM(%MONTH(EndDate) - 1, 12) * 11,                                                        000503
+   504     1                                                                                                                000504
+   505   );                                                                                                                 000505
+   506                                                                                                                      000506
+   507   TimeframeValue.StartDate = StartDate;                                                                              000507
+   508   TimeframeValue.EndDate = EndDate;                                                                                  000508
+   509                                                                                                                      000509
+   510   // Call the general metrics calculation with MONTHLY timeframe                                                     000510
+   511   Result = CalculateSalesMetricsByTimeframe(                                                                         000511
+   512     TimeframeValue : 'MONTHLY' : MetricsArray : MetricsCount                                                         000512
+   513   );                                                                                                                 000513
+   514                                                                                                                      000514
+   515   RETURN Result;                                                                                                     000515
+   516 END-PROC;                                                                                                            000516
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page     12
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+*RNF0733 20      0         The record length of the output file is too small. The
+                           record length must be at least 118.
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page     13
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+*RNF0733 20      1 The record length of the output file is too small.
+*RNF0273 40      1 Compiler not able to open the /COPY or /INCLUDE file;
+                   directive ignored.
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHBIZ          COMMON1    09/17/25 18:57:58        Page     14
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        1
+    Severe Error (30+)  . . . . . . :        1
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        2
+  Source Totals:
+    Records . . . . . . . . . . . . :      516
+    Specifications  . . . . . . . . :      369
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :      129
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Compilation stopped. Severity 40 errors found in program.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Used Car Inventory{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Available Vehicles</h5>
+                <p class="display-4">{{ available_count|default(0) }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Sold (Last 30 Days)</h5>
+                <p class="display-4">{{ sold_count|default(0) }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Inventory Value</h5>
+                <p class="display-4">{{ total_value|default(0)|currency }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Recent Sales</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_sales %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vehicle</th>
+                                    <th>Sale Price</th>
+                                    <th>Date Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vehicle in recent_sales %}
+                                    <tr>
+                                        <td>{{ vehicle.vehicle_id }}</td>
+                                        <td>
+                                            <a href="{{ url_for('vehicle_detail', vehicle_id=vehicle.vehicle_id) }}">
+                                                {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
+                                            </a>
+                                        </td>
+                                        <td>{{ vehicle.asking_price|currency }}</td>
+                                        <td>{{ vehicle.date_sold|format_date }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No recent sales.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Oldest Inventory</h5>
+            </div>
+            <div class="card-body">
+                {% if oldest_inventory %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vehicle</th>
+                                    <th>Asking Price</th>
+                                    <th>Date Acquired</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vehicle in oldest_inventory %}
+                                    <tr>
+                                        <td>{{ vehicle.vehicle_id }}</td>
+                                        <td>
+                                            <a href="{{ url_for('vehicle_detail', vehicle_id=vehicle.vehicle_id) }}">
+                                                {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
+                                            </a>
+                                        </td>
+                                        <td>{{ vehicle.asking_price|currency }}</td>
+                                        <td>{{ vehicle.date_acquired|format_date }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No vehicles in inventory.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add New Vehicle
+                    </a>
+                    <a href="{{ url_for('inventory') }}" class="btn btn-secondary">
+                        <i class="bi bi-list-ul"></i> View All Inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

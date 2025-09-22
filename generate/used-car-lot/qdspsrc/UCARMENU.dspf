@@ -1,0 +1,21 @@
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
+     A                                      CA03(03 'Exit')
+     A                                      CA12(12 'Cancel')
+     A                                      PRINT
+     A          R MENU
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Used Car Dealership System'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  5 20'Used Car Dealership System Menu'
+     A                                  7 20'Select an option and press Enter:'
+     A                                  9 20'1. Monthly Sales and Profit Report'
+     A                                 10 20'2. Inventory Status Report'
+     A                                 11 20'3. Vehicle Inventory Management'
+     A                                 12 20'4. Exit'
+     A                                 14 20'Option:'
+     A            OPTION         2Y 0B 14 28
+     A                                 21  2'F3=Exit'
+     A                                 21 12'F12=Cancel'

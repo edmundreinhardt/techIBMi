@@ -1,0 +1,51 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: CRTSRVPGM srcstmf('/home/REINHARD/builds/used-car-lot/qsrvsrc/VEHCRUD.bnd') SRVPGM(ERCARLOT/VEHCRUD) MODULE(VEHCRUD) BNDSRVPGM(*NONE) ACTGRP(*CALLER) TEXT('') TGTRLS() AUT() DETAIL(*BASIC) STGMDL(*SNGLVL ) OPTION()
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.58.04.00
+
+CPF5D05: Service program VEHCRUD not created.
+                                               Create Service Program                                                   Page     1
+5770SS1 V7R4M0  190621                                                        ERCARLOT/VEHCRUD    COMMON1   09/17/25  18:58:04 EDT
+ Service program  . . . . . . . . . . . . . . . . . . . . . . . . :   VEHCRUD
+   Library  . . . . . . . . . . . . . . . . . . . . . . . . . . . :     ERCARLOT
+ Export . . . . . . . . . . . . . . . . . . . . . . . . . . . . . :   *SRCFILE
+ Export source file . . . . . . . . . . . . . . . . . . . . . . . :   *STMF
+   Library  . . . . . . . . . . . . . . . . . . . . . . . . . . . :
+ Export source member . . . . . . . . . . . . . . . . . . . . . . :
+ Export source stream file  . . . . . . . . . . . . . . . . . . . :   /home/REINHARD/builds/used-car-lot/qsrvsrc/VEHCRUD.bnd
+ Activation group . . . . . . . . . . . . . . . . . . . . . . . . :   *CALLER
+ Creation options . . . . . . . . . . . . . . . . . . . . . . . . :   *GEN        *NODUPPROC  *NODUPVAR   *WARN       *RSLVREF
+ Listing detail . . . . . . . . . . . . . . . . . . . . . . . . . :   *BASIC
+ Allow Update . . . . . . . . . . . . . . . . . . . . . . . . . . :   *YES
+ Allow bound *SRVPGM library name update  . . . . . . . . . . . . :   *NO
+ User profile . . . . . . . . . . . . . . . . . . . . . . . . . . :   *USER
+ Replace existing service program . . . . . . . . . . . . . . . . :   *YES
+ Authority  . . . . . . . . . . . . . . . . . . . . . . . . . . . :   *LIBCRTAUT
+ Target release . . . . . . . . . . . . . . . . . . . . . . . . . :   *CURRENT
+ Allow reinitialization . . . . . . . . . . . . . . . . . . . . . :   *NO
+ Storage model  . . . . . . . . . . . . . . . . . . . . . . . . . :   *SNGLVL
+ Argument optimization  . . . . . . . . . . . . . . . . . . . . . :   *NO
+                                               Create Service Program                                                   Page     2
+5770SS1 V7R4M0  190621                                                        ERCARLOT/VEHCRUD    COMMON1   09/17/25  18:58:04 EDT
+ Interprocedural analysis . . . . . . . . . . . . . . . . . . . . :   *NO
+ IPA control file . . . . . . . . . . . . . . . . . . . . . . . . :   *NONE
+ Text . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . :
+ Module      Library              Module      Library              Module      Library              Module      Library
+ VEHCRUD     *LIBL
+ Service                                     Service                                     Service
+ Program     Library     Activation          Program     Library     Activation          Program     Library     Activation
+ *NONE
+                                               Create Service Program                                                   Page     3
+5770SS1 V7R4M0  190621                                                        ERCARLOT/VEHCRUD    COMMON1   09/17/25  18:58:04 EDT
+ Binding                          Binding                          Binding                          Binding
+ Directory   Library              Directory   Library              Directory   Library              Directory   Library
+ *NONE
+ Total CPU time . . . . . . . . . . . . . . . . . . . . . . . :                .001
+ Total elapsed time . . . . . . . . . . . . . . . . . . . . . :                .003
+                                 * * * * *   E N D  O F  B I N D I N G  S T A T I S T I C S   * * * * *
+*CPF5D05 - Service program VEHCRUD not created.
+                    * * * * *   E N D  O F  C R E A T E  S E R V I C E  P R O G R A M  L I S T I N G   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

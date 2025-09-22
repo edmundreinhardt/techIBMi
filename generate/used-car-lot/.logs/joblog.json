@@ -1,0 +1,326 @@
+[
+    {
+        "cmd": "RUNSQLSTM srcstmf('/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLES.table') DBGVIEW(*SOURCE) TGTRLS() OUTPUT(*PRINT) MARGINS(1024) COMMIT(*NONE )",
+        "cmd_time": "2025-09-17-18.57.55.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.54.904702",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            },
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.54.942396",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            },
+            {
+                "msgid": "CPF2105",
+                "type": "DIAGNOSTIC",
+                "severity": 40,
+                "message_time": "2025-09-17-18.57.55.218961",
+                "message_text": "Object VEHICLES in ERCARLOT type *FILE not found.",
+                "second_level": "&N Cause . . . . . :   No object was found for the name or type specified. &N Recovery  . . . :   Specify the correct name or type of the object. Then try the request again.",
+                "from_program": "QLICHGOB",
+                "from_library": "QSYS",
+                "from_instruction": "05EF",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHICLES.FILE",
+        "source": "/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLES.table",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qsqlsrc_VEHICLES_table.splf",
+        "failed": true
+    },
+    {
+        "cmd": "RUNSQLSTM srcstmf('/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLE_HISTORY.table') DBGVIEW(*SOURCE) TGTRLS() OUTPUT(*PRINT) MARGINS(1024) COMMIT(*NONE )",
+        "cmd_time": "2025-09-17-18.57.56.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.56.002094",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            },
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.56.034107",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            },
+            {
+                "msgid": "CPF2105",
+                "type": "DIAGNOSTIC",
+                "severity": 40,
+                "message_time": "2025-09-17-18.57.56.288425",
+                "message_text": "Object VEHHISTORY in ERCARLOT type *FILE not found.",
+                "second_level": "&N Cause . . . . . :   No object was found for the name or type specified. &N Recovery  . . . :   Specify the correct name or type of the object. Then try the request again.",
+                "from_program": "QLICHGOB",
+                "from_library": "QSYS",
+                "from_instruction": "05EF",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHHISTORY.FILE",
+        "source": "/home/REINHARD/builds/used-car-lot/qsqlsrc/VEHICLE_HISTORY.table",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qsqlsrc_VEHICLE_HISTORY_table.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/VEHCRUD) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHCRUD.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.57.57.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.57.060846",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHCRUD.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHCRUD.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_VEHCRUD_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/VEHBIZ) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHBIZ.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.57.58.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.58.385437",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHBIZ.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHBIZ.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_VEHBIZ_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/MONTHRPT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/MONTHRPT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.57.59.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.57.59.638242",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "MONTHRPT.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/MONTHRPT.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_MONTHRPT_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/INVRPT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/INVRPT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.58.01.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.58.00.867968",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "INVRPT.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/INVRPT.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_INVRPT_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/VEHMGMT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHMGMT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.58.02.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.58.02.082937",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHMGMT.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHMGMT.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_VEHMGMT_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "crtsqlrpgi obj(ERCARLOT/REPMENU) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/REPMENU.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')",
+        "cmd_time": "2025-09-17-18.58.03.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.58.03.353547",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "REPMENU.MODULE",
+        "source": "/home/REINHARD/builds/used-car-lot/qrpglesrc/REPMENU.sqlrpgle",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qrpglesrc_REPMENU_sqlrpgle.splf",
+        "failed": true
+    },
+    {
+        "cmd": "CRTSRVPGM srcstmf('/home/REINHARD/builds/used-car-lot/qsrvsrc/VEHCRUD.bnd') SRVPGM(ERCARLOT/VEHCRUD) MODULE(VEHCRUD) BNDSRVPGM(*NONE) ACTGRP(*CALLER) TEXT('') TGTRLS() AUT() DETAIL(*BASIC) STGMDL(*SNGLVL ) OPTION()",
+        "cmd_time": "2025-09-17-18.58.04.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.58.04.620145",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHCRUD.SRVPGM",
+        "source": "/home/REINHARD/builds/used-car-lot/qsrvsrc/VEHCRUD.bnd",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qsrvsrc_VEHCRUD_bnd.splf",
+        "failed": true
+    },
+    {
+        "cmd": "CRTSRVPGM srcstmf('/home/REINHARD/builds/used-car-lot/qsrvsrc/VEHBIZ.bnd') SRVPGM(ERCARLOT/VEHBIZ) MODULE(VEHBIZ) BNDSRVPGM(VEHCRUD) ACTGRP(*CALLER) TEXT('') TGTRLS() AUT() DETAIL(*BASIC) STGMDL(*SNGLVL ) OPTION()",
+        "cmd_time": "2025-09-17-18.58.05.00",
+        "msgs": [
+            {
+                "msgid": "CPC2198",
+                "type": "COMPLETION",
+                "severity": 0,
+                "message_time": "2025-09-17-18.58.05.650831",
+                "message_text": "Current library changed to ERCARLOT.",
+                "second_level": "&N Cause . . . . . :   The current library in the library list was changed to ERCARLOT.",
+                "from_program": "QLICHLLE",
+                "from_library": "QSYS",
+                "from_instruction": "01A3",
+                "to_program": "QP2USER2",
+                "to_library": "QSYS",
+                "to_module": "QP2API",
+                "to_procedure": "runpase_common__FiPvT2",
+                "to_instruction": "4"
+            }
+        ],
+        "object": "VEHBIZ.SRVPGM",
+        "source": "/home/REINHARD/builds/used-car-lot/qsrvsrc/VEHBIZ.bnd",
+        "output": "/home/REINHARD/builds/used-car-lot/.logs/qsrvsrc_VEHBIZ_bnd.splf",
+        "failed": true
+    }
+]

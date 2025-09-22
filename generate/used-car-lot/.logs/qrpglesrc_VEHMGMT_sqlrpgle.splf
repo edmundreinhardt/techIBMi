@@ -1,0 +1,693 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/VEHMGMT) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHMGMT.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.58.02.00
+
+SQL9019: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   VEHMGMT
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/VEHMG
+                                       MT.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  18:14:08
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   VEHMGMT
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // VEHMGMT - Vehicle Inventory Management Program                                                                    000002
+     3 // This program provides a user interface for managing vehicle inventory                                             000003
+     4                                                                                                                      000004
+     5 CTL-OPT DFTACTGRP(*NO) ACTGRP(*NEW);                                                                                 000005
+     6 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000006
+     7 CTL-OPT DECEDIT('0.');                                                                                               000007
+     8 CTL-OPT ALWNULL(*USRCTL);                                                                                            000008
+     9 CTL-OPT BNDDIR('VEHBND');                                                                                            000009
+    10 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000010
+    11 CTL-OPT MAIN(Main);                                                                                                  000011
+    12                                                                                                                      000012
+    13 // Include service program headers                                                                                   000013
+    14 /COPY QRPGLESRC,VEHCRUD_H                                                                                            000014
+======>      aaaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000014  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    15                                                                                                                      000015
+    16 // Display file                                                                                                      000016
+    17 DCL-F VEHMGMTD WORKSTN SFILE(SFLRCD:SFLRRN) SFILE(ERRORSFL:ERRRN) INDDS(DSPIND);                                     000017
+    18                                                                                                                      000018
+    19 // Indicators                                                                                                        000019
+    20 DCL-DS DSPIND;                                                                                                       000020
+    21   Exit IND POS(3);                                                                                                   000021
+    22   Delete IND POS(4);                                                                                                 000022
+    23   Refresh IND POS(5);                                                                                                000023
+    24   Add IND POS(6);                                                                                                    000024
+    25   Cancel IND POS(12);                                                                                                000025
+    26   SflDsp IND POS(31);                                                                                                000026
+    27   SflDspCtl IND POS(32);                                                                                             000027
+    28   SflClr IND POS(33);                                                                                                000028
+    29   SflEnd IND POS(34);                                                                                                000029
+    30 END-DS;                                                                                                              000030
+    31                                                                                                                      000031
+    32 // Program variables                                                                                                 000032
+    33 DCL-S ProgramStatus CHAR(10) INZ('RUNNING');                                                                         000033
+    34 DCL-S VehicleCount INT(10);                                                                                          000034
+    35 DCL-S i INT(10);                                                                                                     000035
+    36 DCL-S CurrentDate DATE;                                                                                              000036
+    37 DCL-S SelectedVehicleId INT(10);                                                                                     000037
+    38 DCL-S Result INT(10);                                                                                                000038
+    39 DCL-S ErrorMessage VARCHAR(100);                                                                                     000039
+    40 DCL-S ERRRN PACKED(4:0);                                                                                             000040
+    41 DCL-S UserId VARCHAR(10) INZ('USERMGMT');                                                                            000041
+    42                                                                                                                      000042
+    43 // Array to hold vehicle data                                                                                        000043
+    44 DCL-DS VehicleArray LIKEDS(VehicleDS) DIM(999);                                                                      000044
+    45                                                                                                                      000045
+    46 // Vehicle data structure for add/edit                                                                               000046
+    47 DCL-DS VehicleData LIKEDS(VehicleDS);                                                                                000047
+    48                                                                                                                      000048
+    49 // Array to hold history data                                                                                        000049
+    50 DCL-DS HistoryArray LIKEDS(VehicleHistoryDS) DIM(999);                                                               000050
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    51                                                                                                                      000051
+    52 // Main procedure                                                                                                    000052
+    53 DCL-PROC Main;                                                                                                       000053
+    54   // Initialize display                                                                                              000054
+    55   ExecInit();                                                                                                        000055
+    56                                                                                                                      000056
+    57   // Process until exit                                                                                              000057
+    58   DOW ProgramStatus = 'RUNNING';                                                                                     000058
+    59     ExecDisplay();                                                                                                   000059
+    60     ExecCommand();                                                                                                   000060
+    61   ENDDO;                                                                                                             000061
+    62                                                                                                                      000062
+    63   // Clean up and exit                                                                                               000063
+    64   *INLR = *ON;                                                                                                       000064
+    65   RETURN;                                                                                                            000065
+    66 END-PROC;                                                                                                            000066
+    67                                                                                                                      000067
+    68 // Initialize the program                                                                                            000068
+    69 DCL-PROC ExecInit;                                                                                                   000069
+    70   // Get current date                                                                                                000070
+    71   CurrentDate = %DATE();                                                                                             000071
+    72                                                                                                                      000072
+    73   // Load data                                                                                                       000073
+    74   LoadData();                                                                                                        000074
+    75                                                                                                                      000075
+    76   RETURN;                                                                                                            000076
+    77 END-PROC;                                                                                                            000077
+    78                                                                                                                      000078
+    79 // Load vehicle data                                                                                                 000079
+    80 DCL-PROC LoadData;                                                                                                   000080
+    81   DCL-DS Filter LIKEDS(VehicleFilterDS);                                                                             000081
+    82                                                                                                                      000082
+    83   // Clear and initialize the subfile                                                                                000083
+    84   SflClr = *ON;                                                                                                      000084
+    85   WRITE SFCTL;                                                                                                       000085
+    86   SflClr = *OFF;                                                                                                     000086
+    87                                                                                                                      000087
+    88   // Get all vehicles                                                                                                000088
+    89   Result = ListVehicles(*NULL : VehicleArray : VehicleCount);                                                        000089
+    90                                                                                                                      000090
+    91   // If no data, display empty subfile                                                                               000091
+    92   IF Result <= 0;                                                                                                    000092
+    93     SflDsp = *OFF;                                                                                                   000093
+    94     SflDspCtl = *ON;                                                                                                 000094
+    95     RETURN;                                                                                                          000095
+    96   ENDIF;                                                                                                             000096
+    97                                                                                                                      000097
+    98   // Load subfile with vehicles                                                                                      000098
+    99   SFLRRN = 0;                                                                                                        000099
+   100                                                                                                                      000100
+   101   FOR i = 1 TO VehicleCount;                                                                                         000101
+   102     // Increment record number                                                                                       000102
+   103     SFLRRN += 1;                                                                                                     000103
+   104                                                                                                                      000104
+   105     // Set subfile record fields                                                                                     000105
+   106     OPTION = ' ';                                                                                                    000106
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   107     VEHID = VehicleArray(i).VehicleId;                                                                               000107
+   108     MAKE = VehicleArray(i).Make;                                                                                     000108
+   109     MODEL = VehicleArray(i).Model;                                                                                   000109
+   110     YEAR = VehicleArray(i).Year;                                                                                     000110
+   111     VIN = VehicleArray(i).VIN;                                                                                       000111
+   112     STATUS = VehicleArray(i).Status;                                                                                 000112
+   113     PRICE = VehicleArray(i).AskingPrice;                                                                             000113
+   114                                                                                                                      000114
+   115     // Write subfile record                                                                                          000115
+   116     WRITE SFLRCD;                                                                                                    000116
+   117   ENDFOR;                                                                                                            000117
+   118                                                                                                                      000118
+   119   // Turn on subfile display                                                                                         000119
+   120   SflDsp = *ON;                                                                                                      000120
+   121   SflDspCtl = *ON;                                                                                                   000121
+   122   SflEnd = *ON;                                                                                                      000122
+   123                                                                                                                      000123
+   124   RETURN;                                                                                                            000124
+   125 END-PROC;                                                                                                            000125
+   126                                                                                                                      000126
+   127 // Display the screen                                                                                                000127
+   128 DCL-PROC ExecDisplay;                                                                                                000128
+   129   // Write header                                                                                                    000129
+   130   WRITE SFCTL;                                                                                                       000130
+   131                                                                                                                      000131
+   132   // Write footer                                                                                                    000132
+   133   WRITE FOOTER;                                                                                                      000133
+   134                                                                                                                      000134
+   135   // Display screen and read input                                                                                   000135
+   136   EXFMT SFCTL;                                                                                                       000136
+   137                                                                                                                      000137
+   138   RETURN;                                                                                                            000138
+   139 END-PROC;                                                                                                            000139
+   140                                                                                                                      000140
+   141 // Process command keys and options                                                                                  000141
+   142 DCL-PROC ExecCommand;                                                                                                000142
+   143   // Check function keys                                                                                             000143
+   144   SELECT;                                                                                                            000144
+   145     WHEN Exit;                                                                                                       000145
+   146       ProgramStatus = 'EXIT';                                                                                        000146
+   147                                                                                                                      000147
+   148     WHEN Refresh;                                                                                                    000148
+   149       LoadData();                                                                                                    000149
+   150                                                                                                                      000150
+   151     WHEN Add;                                                                                                        000151
+   152       AddVehicleScreen();                                                                                            000152
+   153                                                                                                                      000153
+   154     WHEN Cancel;                                                                                                     000154
+   155       ProgramStatus = 'EXIT';                                                                                        000155
+   156                                                                                                                      000156
+   157     OTHER;                                                                                                           000157
+   158       // Process options                                                                                             000158
+   159       ProcessOptions();                                                                                              000159
+   160   ENDSL;                                                                                                             000160
+   161                                                                                                                      000161
+   162   RETURN;                                                                                                            000162
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      5
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   163 END-PROC;                                                                                                            000163
+   164                                                                                                                      000164
+   165 // Process options entered on the subfile                                                                            000165
+   166 DCL-PROC ProcessOptions;                                                                                             000166
+   167   DCL-S OptionValue CHAR(1);                                                                                         000167
+   168   DCL-S VehicleId INT(10);                                                                                           000168
+   169                                                                                                                      000169
+   170   // Read all records in the subfile                                                                                 000170
+   171   SFLRRN = 0;                                                                                                        000171
+   172                                                                                                                      000172
+   173   DOW SFLRRN < VehicleCount;                                                                                         000173
+   174     SFLRRN += 1;                                                                                                     000174
+   175                                                                                                                      000175
+   176     // Read the record                                                                                               000176
+   177     CHAIN SFLRRN SFLRCD;                                                                                             000177
+   178                                                                                                                      000178
+   179     // If option entered, process it                                                                                 000179
+   180     IF OPTION <> ' ';                                                                                                000180
+   181       OptionValue = OPTION;                                                                                          000181
+   182       VehicleId = VEHID;                                                                                             000182
+   183                                                                                                                      000183
+   184       // Clear the option                                                                                            000184
+   185       OPTION = ' ';                                                                                                  000185
+   186       UPDATE SFLRCD;                                                                                                 000186
+   187                                                                                                                      000187
+   188       // Process the option                                                                                          000188
+   189       SELECT;                                                                                                        000189
+   190         WHEN OptionValue = '2';                                                                                      000190
+   191           EditVehicleScreen(VehicleId);                                                                              000191
+   192                                                                                                                      000192
+   193         WHEN OptionValue = '4';                                                                                      000193
+   194           DeleteVehicle(VehicleId);                                                                                  000194
+   195                                                                                                                      000195
+   196         WHEN OptionValue = '5';                                                                                      000196
+   197           UpdateStatusScreen(VehicleId);                                                                             000197
+   198                                                                                                                      000198
+   199         WHEN OptionValue = '6';                                                                                      000199
+   200           ViewHistoryScreen(VehicleId);                                                                              000200
+   201                                                                                                                      000201
+   202         OTHER;                                                                                                       000202
+   203           ShowError('Invalid option. Valid options are 2, 4, 5, and 6.');                                            000203
+   204       ENDSL;                                                                                                         000204
+   205     ENDIF;                                                                                                           000205
+   206   ENDDO;                                                                                                             000206
+   207                                                                                                                      000207
+   208   RETURN;                                                                                                            000208
+   209 END-PROC;                                                                                                            000209
+   210                                                                                                                      000210
+   211 // Add vehicle screen                                                                                                000211
+   212 DCL-PROC AddVehicleScreen;                                                                                           000212
+   213   // Initialize fields                                                                                               000213
+   214   AMAKE = '';                                                                                                        000214
+   215   AMODEL = '';                                                                                                       000215
+   216   ATRIM = '';                                                                                                        000216
+   217   AYEAR = 0;                                                                                                         000217
+   218   AVIN = '';                                                                                                         000218
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      6
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   219   ACOLOR = '';                                                                                                       000219
+   220   AODOMETER = 0;                                                                                                     000220
+   221   ACONDITION = 0;                                                                                                    000221
+   222   AACQPRICE = 0;                                                                                                     000222
+   223   AASKPRICE = 0;                                                                                                     000223
+   224   ADATEACQ = CurrentDate;                                                                                            000224
+   225   ASTATUS = 'AVAILABLE';                                                                                             000225
+   226   ANOTES = '';                                                                                                       000226
+   227                                                                                                                      000227
+   228   // Display screen                                                                                                  000228
+   229   EXFMT ADDRCD;                                                                                                      000229
+   230                                                                                                                      000230
+   231   // Process function keys                                                                                           000231
+   232   IF Exit OR Cancel;                                                                                                 000232
+   233     RETURN;                                                                                                          000233
+   234   ENDIF;                                                                                                             000234
+   235                                                                                                                      000235
+   236   // Add the vehicle                                                                                                 000236
+   237   VehicleData = *ALLX'00';                                                                                           000237
+   238   VehicleData.Make = AMAKE;                                                                                          000238
+   239   VehicleData.Model = AMODEL;                                                                                        000239
+   240   VehicleData.Trim = ATRIM;                                                                                          000240
+   241   VehicleData.Year = AYEAR;                                                                                          000241
+   242   VehicleData.VIN = AVIN;                                                                                            000242
+   243   VehicleData.Color = ACOLOR;                                                                                        000243
+   244   VehicleData.Odometer = AODOMETER;                                                                                  000244
+   245   VehicleData.ConditionRating = ACONDITION;                                                                          000245
+   246   VehicleData.AcquisitionPrice = AACQPRICE;                                                                          000246
+   247   VehicleData.AskingPrice = AASKPRICE;                                                                               000247
+   248   VehicleData.DateAcquired = ADATEACQ;                                                                               000248
+   249   VehicleData.Status = ASTATUS;                                                                                      000249
+   250   VehicleData.Notes = ANOTES;                                                                                        000250
+   251                                                                                                                      000251
+   252   Result = AddVehicle(VehicleData : UserId);                                                                         000252
+   253                                                                                                                      000253
+   254   IF Result <= 0;                                                                                                    000254
+   255     ShowError('Failed to add vehicle. Error code: ' + %CHAR(Result));                                                000255
+   256   ELSE;                                                                                                              000256
+   257     // Reload data                                                                                                   000257
+   258     LoadData();                                                                                                      000258
+   259   ENDIF;                                                                                                             000259
+   260                                                                                                                      000260
+   261   RETURN;                                                                                                            000261
+   262 END-PROC;                                                                                                            000262
+   263                                                                                                                      000263
+   264 // Edit vehicle screen                                                                                               000264
+   265 DCL-PROC EditVehicleScreen;                                                                                          000265
+   266   DCL-PI *N;                                                                                                         000266
+   267     VehicleId INT(10) CONST;                                                                                         000267
+   268   END-PI;                                                                                                            000268
+   269                                                                                                                      000269
+   270   // Get vehicle data                                                                                                000270
+   271   Result = GetVehicleById(VehicleId : VehicleData);                                                                  000271
+   272                                                                                                                      000272
+   273   IF Result <> VEHCRUD_SUCCESS;                                                                                      000273
+   274     ShowError('Failed to retrieve vehicle data. Error code: ' + %CHAR(Result));                                      000274
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      7
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   275     RETURN;                                                                                                          000275
+   276   ENDIF;                                                                                                             000276
+   277                                                                                                                      000277
+   278   // Set screen fields                                                                                               000278
+   279   DVEHID = VehicleData.VehicleId;                                                                                    000279
+   280   DMAKE = VehicleData.Make;                                                                                          000280
+   281   DMODEL = VehicleData.Model;                                                                                        000281
+   282   DTRIM = VehicleData.Trim;                                                                                          000282
+   283   DYEAR = VehicleData.Year;                                                                                          000283
+   284   DVIN = VehicleData.VIN;                                                                                            000284
+   285   DCOLOR = VehicleData.Color;                                                                                        000285
+   286   DODOMETER = VehicleData.Odometer;                                                                                  000286
+   287   DCONDITION = VehicleData.ConditionRating;                                                                          000287
+   288   DACQPRICE = VehicleData.AcquisitionPrice;                                                                          000288
+   289   DASKPRICE = VehicleData.AskingPrice;                                                                               000289
+   290   DDATEACQ = VehicleData.DateAcquired;                                                                               000290
+   291   DDATESOLD = VehicleData.DateSold;                                                                                  000291
+   292   DSTATUS = VehicleData.Status;                                                                                      000292
+   293   DNOTES = VehicleData.Notes;                                                                                        000293
+   294                                                                                                                      000294
+   295   // Display screen                                                                                                  000295
+   296   EXFMT DETAILSCR;                                                                                                   000296
+   297                                                                                                                      000297
+   298   // Process function keys                                                                                           000298
+   299   SELECT;                                                                                                            000299
+   300     WHEN Exit OR Cancel;                                                                                             000300
+   301       RETURN;                                                                                                        000301
+   302                                                                                                                      000302
+   303     WHEN Delete;                                                                                                     000303
+   304       DeleteVehicle(VehicleId);                                                                                      000304
+   305       RETURN;                                                                                                        000305
+   306                                                                                                                      000306
+   307     WHEN Refresh;                                                                                                    000307
+   308       UpdateStatusScreen(VehicleId);                                                                                 000308
+   309       RETURN;                                                                                                        000309
+   310                                                                                                                      000310
+   311     WHEN Add;                                                                                                        000311
+   312       ViewHistoryScreen(VehicleId);                                                                                  000312
+   313       RETURN;                                                                                                        000313
+   314   ENDSL;                                                                                                             000314
+   315                                                                                                                      000315
+   316   // Update vehicle data                                                                                             000316
+   317   VehicleData.Make = DMAKE;                                                                                          000317
+   318   VehicleData.Model = DMODEL;                                                                                        000318
+   319   VehicleData.Trim = DTRIM;                                                                                          000319
+   320   VehicleData.Year = DYEAR;                                                                                          000320
+   321   VehicleData.VIN = DVIN;                                                                                            000321
+   322   VehicleData.Color = DCOLOR;                                                                                        000322
+   323   VehicleData.Odometer = DODOMETER;                                                                                  000323
+   324   VehicleData.ConditionRating = DCONDITION;                                                                          000324
+   325   VehicleData.AcquisitionPrice = DACQPRICE;                                                                          000325
+   326   VehicleData.AskingPrice = DASKPRICE;                                                                               000326
+   327   VehicleData.DateAcquired = DDATEACQ;                                                                               000327
+   328   VehicleData.DateSold = DDATESOLD;                                                                                  000328
+   329   VehicleData.Status = DSTATUS;                                                                                      000329
+   330   VehicleData.Notes = DNOTES;                                                                                        000330
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      8
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   331                                                                                                                      000331
+   332   Result = UpdateVehicle(VehicleData : UserId);                                                                      000332
+   333                                                                                                                      000333
+   334   IF Result <> VEHCRUD_SUCCESS;                                                                                      000334
+   335     ShowError('Failed to update vehicle. Error code: ' + %CHAR(Result));                                             000335
+   336   ELSE;                                                                                                              000336
+   337     // Reload data                                                                                                   000337
+   338     LoadData();                                                                                                      000338
+   339   ENDIF;                                                                                                             000339
+   340                                                                                                                      000340
+   341   RETURN;                                                                                                            000341
+   342 END-PROC;                                                                                                            000342
+   343                                                                                                                      000343
+   344 // Delete vehicle                                                                                                    000344
+   345 DCL-PROC DeleteVehicle;                                                                                              000345
+   346   DCL-PI *N;                                                                                                         000346
+   347     VehicleId INT(10) CONST;                                                                                         000347
+   348   END-PI;                                                                                                            000348
+   349                                                                                                                      000349
+   350   // Delete the vehicle                                                                                              000350
+   351   Result = VEHCRUD_DeleteVehicle(VehicleId : UserId);                                                                000351
+   352                                                                                                                      000352
+   353   IF Result <> VEHCRUD_SUCCESS;                                                                                      000353
+   354     ShowError('Failed to delete vehicle. Error code: ' + %CHAR(Result));                                             000354
+   355   ELSE;                                                                                                              000355
+   356     // Reload data                                                                                                   000356
+   357     LoadData();                                                                                                      000357
+   358   ENDIF;                                                                                                             000358
+   359                                                                                                                      000359
+   360   RETURN;                                                                                                            000360
+   361 END-PROC;                                                                                                            000361
+   362                                                                                                                      000362
+   363 // Update status screen                                                                                              000363
+   364 DCL-PROC UpdateStatusScreen;                                                                                         000364
+   365   DCL-PI *N;                                                                                                         000365
+   366     VehicleId INT(10) CONST;                                                                                         000366
+   367   END-PI;                                                                                                            000367
+   368                                                                                                                      000368
+   369   // Get vehicle data                                                                                                000369
+   370   Result = GetVehicleById(VehicleId : VehicleData);                                                                  000370
+   371                                                                                                                      000371
+   372   IF Result <> VEHCRUD_SUCCESS;                                                                                      000372
+   373     ShowError('Failed to retrieve vehicle data. Error code: ' + %CHAR(Result));                                      000373
+   374     RETURN;                                                                                                          000374
+   375   ENDIF;                                                                                                             000375
+   376                                                                                                                      000376
+   377   // Set screen fields                                                                                               000377
+   378   SVEHID = VehicleData.VehicleId;                                                                                    000378
+   379   SMAKE = VehicleData.Make;                                                                                          000379
+   380   SMODEL = VehicleData.Model;                                                                                        000380
+   381   SYEAR = VehicleData.Year;                                                                                          000381
+   382   SVIN = VehicleData.VIN;                                                                                            000382
+   383   SOLDSTATUS = VehicleData.Status;                                                                                   000383
+   384   SNEWSTATUS = VehicleData.Status;                                                                                   000384
+   385   SDATESOLD = VehicleData.DateSold;                                                                                  000385
+   386   SNOTES = '';                                                                                                       000386
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page      9
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   387                                                                                                                      000387
+   388   // Display screen                                                                                                  000388
+   389   EXFMT STATUSSCR;                                                                                                   000389
+   390                                                                                                                      000390
+   391   // Process function keys                                                                                           000391
+   392   IF Exit OR Cancel;                                                                                                 000392
+   393     RETURN;                                                                                                          000393
+   394   ENDIF;                                                                                                             000394
+   395                                                                                                                      000395
+   396   // Update status                                                                                                   000396
+   397   Result = UpdateVehicleStatus(VehicleId : SNEWSTATUS : SDATESOLD : UserId : SNOTES);                                000397
+   398                                                                                                                      000398
+   399   IF Result <> VEHCRUD_SUCCESS;                                                                                      000399
+   400     ShowError('Failed to update vehicle status. Error code: ' + %CHAR(Result));                                      000400
+   401   ELSE;                                                                                                              000401
+   402     // Reload data                                                                                                   000402
+   403     LoadData();                                                                                                      000403
+   404   ENDIF;                                                                                                             000404
+   405                                                                                                                      000405
+   406   RETURN;                                                                                                            000406
+   407 END-PROC;                                                                                                            000407
+   408                                                                                                                      000408
+   409 // View history screen                                                                                               000409
+   410 DCL-PROC ViewHistoryScreen;                                                                                          000410
+   411   DCL-PI *N;                                                                                                         000411
+   412     VehicleId INT(10) CONST;                                                                                         000412
+   413   END-PI;                                                                                                            000413
+   414                                                                                                                      000414
+   415   DCL-S HistoryCount INT(10);                                                                                        000415
+   416   DCL-S j INT(10);                                                                                                   000416
+   417                                                                                                                      000417
+   418   // Get vehicle data                                                                                                000418
+   419   Result = GetVehicleById(VehicleId : VehicleData);                                                                  000419
+   420                                                                                                                      000420
+   421   IF Result <> VEHCRUD_SUCCESS;                                                                                      000421
+   422     ShowError('Failed to retrieve vehicle data. Error code: ' + %CHAR(Result));                                      000422
+   423     RETURN;                                                                                                          000423
+   424   ENDIF;                                                                                                             000424
+   425                                                                                                                      000425
+   426   // Set screen fields                                                                                               000426
+   427   HVEHID = VehicleData.VehicleId;                                                                                    000427
+   428   HMAKE = VehicleData.Make;                                                                                          000428
+   429   HMODEL = VehicleData.Model;                                                                                        000429
+   430   HYEAR = VehicleData.Year;                                                                                          000430
+   431   HVIN = VehicleData.VIN;                                                                                            000431
+   432                                                                                                                      000432
+   433   // Get history data                                                                                                000433
+   434   Result = GetVehicleHistory(VehicleId : HistoryArray : HistoryCount);                                               000434
+   435                                                                                                                      000435
+   436   IF Result < 0;                                                                                                     000436
+   437     ShowError('Failed to retrieve vehicle history. Error code: ' + %CHAR(Result));                                   000437
+   438     RETURN;                                                                                                          000438
+   439   ENDIF;                                                                                                             000439
+   440                                                                                                                      000440
+   441   // Clear history fields                                                                                            000441
+   442   HDATE1 = '';                                                                                                       000442
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     10
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   443   HEVENT1 = '';                                                                                                      000443
+   444   HDETAIL1 = '';                                                                                                     000444
+   445   HDATE2 = '';                                                                                                       000445
+   446   HEVENT2 = '';                                                                                                      000446
+   447   HDETAIL2 = '';                                                                                                     000447
+   448   HDATE3 = '';                                                                                                       000448
+   449   HEVENT3 = '';                                                                                                      000449
+   450   HDETAIL3 = '';                                                                                                     000450
+   451   HDATE4 = '';                                                                                                       000451
+   452   HEVENT4 = '';                                                                                                      000452
+   453   HDETAIL4 = '';                                                                                                     000453
+   454   HDATE5 = '';                                                                                                       000454
+   455   HEVENT5 = '';                                                                                                      000455
+   456   HDETAIL5 = '';                                                                                                     000456
+   457   HDATE6 = '';                                                                                                       000457
+   458   HEVENT6 = '';                                                                                                      000458
+   459   HDETAIL6 = '';                                                                                                     000459
+   460   HDATE7 = '';                                                                                                       000460
+   461   HEVENT7 = '';                                                                                                      000461
+   462   HDETAIL7 = '';                                                                                                     000462
+   463   HDATE8 = '';                                                                                                       000463
+   464   HEVENT8 = '';                                                                                                      000464
+   465   HDETAIL8 = '';                                                                                                     000465
+   466   HDATE9 = '';                                                                                                       000466
+   467   HEVENT9 = '';                                                                                                      000467
+   468   HDETAIL9 = '';                                                                                                     000468
+   469   HDATE10 = '';                                                                                                      000469
+   470   HEVENT10 = '';                                                                                                     000470
+   471   HDETAIL10 = '';                                                                                                    000471
+   472                                                                                                                      000472
+   473   // Set history fields                                                                                              000473
+   474   FOR j = 1 TO %MIN(HistoryCount : 10);                                                                              000474
+   475     SELECT;                                                                                                          000475
+   476       WHEN j = 1;                                                                                                    000476
+   477         HDATE1 = %CHAR(HistoryArray(j).EventDate);                                                                   000477
+   478         HEVENT1 = HistoryArray(j).EventType;                                                                         000478
+   479         HDETAIL1 = BuildHistoryDetail(HistoryArray(j));                                                              000479
+   480       WHEN j = 2;                                                                                                    000480
+   481         HDATE2 = %CHAR(HistoryArray(j).EventDate);                                                                   000481
+   482         HEVENT2 = HistoryArray(j).EventType;                                                                         000482
+   483         HDETAIL2 = BuildHistoryDetail(HistoryArray(j));                                                              000483
+   484       WHEN j = 3;                                                                                                    000484
+   485         HDATE3 = %CHAR(HistoryArray(j).EventDate);                                                                   000485
+   486         HEVENT3 = HistoryArray(j).EventType;                                                                         000486
+   487         HDETAIL3 = BuildHistoryDetail(HistoryArray(j));                                                              000487
+   488       WHEN j = 4;                                                                                                    000488
+   489         HDATE4 = %CHAR(HistoryArray(j).EventDate);                                                                   000489
+   490         HEVENT4 = HistoryArray(j).EventType;                                                                         000490
+   491         HDETAIL4 = BuildHistoryDetail(HistoryArray(j));                                                              000491
+   492       WHEN j = 5;                                                                                                    000492
+   493         HDATE5 = %CHAR(HistoryArray(j).EventDate);                                                                   000493
+   494         HEVENT5 = HistoryArray(j).EventType;                                                                         000494
+   495         HDETAIL5 = BuildHistoryDetail(HistoryArray(j));                                                              000495
+   496       WHEN j = 6;                                                                                                    000496
+   497         HDATE6 = %CHAR(HistoryArray(j).EventDate);                                                                   000497
+   498         HEVENT6 = HistoryArray(j).EventType;                                                                         000498
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     11
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   499         HDETAIL6 = BuildHistoryDetail(HistoryArray(j));                                                              000499
+   500       WHEN j = 7;                                                                                                    000500
+   501         HDATE7 = %CHAR(HistoryArray(j).EventDate);                                                                   000501
+   502         HEVENT7 = HistoryArray(j).EventType;                                                                         000502
+   503         HDETAIL7 = BuildHistoryDetail(HistoryArray(j));                                                              000503
+   504       WHEN j = 8;                                                                                                    000504
+   505         HDATE8 = %CHAR(HistoryArray(j).EventDate);                                                                   000505
+   506         HEVENT8 = HistoryArray(j).EventType;                                                                         000506
+   507         HDETAIL8 = BuildHistoryDetail(HistoryArray(j));                                                              000507
+   508       WHEN j = 9;                                                                                                    000508
+   509         HDATE9 = %CHAR(HistoryArray(j).EventDate);                                                                   000509
+   510         HEVENT9 = HistoryArray(j).EventType;                                                                         000510
+   511         HDETAIL9 = BuildHistoryDetail(HistoryArray(j));                                                              000511
+   512       WHEN j = 10;                                                                                                   000512
+   513         HDATE10 = %CHAR(HistoryArray(j).EventDate);                                                                  000513
+   514         HEVENT10 = HistoryArray(j).EventType;                                                                        000514
+   515         HDETAIL10 = BuildHistoryDetail(HistoryArray(j));                                                             000515
+   516     ENDSL;                                                                                                           000516
+   517   ENDFOR;                                                                                                            000517
+   518                                                                                                                      000518
+   519   // Display screen                                                                                                  000519
+   520   EXFMT HISTSCR;                                                                                                     000520
+   521                                                                                                                      000521
+   522   RETURN;                                                                                                            000522
+   523 END-PROC;                                                                                                            000523
+   524                                                                                                                      000524
+   525 // Build history detail string                                                                                       000525
+   526 DCL-PROC BuildHistoryDetail;                                                                                         000526
+   527   DCL-PI *N VARCHAR(35);                                                                                             000527
+   528     HistoryData LIKEDS(VehicleHistoryDS) CONST;                                                                      000528
+   529   END-PI;                                                                                                            000529
+   530                                                                                                                      000530
+   531   DCL-S Detail VARCHAR(35);                                                                                          000531
+   532                                                                                                                      000532
+   533   SELECT;                                                                                                            000533
+   534     WHEN HistoryData.EventType = 'ADDED';                                                                            000534
+   535       Detail = 'Added to inventory';                                                                                 000535
+   536                                                                                                                      000536
+   537     WHEN HistoryData.EventType = 'STATUS_CHANGE';                                                                    000537
+   538       Detail = 'Status: ' + %TRIM(HistoryData.OldStatus) +                                                           000538
+   539                ' -> ' + %TRIM(HistoryData.NewStatus);                                                                000539
+   540                                                                                                                      000540
+   541     WHEN HistoryData.EventType = 'PRICE_CHANGE';                                                                     000541
+   542       Detail = 'Price: ' + %EDITC(HistoryData.OldPrice : 'J') +                                                      000542
+   543                ' -> ' + %EDITC(HistoryData.NewPrice : 'J');                                                          000543
+   544                                                                                                                      000544
+   545     WHEN HistoryData.EventType = 'DELETED';                                                                          000545
+   546       Detail = 'Removed from inventory';                                                                             000546
+   547                                                                                                                      000547
+   548     OTHER;                                                                                                           000548
+   549       Detail = %TRIM(HistoryData.Notes);                                                                             000549
+   550   ENDSL;                                                                                                             000550
+   551                                                                                                                      000551
+   552   RETURN Detail;                                                                                                     000552
+   553 END-PROC;                                                                                                            000553
+   554                                                                                                                      000554
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     12
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   555 // Show error message                                                                                                000555
+   556 DCL-PROC ShowError;                                                                                                  000556
+   557   DCL-PI *N;                                                                                                         000557
+   558     Message VARCHAR(100) CONST;                                                                                      000558
+   559   END-PI;                                                                                                            000559
+   560                                                                                                                      000560
+   561   // Clear error subfile                                                                                             000561
+   562   ERRRN = 0;                                                                                                         000562
+   563   WRITE ERRORCTL;                                                                                                    000563
+   564                                                                                                                      000564
+   565   // Add error message                                                                                               000565
+   566   ERRRN = 1;                                                                                                         000566
+   567   ERRPGM = 'VEHMGMT';                                                                                                000567
+   568   ERRMSG = Message;                                                                                                  000568
+   569   WRITE ERRORSFL;                                                                                                    000569
+   570                                                                                                                      000570
+   571   // Display error                                                                                                   000571
+   572   EXFMT ERRORCTL;                                                                                                    000572
+   573                                                                                                                      000573
+   574   RETURN;                                                                                                            000574
+   575 END-PROC;                                                                                                            000575
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     13
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     14
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+*RNF0273 40      1 Compiler not able to open the /COPY or /INCLUDE file;
+                   directive ignored.
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHMGMT         COMMON1    09/17/25 18:58:02        Page     15
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        1
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        1
+  Source Totals:
+    Records . . . . . . . . . . . . :      575
+    Specifications  . . . . . . . . :      371
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :      176
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Compilation stopped. Severity 40 errors found in program.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

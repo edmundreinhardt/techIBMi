@@ -1,0 +1,6 @@
+flask==2.3.3
+werkzeug==2.3.7
+itoolkit==1.0.0
+ibm-db==3.2.0
+ibm-db-dbi==3.2.0
+python-dotenv==1.0.0

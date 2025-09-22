@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "description": "Used Car Dealership Inventory System",
+  "objlib": "&CURLIB",
+  "curlib": "&CURLIB",
+  "includePath": [
+    "qrpglesrc"
+  ],
+  "buildCommand": "makei build"
+}

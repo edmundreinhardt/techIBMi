@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory - Used Car Dealership{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Vehicle Inventory</h1>
+    <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Vehicle
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Filter Inventory</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" action="{{ url_for('inventory') }}" class="row g-3">
+            <div class="col-md-3">
+                <label for="make" class="form-label">Make</label>
+                <select name="make" id="make" class="form-select">
+                    <option value="">All Makes</option>
+                    {% for make in makes %}
+                        <option value="{{ make }}" {% if filters.make == make %}selected{% endif %}>{{ make }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="model" class="form-label">Model</label>
+                <select name="model" id="model" class="form-select">
+                    <option value="">All Models</option>
+                    {% for model in models %}
+                        <option value="{{ model }}" {% if filters.model == model %}selected{% endif %}>{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="year_from" class="form-label">Year From</label>
+                <input type="number" class="form-control" id="year_from" name="year_from" 
+                       value="{{ filters.year_from }}" min="1900" max="2099">
+            </div>
+            <div class="col-md-2">
+                <label for="year_to" class="form-label">Year To</label>
+                <input type="number" class="form-control" id="year_to" name="year_to" 
+                       value="{{ filters.year_to }}" min="1900" max="2099">
+            </div>
+            <div class="col-md-2">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="AVAILABLE" {% if filters.status == 'AVAILABLE' %}selected{% endif %}>Available</option>
+                    <option value="SOLD" {% if filters.status == 'SOLD' %}selected{% endif %}>Sold</option>
+                    <option value="PENDING" {% if filters.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="{{ url_for('inventory') }}" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Vehicles</h5>
+    </div>
+    <div class="card-body">
+        {% if vehicles %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Year</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Color</th>
+                            <th>Odometer</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicles %}
+                            <tr>
+                                <td>{{ vehicle.vehicle_id }}</td>
+                                <td>{{ vehicle.year }}</td>
+                                <td>{{ vehicle.make }}</td>
+                                <td>{{ vehicle.model }}</td>
+                                <td>{{ vehicle.color }}</td>
+                                <td>{{ vehicle.odometer|default(0)|int }}</td>
+                                <td>{{ vehicle.asking_price|currency }}</td>
+                                <td>
+                                    {% if vehicle.status == 'AVAILABLE' %}
+                                        <span class="badge bg-success">Available</span>
+                                    {% elif vehicle.status == 'SOLD' %}
+                                        <span class="badge bg-danger">Sold</span>
+                                    {% elif vehicle.status == 'PENDING' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ vehicle.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('vehicle_detail', vehicle_id=vehicle.vehicle_id) }}" 
+                                           class="btn btn-info" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('edit_vehicle', vehicle_id=vehicle.vehicle_id) }}" 
+                                           class="btn btn-primary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No vehicles found matching your criteria.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

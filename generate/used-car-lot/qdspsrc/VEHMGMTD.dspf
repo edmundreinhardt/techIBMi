@@ -1,0 +1,294 @@
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
+     A                                      CA03(03 'Exit')
+     A                                      CA05(05 'Refresh')
+     A                                      CA06(06 'Add')
+     A                                      CA12(12 'Cancel')
+     A                                      PRINT
+     A                                      ERRSFL
+     A          R SFCTL                     SFLCTL(SFLRCD)
+     A                                      SFLSIZ(0015)
+     A                                      SFLPAG(0014)
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  32                                  SFLDSPCTL
+     A  33                                  SFLCLR
+     A  34                                  SFLEND(*MORE)
+     A            SFLRRN         4S 0H      SFLRCDNBR
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Vehicle Inventory Management'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  3  2'Type options, press Enter.'
+     A                                  4  2'2=Edit  4=Delete  5=Status  6=History'
+     A                                  5  2'Opt'
+     A                                  5  7'ID'
+     A                                  5 12'Make'
+     A                                  5 23'Model'
+     A                                  5 34'Year'
+     A                                  5 40'VIN'
+     A                                  5 58'Status'
+     A                                  5 69'Price'
+     A                                  6  2'---'
+     A                                  6  7'--'
+     A                                  6 12'----'
+     A                                  6 23'-----'
+     A                                  6 34'----'
+     A                                  6 40'---'
+     A                                  6 58'------'
+     A                                  6 69'-----'
+     A          R SFLRCD                    SFL
+     A            OPTION         1A  B  7  3
+     A            VEHID          5Y 0O  7  7
+     A                                      REFFLD(VEHICLE_ID VEHICLES)
+     A            MAKE         10A  O  7 12
+     A                                      REFFLD(MAKE VEHICLES)
+     A            MODEL        10A  O  7 23
+     A                                      REFFLD(MODEL VEHICLES)
+     A            YEAR          4Y 0O  7 34
+     A                                      REFFLD(YEAR VEHICLES)
+     A            VIN          17A  O  7 40
+     A                                      REFFLD(VIN VEHICLES)
+     A            STATUS       10A  O  7 58
+     A                                      REFFLD(STATUS VEHICLES)
+     A            PRICE        10Y 2O  7 69EDTCDE(J)
+     A                                      REFFLD(ASKING_PRICE VEHICLES)
+     A          R FOOTER
+     A                                      OVERLAY
+     A                                 22  2'F3=Exit'
+     A                                 22 12'F5=Refresh'
+     A                                 22 25'F6=Add'
+     A                                 22 35'F12=Cancel'
+     A          R DETAILSCR
+     A                                      CA03(03 'Exit')
+     A                                      CA12(12 'Cancel')
+     A                                      CF04(04 'Delete')
+     A                                      CF05(05 'Status')
+     A                                      CF06(06 'History')
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Vehicle Details'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  3  2'Vehicle ID:'
+     A            DVEHID         5Y 0O  3 14
+     A                                      REFFLD(VEHICLE_ID VEHICLES)
+     A                                  5  2'Make:'
+     A            DMAKE         50A  B  5 14
+     A                                      REFFLD(MAKE VEHICLES)
+     A                                  6  2'Model:'
+     A            DMODEL        50A  B  6 14
+     A                                      REFFLD(MODEL VEHICLES)
+     A                                  7  2'Trim:'
+     A            DTRIM         50A  B  7 14
+     A                                      REFFLD(TRIM VEHICLES)
+     A                                  8  2'Year:'
+     A            DYEAR         10Y 0B  8 14
+     A                                      REFFLD(YEAR VEHICLES)
+     A                                  9  2'VIN:'
+     A            DVIN          17A  B  9 14
+     A                                      REFFLD(VIN VEHICLES)
+     A                                 10  2'Color:'
+     A            DCOLOR        30A  B 10 14
+     A                                      REFFLD(COLOR VEHICLES)
+     A                                 11  2'Odometer:'
+     A            DODOMETER     10Y 0B 11 14
+     A                                      REFFLD(ODOMETER VEHICLES)
+     A                                 12  2'Condition:'
+     A            DCONDITION    10Y 0B 12 14
+     A                                      REFFLD(CONDITION_RATING VEHICLES)
+     A                                 12 17'(1-10)'
+     A                                 13  2'Acq Price:'
+     A            DACQPRICE     12Y 2B 13 14EDTCDE(J)
+     A                                      REFFLD(ACQUISITION_PRICE VEHICLES)
+     A                                 14  2'Ask Price:'
+     A            DASKPRICE     12Y 2B 14 14EDTCDE(J)
+     A                                      REFFLD(ASKING_PRICE VEHICLES)
+     A                                 15  2'Date Acq:'
+     A            DDATEACQ       D  B 15 14
+     A                                      REFFLD(DATE_ACQUIRED VEHICLES)
+     A                                      DATFMT(*ISO)
+     A                                 16  2'Date Sold:'
+     A            DDATESOLD      D  B 16 14
+     A                                      REFFLD(DATE_SOLD VEHICLES)
+     A                                      DATFMT(*ISO)
+     A                                 17  2'Status:'
+     A            DSTATUS       10A  B 17 14
+     A                                      REFFLD(STATUS VEHICLES)
+     A                                 17 26'(AVAILABLE/SOLD/ON_HOLD)'
+     A                                 18  2'Notes:'
+     A            DNOTES       500A  B 18 14
+     A                                      REFFLD(NOTES VEHICLES)
+     A                                 21  2'F3=Exit'
+     A                                 21 12'F4=Delete'
+     A                                 21 25'F5=Status'
+     A                                 21 38'F6=History'
+     A                                 21 51'F12=Cancel'
+     A                                 22  2'Press Enter to save changes'
+     A          R STATUSSCR
+     A                                      CA03(03 'Exit')
+     A                                      CA12(12 'Cancel')
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Update Vehicle Status'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  3  2'Vehicle ID:'
+     A            SVEHID         5Y 0O  3 14
+     A                                      REFFLD(VEHICLE_ID VEHICLES)
+     A                                  4  2'Make:'
+     A            SMAKE         50A  O  4 14
+     A                                      REFFLD(MAKE VEHICLES)
+     A                                  5  2'Model:'
+     A            SMODEL        50A  O  5 14
+     A                                      REFFLD(MODEL VEHICLES)
+     A                                  6  2'Year:'
+     A            SYEAR         10Y 0O  6 14
+     A                                      REFFLD(YEAR VEHICLES)
+     A                                  7  2'VIN:'
+     A            SVIN          17A  O  7 14
+     A                                      REFFLD(VIN VEHICLES)
+     A                                  9  2'Current Status:'
+     A            SOLDSTATUS    10A  O  9 17
+     A                                      REFFLD(STATUS VEHICLES)
+     A                                 11  2'New Status:'
+     A            SNEWSTATUS    10A  B 11 17
+     A                                 11 29'(AVAILABLE/SOLD/ON_HOLD)'
+     A                                 13  2'Date Sold:'
+     A            SDATESOLD      D  B 13 17
+     A                                      REFFLD(DATE_SOLD VEHICLES)
+     A                                      DATFMT(*ISO)
+     A                                 13 29'(Required if status is SOLD)'
+     A                                 15  2'Notes:'
+     A            SNOTES       500A  B 15 17
+     A                                      REFFLD(NOTES VEHICLES)
+     A                                 21  2'F3=Exit'
+     A                                 21 12'F12=Cancel'
+     A                                 22  2'Press Enter to update status'
+     A          R HISTSCR
+     A                                      CA03(03 'Exit')
+     A                                      CA12(12 'Cancel')
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Vehicle History'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  3  2'Vehicle ID:'
+     A            HVEHID         5Y 0O  3 14
+     A                                      REFFLD(VEHICLE_ID VEHICLES)
+     A                                  4  2'Make:'
+     A            HMAKE         50A  O  4 14
+     A                                      REFFLD(MAKE VEHICLES)
+     A                                  4 40'Model:'
+     A            HMODEL        50A  O  4 47
+     A                                      REFFLD(MODEL VEHICLES)
+     A                                  5  2'Year:'
+     A            HYEAR         10Y 0O  5 14
+     A                                      REFFLD(YEAR VEHICLES)
+     A                                  5 40'VIN:'
+     A            HVIN          17A  O  5 47
+     A                                      REFFLD(VIN VEHICLES)
+     A                                  7  2'History:'
+     A                                  8  2'Date'
+     A                                  8 23'Event'
+     A                                  8 45'Details'
+     A                                  9  2'----'
+     A                                  9 23'-----'
+     A                                  9 45'-------'
+     A            HDATE1        26A  O 10  2
+     A            HEVENT1       20A  O 10 23
+     A            HDETAIL1      35A  O 10 45
+     A            HDATE2        26A  O 11  2
+     A            HEVENT2       20A  O 11 23
+     A            HDETAIL2      35A  O 11 45
+     A            HDATE3        26A  O 12  2
+     A            HEVENT3       20A  O 12 23
+     A            HDETAIL3      35A  O 12 45
+     A            HDATE4        26A  O 13  2
+     A            HEVENT4       20A  O 13 23
+     A            HDETAIL4      35A  O 13 45
+     A            HDATE5        26A  O 14  2
+     A            HEVENT5       20A  O 14 23
+     A            HDETAIL5      35A  O 14 45
+     A            HDATE6        26A  O 15  2
+     A            HEVENT6       20A  O 15 23
+     A            HDETAIL6      35A  O 15 45
+     A            HDATE7        26A  O 16  2
+     A            HEVENT7       20A  O 16 23
+     A            HDETAIL7      35A  O 16 45
+     A            HDATE8        26A  O 17  2
+     A            HEVENT8       20A  O 17 23
+     A            HDETAIL8      35A  O 17 45
+     A            HDATE9        26A  O 18  2
+     A            HEVENT9       20A  O 18 23
+     A            HDETAIL9      35A  O 18 45
+     A            HDATE10       26A  O 19  2
+     A            HEVENT10      20A  O 19 23
+     A            HDETAIL10     35A  O 19 45
+     A                                 21  2'F3=Exit'
+     A                                 21 12'F12=Cancel'
+     A          R ADDRCD
+     A                                      CA03(03 'Exit')
+     A                                      CA12(12 'Cancel')
+     A                                  1  2'USEDCAR'
+     A                                  1 30'Add New Vehicle'
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                  2 71TIME
+     A                                  5  2'Make:'
+     A            AMAKE         50A  B  5 14
+     A                                      REFFLD(MAKE VEHICLES)
+     A                                  6  2'Model:'
+     A            AMODEL        50A  B  6 14
+     A                                      REFFLD(MODEL VEHICLES)
+     A                                  7  2'Trim:'
+     A            ATRIM         50A  B  7 14
+     A                                      REFFLD(TRIM VEHICLES)
+     A                                  8  2'Year:'
+     A            AYEAR         10Y 0B  8 14
+     A                                      REFFLD(YEAR VEHICLES)
+     A                                  9  2'VIN:'
+     A            AVIN          17A  B  9 14
+     A                                      REFFLD(VIN VEHICLES)
+     A                                 10  2'Color:'
+     A            ACOLOR        30A  B 10 14
+     A                                      REFFLD(COLOR VEHICLES)
+     A                                 11  2'Odometer:'
+     A            AODOMETER     10Y 0B 11 14
+     A                                      REFFLD(ODOMETER VEHICLES)
+     A                                 12  2'Condition:'
+     A            ACONDITION    10Y 0B 12 14
+     A                                      REFFLD(CONDITION_RATING VEHICLES)
+     A                                 12 17'(1-10)'
+     A                                 13  2'Acq Price:'
+     A            AACQPRICE     12Y 2B 13 14EDTCDE(J)
+     A                                      REFFLD(ACQUISITION_PRICE VEHICLES)
+     A                                 14  2'Ask Price:'
+     A            AASKPRICE     12Y 2B 14 14EDTCDE(J)
+     A                                      REFFLD(ASKING_PRICE VEHICLES)
+     A                                 15  2'Date Acq:'
+     A            ADATEACQ       D  B 15 14
+     A                                      REFFLD(DATE_ACQUIRED VEHICLES)
+     A                                      DATFMT(*ISO)
+     A                                 17  2'Status:'
+     A            ASTATUS       10A  B 17 14
+     A                                      REFFLD(STATUS VEHICLES)
+     A                                 17 26'(AVAILABLE/SOLD/ON_HOLD)'
+     A                                 18  2'Notes:'
+     A            ANOTES       500A  B 18 14
+     A                                      REFFLD(NOTES VEHICLES)
+     A                                 21  2'F3=Exit'
+     A                                 21 12'F12=Cancel'
+     A                                 22  2'Press Enter to add vehicle'
+     A          R ERRORSFL                   SFL
+     A                                      SFLMSGRCD(24)
+     A            ERRMSG       78   O 24  2
+     A          R ERRORCTL                   SFLCTL(ERRORSFL)
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A                                      SFLINZ
+     A                                      SFLEND
+     A                                      SFLSIZ(5)
+     A                                      SFLPAG(1)
+     A            ERRPGM        10   O  1  2

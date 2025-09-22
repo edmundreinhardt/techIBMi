@@ -1,0 +1,9 @@
+TIMESTAMP  0 20250917185801
+PROCESSOR  0 999 1
+FILEID     0 999 000000 021 QTEMP/QSQLPRE(INVRPT) 20250917185801 0
+FILEID     0 001 000000 060 /home/REINHARD/builds/used-car-lot/qrpglesrc/INVRPT.sqlrpgle 20250917180932 0
+ERROR      0 001 1 000014 000014 007 000014 025 RNF0273 T 40 072 Compiler not able to open the /COPY or /INCLUDE file; directive ignored.
+ERROR      0 001 1 000015 000015 007 000015 024 RNF0273 T 40 072 Compiler not able to open the /COPY or /INCLUDE file; directive ignored.
+ERROR      0 001 0 000000 000000 000 000000 000 RNS9308 T 50 057 Compilation stopped. Severity 40 errors found in program.
+FILEEND    0 001 000209
+FILEEND    0 999 000209

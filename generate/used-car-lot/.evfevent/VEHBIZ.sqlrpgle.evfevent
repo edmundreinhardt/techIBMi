@@ -1,0 +1,9 @@
+TIMESTAMP  0 20250917185758
+PROCESSOR  0 999 1
+FILEID     0 999 000000 021 QTEMP/QSQLPRE(VEHBIZ) 20250917185758 0
+FILEID     0 001 000000 060 /home/REINHARD/builds/used-car-lot/qrpglesrc/VEHBIZ.sqlrpgle 20250917173359 0
+ERROR      0 001 1 000013 000013 007 000013 024 RNF0273 T 40 072 Compiler not able to open the /COPY or /INCLUDE file; directive ignored.
+ERROR      0 001 1 000000 000000 001 000000 000 RNF0733 E 20 090 The record length of the output file is too small. The record length must be at least 118.
+ERROR      0 001 0 000000 000000 000 000000 000 RNS9308 T 50 057 Compilation stopped. Severity 40 errors found in program.
+FILEEND    0 001 000516
+FILEEND    0 999 000516

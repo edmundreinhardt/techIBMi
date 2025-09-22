@@ -1,0 +1,373 @@
+-- Sample data for Used Car Dealership Inventory System
+-- This script inserts sample data into the VEHICLES and VEHICLE_HISTORY tables
+
+-- Clear existing data (if any)
+DELETE FROM VEHICLE_HISTORY;
+DELETE FROM VEHICLES;
+
+-- Reset identity columns
+ALTER TABLE VEHICLES ALTER COLUMN VEHICLE_ID RESTART WITH 1;
+ALTER TABLE VEHICLE_HISTORY ALTER COLUMN HISTORY_ID RESTART WITH 1;
+
+-- Insert sample vehicles - AVAILABLE status
+INSERT INTO VEHICLES (
+    MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ODOMETER, 
+    CONDITION_RATING, ACQUISITION_PRICE, ASKING_PRICE, 
+    DATE_ACQUIRED, STATUS, NOTES
+) VALUES 
+('Toyota', 'Camry', 'LE', 2020, 'JT2BF22K1W0123456', 'Silver', 35000, 
+ 8, 18500.00, 22995.00, 
+ CURRENT_DATE - 30 DAYS, 'AVAILABLE', 'One owner, clean history, well maintained'),
+
+('Honda', 'Civic', 'EX', 2019, 'JHMEH9694PS012345', 'Blue', 42000, 
+ 7, 16000.00, 19995.00, 
+ CURRENT_DATE - 45 DAYS, 'AVAILABLE', 'Low mileage, excellent condition'),
+
+('Ford', 'F-150', 'XLT', 2018, '1FTEW1EP7JFA12345', 'Black', 55000, 
+ 6, 22000.00, 27500.00, 
+ CURRENT_DATE - 60 DAYS, 'AVAILABLE', '4x4, tow package, bed liner'),
+
+('Chevrolet', 'Equinox', 'LT', 2021, '2GNAXUEV3M6123456', 'White', 28000, 
+ 9, 21000.00, 25995.00, 
+ CURRENT_DATE - 15 DAYS, 'AVAILABLE', 'Like new condition, factory warranty'),
+
+('Nissan', 'Altima', 'SV', 2020, '1N4BL4BV4LC123456', 'Gray', 38000, 
+ 7, 17500.00, 21995.00, 
+ CURRENT_DATE - 75 DAYS, 'AVAILABLE', 'Fuel efficient, clean interior'),
+
+('Jeep', 'Wrangler', 'Sport', 2017, '1C4HJWDG4HL123456', 'Red', 62000, 
+ 6, 19500.00, 24995.00, 
+ CURRENT_DATE - 90 DAYS, 'AVAILABLE', 'Soft top, 4WD, aftermarket wheels'),
+
+('Hyundai', 'Tucson', 'SEL', 2022, 'KM8J3CAL6NU123456', 'Silver', 18000, 
+ 9, 23000.00, 27995.00, 
+ CURRENT_DATE - 10 DAYS, 'AVAILABLE', 'Factory warranty, advanced safety features'),
+
+('Kia', 'Sorento', 'LX', 2019, '5XYPG4A36KG123456', 'Black', 45000, 
+ 7, 18500.00, 22995.00, 
+ CURRENT_DATE - 50 DAYS, 'AVAILABLE', 'Third row seating, family friendly'),
+
+('Subaru', 'Outback', 'Premium', 2020, '4S4BTACC2L3123456', 'Green', 32000, 
+ 8, 22000.00, 26995.00, 
+ CURRENT_DATE - 40 DAYS, 'AVAILABLE', 'AWD, roof rack, all-weather package'),
+
+('Mazda', 'CX-5', 'Touring', 2021, 'JM3KFBDM9M0123456', 'Blue', 25000, 
+ 8, 23500.00, 28995.00, 
+ CURRENT_DATE - 20 DAYS, 'AVAILABLE', 'Premium audio, leather seats');
+
+-- Insert sample vehicles - SOLD status
+INSERT INTO VEHICLES (
+    MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ODOMETER, 
+    CONDITION_RATING, ACQUISITION_PRICE, ASKING_PRICE, 
+    DATE_ACQUIRED, DATE_SOLD, STATUS, NOTES
+) VALUES 
+('Toyota', 'RAV4', 'XLE', 2019, 'JTMDFREV5KJ123456', 'Red', 38000, 
+ 7, 20000.00, 24995.00, 
+ CURRENT_DATE - 120 DAYS, CURRENT_DATE - 90 DAYS, 'SOLD', 'AWD, sunroof, sold with extended warranty'),
+
+('Honda', 'Accord', 'Sport', 2020, '1HGCV2F34LA123456', 'Black', 30000, 
+ 8, 21500.00, 26995.00, 
+ CURRENT_DATE - 100 DAYS, CURRENT_DATE - 70 DAYS, 'SOLD', 'One owner, clean history'),
+
+('Ford', 'Escape', 'SE', 2019, '1FMCU9GD8KUA12345', 'Silver', 42000, 
+ 7, 17000.00, 21995.00, 
+ CURRENT_DATE - 90 DAYS, CURRENT_DATE - 45 DAYS, 'SOLD', 'Fuel efficient, good family vehicle'),
+
+('Chevrolet', 'Malibu', 'LT', 2018, '1G1ZD5ST4JF123456', 'White', 48000, 
+ 6, 14500.00, 18995.00, 
+ CURRENT_DATE - 150 DAYS, CURRENT_DATE - 120 DAYS, 'SOLD', 'Great commuter car'),
+
+('Nissan', 'Rogue', 'SL', 2020, 'JN8AT2MV4LW123456', 'Blue', 35000, 
+ 8, 19500.00, 24995.00, 
+ CURRENT_DATE - 80 DAYS, CURRENT_DATE - 30 DAYS, 'SOLD', 'Premium package, leather interior'),
+
+('Jeep', 'Grand Cherokee', 'Limited', 2019, '1C4RJFBG5KC123456', 'Black', 40000, 
+ 7, 25000.00, 31995.00, 
+ CURRENT_DATE - 110 DAYS, CURRENT_DATE - 60 DAYS, 'SOLD', 'Luxury trim, tow package'),
+
+('Hyundai', 'Sonata', 'SEL', 2021, '5NPE34AF4MH123456', 'Gray', 22000, 
+ 9, 19000.00, 23995.00, 
+ CURRENT_DATE - 60 DAYS, CURRENT_DATE - 15 DAYS, 'SOLD', 'Like new condition, warranty transferred');
+
+-- Insert sample vehicles - ON_HOLD status
+INSERT INTO VEHICLES (
+    MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ODOMETER, 
+    CONDITION_RATING, ACQUISITION_PRICE, ASKING_PRICE, 
+    DATE_ACQUIRED, STATUS, NOTES
+) VALUES 
+('Volkswagen', 'Tiguan', 'SE', 2020, '3VV2B7AX4LM123456', 'Gray', 32000, 
+ 8, 20500.00, 25995.00, 
+ CURRENT_DATE - 25 DAYS, 'ON_HOLD', 'Customer deposit received, pending financing'),
+
+('Audi', 'Q5', 'Premium', 2019, 'WA1BNAFY2K2123456', 'Black', 38000, 
+ 8, 28000.00, 34995.00, 
+ CURRENT_DATE - 35 DAYS, 'ON_HOLD', 'Pending inspection and final paperwork'),
+
+('BMW', '3 Series', '330i', 2020, 'WBA5R7C54LFH12345', 'White', 30000, 
+ 9, 29500.00, 36995.00, 
+ CURRENT_DATE - 15 DAYS, 'ON_HOLD', 'Customer test drive scheduled');
+
+-- Insert history records for AVAILABLE vehicles
+-- Toyota Camry
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(1, 'ACQUISITION', CURRENT_DATE - 30 DAYS, 
+ NULL, 'AVAILABLE', NULL, 22995.00, 
+ 'JSMITH', 'Vehicle added to inventory');
+
+-- Honda Civic
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(2, 'ACQUISITION', CURRENT_DATE - 45 DAYS, 
+ NULL, 'AVAILABLE', NULL, 19995.00, 
+ 'JSMITH', 'Vehicle added to inventory');
+
+-- Ford F-150
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(3, 'ACQUISITION', CURRENT_DATE - 60 DAYS, 
+ NULL, 'AVAILABLE', NULL, 28995.00, 
+ 'BJONES', 'Vehicle added to inventory'),
+(3, 'PRICE_CHANGE', CURRENT_DATE - 30 DAYS, 
+ NULL, NULL, 28995.00, 27500.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory');
+
+-- Chevrolet Equinox
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(4, 'ACQUISITION', CURRENT_DATE - 15 DAYS, 
+ NULL, 'AVAILABLE', NULL, 25995.00, 
+ 'MWILSON', 'Vehicle added to inventory');
+
+-- Nissan Altima
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(5, 'ACQUISITION', CURRENT_DATE - 75 DAYS, 
+ NULL, 'AVAILABLE', NULL, 22995.00, 
+ 'JSMITH', 'Vehicle added to inventory'),
+(5, 'PRICE_CHANGE', CURRENT_DATE - 45 DAYS, 
+ NULL, NULL, 22995.00, 21995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory');
+
+-- Jeep Wrangler
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(6, 'ACQUISITION', CURRENT_DATE - 90 DAYS, 
+ NULL, 'AVAILABLE', NULL, 26995.00, 
+ 'MWILSON', 'Vehicle added to inventory'),
+(6, 'PRICE_CHANGE', CURRENT_DATE - 60 DAYS, 
+ NULL, NULL, 26995.00, 25995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory'),
+(6, 'PRICE_CHANGE', CURRENT_DATE - 30 DAYS, 
+ NULL, NULL, 25995.00, 24995.00, 
+ 'BJONES', 'Price adjustment after 60 days in inventory');
+
+-- Hyundai Tucson
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(7, 'ACQUISITION', CURRENT_DATE - 10 DAYS, 
+ NULL, 'AVAILABLE', NULL, 27995.00, 
+ 'JSMITH', 'Vehicle added to inventory');
+
+-- Kia Sorento
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(8, 'ACQUISITION', CURRENT_DATE - 50 DAYS, 
+ NULL, 'AVAILABLE', NULL, 23995.00, 
+ 'MWILSON', 'Vehicle added to inventory'),
+(8, 'PRICE_CHANGE', CURRENT_DATE - 20 DAYS, 
+ NULL, NULL, 23995.00, 22995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory');
+
+-- Subaru Outback
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(9, 'ACQUISITION', CURRENT_DATE - 40 DAYS, 
+ NULL, 'AVAILABLE', NULL, 26995.00, 
+ 'JSMITH', 'Vehicle added to inventory');
+
+-- Mazda CX-5
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(10, 'ACQUISITION', CURRENT_DATE - 20 DAYS, 
+ NULL, 'AVAILABLE', NULL, 28995.00, 
+ 'BJONES', 'Vehicle added to inventory');
+
+-- Insert history records for SOLD vehicles
+-- Toyota RAV4
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(11, 'ACQUISITION', CURRENT_DATE - 120 DAYS, 
+ NULL, 'AVAILABLE', NULL, 24995.00, 
+ 'JSMITH', 'Vehicle added to inventory'),
+(11, 'STATUS_CHANGE', CURRENT_DATE - 90 DAYS, 
+ 'AVAILABLE', 'SOLD', NULL, NULL, 
+ 'MWILSON', 'Vehicle sold to customer');
+
+-- Honda Accord
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(12, 'ACQUISITION', CURRENT_DATE - 100 DAYS, 
+ NULL, 'AVAILABLE', NULL, 26995.00, 
+ 'BJONES', 'Vehicle added to inventory'),
+(12, 'STATUS_CHANGE', CURRENT_DATE - 75 DAYS, 
+ 'AVAILABLE', 'ON_HOLD', NULL, NULL, 
+ 'JSMITH', 'Customer deposit received'),
+(12, 'STATUS_CHANGE', CURRENT_DATE - 70 DAYS, 
+ 'ON_HOLD', 'SOLD', NULL, NULL, 
+ 'JSMITH', 'Financing approved, sale completed');
+
+-- Ford Escape
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(13, 'ACQUISITION', CURRENT_DATE - 90 DAYS, 
+ NULL, 'AVAILABLE', NULL, 21995.00, 
+ 'MWILSON', 'Vehicle added to inventory'),
+(13, 'PRICE_CHANGE', CURRENT_DATE - 60 DAYS, 
+ NULL, NULL, 21995.00, 20995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory'),
+(13, 'STATUS_CHANGE', CURRENT_DATE - 45 DAYS, 
+ 'AVAILABLE', 'SOLD', NULL, NULL, 
+ 'JSMITH', 'Vehicle sold to customer');
+
+-- Chevrolet Malibu
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(14, 'ACQUISITION', CURRENT_DATE - 150 DAYS, 
+ NULL, 'AVAILABLE', NULL, 18995.00, 
+ 'BJONES', 'Vehicle added to inventory'),
+(14, 'PRICE_CHANGE', CURRENT_DATE - 120 DAYS, 
+ NULL, NULL, 18995.00, 17995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory'),
+(14, 'STATUS_CHANGE', CURRENT_DATE - 120 DAYS, 
+ 'AVAILABLE', 'SOLD', NULL, NULL, 
+ 'MWILSON', 'Vehicle sold to customer');
+
+-- Nissan Rogue
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(15, 'ACQUISITION', CURRENT_DATE - 80 DAYS, 
+ NULL, 'AVAILABLE', NULL, 24995.00, 
+ 'JSMITH', 'Vehicle added to inventory'),
+(15, 'STATUS_CHANGE', CURRENT_DATE - 50 DAYS, 
+ 'AVAILABLE', 'ON_HOLD', NULL, NULL, 
+ 'BJONES', 'Customer deposit received'),
+(15, 'STATUS_CHANGE', CURRENT_DATE - 30 DAYS, 
+ 'ON_HOLD', 'SOLD', NULL, NULL, 
+ 'BJONES', 'Financing approved, sale completed');
+
+-- Jeep Grand Cherokee
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(16, 'ACQUISITION', CURRENT_DATE - 110 DAYS, 
+ NULL, 'AVAILABLE', NULL, 31995.00, 
+ 'MWILSON', 'Vehicle added to inventory'),
+(16, 'PRICE_CHANGE', CURRENT_DATE - 80 DAYS, 
+ NULL, NULL, 31995.00, 30995.00, 
+ 'BJONES', 'Price adjustment after 30 days in inventory'),
+(16, 'STATUS_CHANGE', CURRENT_DATE - 60 DAYS, 
+ 'AVAILABLE', 'SOLD', NULL, NULL, 
+ 'JSMITH', 'Vehicle sold to customer');
+
+-- Hyundai Sonata
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(17, 'ACQUISITION', CURRENT_DATE - 60 DAYS, 
+ NULL, 'AVAILABLE', NULL, 23995.00, 
+ 'BJONES', 'Vehicle added to inventory'),
+(17, 'STATUS_CHANGE', CURRENT_DATE - 15 DAYS, 
+ 'AVAILABLE', 'SOLD', NULL, NULL, 
+ 'MWILSON', 'Vehicle sold to customer');
+
+-- Insert history records for ON_HOLD vehicles
+-- Volkswagen Tiguan
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(18, 'ACQUISITION', CURRENT_DATE - 25 DAYS, 
+ NULL, 'AVAILABLE', NULL, 25995.00, 
+ 'JSMITH', 'Vehicle added to inventory'),
+(18, 'STATUS_CHANGE', CURRENT_DATE - 2 DAYS, 
+ 'AVAILABLE', 'ON_HOLD', NULL, NULL, 
+ 'BJONES', 'Customer deposit received, pending financing');
+
+-- Audi Q5
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(19, 'ACQUISITION', CURRENT_DATE - 35 DAYS, 
+ NULL, 'AVAILABLE', NULL, 34995.00, 
+ 'MWILSON', 'Vehicle added to inventory'),
+(19, 'STATUS_CHANGE', CURRENT_DATE - 5 DAYS, 
+ 'AVAILABLE', 'ON_HOLD', NULL, NULL, 
+ 'JSMITH', 'Pending inspection and final paperwork');
+
+-- BMW 3 Series
+INSERT INTO VEHICLE_HISTORY (
+    VEHICLE_ID, EVENT_TYPE, EVENT_DATE, 
+    OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE, 
+    USER_ID, NOTES
+) VALUES 
+(20, 'ACQUISITION', CURRENT_DATE - 15 DAYS, 
+ NULL, 'AVAILABLE', NULL, 36995.00, 
+ 'BJONES', 'Vehicle added to inventory'),
+(20, 'STATUS_CHANGE', CURRENT_DATE - 1 DAY, 
+ 'AVAILABLE', 'ON_HOLD', NULL, NULL, 
+ 'MWILSON', 'Customer test drive scheduled');
+
+-- Made with Bob

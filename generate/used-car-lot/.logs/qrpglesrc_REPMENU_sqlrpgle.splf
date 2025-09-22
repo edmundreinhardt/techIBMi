@@ -1,0 +1,430 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/REPMENU) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/REPMENU.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.58.03.00
+
+SQL9001: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   REPMENU
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/REPME
+                                       NU.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  18:22:00
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   REPMENU
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // REPMENU - Reporting Menu Program                                                                                  000002
+     3 // This program provides a menu interface for accessing various reports                                              000003
+     4                                                                                                                      000004
+     5 CTL-OPT DFTACTGRP(*NO) ACTGRP(*NEW);                                                                                 000005
+     6 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000006
+     7 CTL-OPT DECEDIT('0.');                                                                                               000007
+     8 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000008
+     9 CTL-OPT MAIN(Main);                                                                                                  000009
+    10                                                                                                                      000010
+    11 // Display file                                                                                                      000011
+    12 DCL-F REPMENU WORKSTN SFILE(ERRORSFL:ERRRN) INDDS(DSPIND);                                                           000012
+    13                                                                                                                      000013
+    14 // Indicators                                                                                                        000014
+    15 DCL-DS DSPIND;                                                                                                       000015
+    16   Exit IND POS(3);                                                                                                   000016
+    17   Cancel IND POS(12);                                                                                                000017
+    18 END-DS;                                                                                                              000018
+    19                                                                                                                      000019
+    20 // Program variables                                                                                                 000020
+    21 DCL-S ProgramStatus CHAR(10) INZ('RUNNING');                                                                         000021
+    22 DCL-S ERRRN PACKED(4:0);                                                                                             000022
+    23 DCL-S Command VARCHAR(100);                                                                                          000023
+    24                                                                                                                      000024
+    25 // Main procedure                                                                                                    000025
+    26 DCL-PROC Main;                                                                                                       000026
+    27   // Process until exit                                                                                              000027
+    28   DOW ProgramStatus = 'RUNNING';                                                                                     000028
+    29     // Display menu                                                                                                  000029
+    30     ExecDisplay();                                                                                                   000030
+    31                                                                                                                      000031
+    32     // Process selection                                                                                             000032
+    33     ExecCommand();                                                                                                   000033
+    34   ENDDO;                                                                                                             000034
+    35                                                                                                                      000035
+    36   // Clean up and exit                                                                                               000036
+    37   *INLR = *ON;                                                                                                       000037
+    38   RETURN;                                                                                                            000038
+    39 END-PROC;                                                                                                            000039
+    40                                                                                                                      000040
+    41 // Display the menu                                                                                                  000041
+    42 DCL-PROC ExecDisplay;                                                                                                000042
+    43   // Clear option                                                                                                    000043
+    44   OPTION = ' ';                                                                                                      000044
+    45                                                                                                                      000045
+    46   // Display menu screen                                                                                             000046
+    47   EXFMT MENUSCR;                                                                                                     000047
+    48                                                                                                                      000048
+    49   // Check function keys                                                                                             000049
+    50   IF Exit OR Cancel;                                                                                                 000050
+    51     ProgramStatus = 'EXIT';                                                                                          000051
+    52   ENDIF;                                                                                                             000052
+    53                                                                                                                      000053
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    54   RETURN;                                                                                                            000054
+    55 END-PROC;                                                                                                            000055
+    56                                                                                                                      000056
+    57 // Process menu selection                                                                                            000057
+    58 DCL-PROC ExecCommand;                                                                                                000058
+    59   // If exit requested, return                                                                                       000059
+    60   IF ProgramStatus = 'EXIT';                                                                                         000060
+    61     RETURN;                                                                                                          000061
+    62   ENDIF;                                                                                                             000062
+    63                                                                                                                      000063
+    64   // Process option                                                                                                  000064
+    65   SELECT;                                                                                                            000065
+    66     WHEN OPTION = '1';                                                                                               000066
+    67       // Monthly Sales and Profit Report                                                                             000067
+    68       CallProgram('MONTHRPT');                                                                                       000068
+    69                                                                                                                      000069
+    70     WHEN OPTION = '2';                                                                                               000070
+    71       // Inventory Status Report                                                                                     000071
+    72       CallProgram('INVRPT');                                                                                         000072
+    73                                                                                                                      000073
+    74     WHEN OPTION = '3';                                                                                               000074
+    75       // Vehicle Inventory Management                                                                                000075
+    76       CallProgram('VEHMGMT');                                                                                        000076
+    77                                                                                                                      000077
+    78     WHEN OPTION = '4';                                                                                               000078
+    79       // Exit                                                                                                        000079
+    80       ProgramStatus = 'EXIT';                                                                                        000080
+    81                                                                                                                      000081
+    82     OTHER;                                                                                                           000082
+    83       // Invalid option                                                                                              000083
+    84       ShowError('Invalid option. Please enter 1, 2, 3, or 4.');                                                      000084
+    85   ENDSL;                                                                                                             000085
+    86                                                                                                                      000086
+    87   RETURN;                                                                                                            000087
+    88 END-PROC;                                                                                                            000088
+    89                                                                                                                      000089
+    90 // Call a program                                                                                                    000090
+    91 DCL-PROC CallProgram;                                                                                                000091
+    92   DCL-PI *N;                                                                                                         000092
+    93     ProgramName CHAR(10) CONST;                                                                                      000093
+    94   END-PI;                                                                                                            000094
+    95                                                                                                                      000095
+    96   // Build command                                                                                                   000096
+    97   Command = 'CALL PGM(' + %TRIM(ProgramName) + ')';                                                                  000097
+    98                                                                                                                      000098
+    99   // Execute command                                                                                                 000099
+   100   EXEC SQL                                                                                                           000100
+   101     CALL QCMDEXC(:Command, :(%LEN(%TRIM(Command))));                                                                 000101
+   102                                                                                                                      000102
+   103   RETURN;                                                                                                            000103
+   104 END-PROC;                                                                                                            000104
+   105                                                                                                                      000105
+   106 // Show error message                                                                                                000106
+   107 DCL-PROC ShowError;                                                                                                  000107
+   108   DCL-PI *N;                                                                                                         000108
+   109     Message VARCHAR(100) CONST;                                                                                      000109
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   110   END-PI;                                                                                                            000110
+   111                                                                                                                      000111
+   112   // Clear error subfile                                                                                             000112
+   113   ERRRN = 0;                                                                                                         000113
+   114   WRITE ERRORCTL;                                                                                                    000114
+   115                                                                                                                      000115
+   116   // Add error message                                                                                               000116
+   117   ERRRN = 1;                                                                                                         000117
+   118   ERRPGM = 'REPMENU';                                                                                                000118
+   119   ERRMSG = Message;                                                                                                  000119
+   120   WRITE ERRORSFL;                                                                                                    000120
+   121                                                                                                                      000121
+   122   // Display error                                                                                                   000122
+   123   EXFMT ERRORCTL;                                                                                                    000123
+   124                                                                                                                      000124
+   125   RETURN;                                                                                                            000125
+   126 END-PROC;                                                                                                            000126
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      5
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      6
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/REPMENU         COMMON1    09/17/25 18:58:03        Page      7
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        0
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        0
+  Source Totals:
+    Records . . . . . . . . . . . . :      126
+    Specifications  . . . . . . . . :       59
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :       56
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Diagnostic check of source is complete. Highest severity is 00.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     1
+Source type...............RPG
+Object name...............ERCARLOT/REPMENU
+Source file...............QTEMP/QSQLPRE
+Member....................*OBJ
+To source file............QTEMP/QSQLTEMP1
+Options...................*LSTDBG
+RPG preprocessor options..*LVL2
+Listing option............*PRINT
+Target release............V7R4M0
+INCLUDE file..............*LIBL/QRPGLESRC
+Commit....................*NONE
+Allow copy of data........*OPTIMIZE
+Close SQL cursor..........*ENDACTGRP
+Allow blocking............*ALLREAD
+Delay PREPARE.............*NO
+Concurrent access
+  resolution..............*DFT
+Generation level..........10
+Printer file..............*LIBL/QSYSPRT
+Date format...............*JOB
+Date separator............*JOB
+Time format...............*HMS
+Time separator ...........*JOB
+Replace...................*YES
+Relational database.......*LOCAL
+User .....................*CURRENT
+RDB connect method........*DUW
+Default collection........*NONE
+Dynamic default
+  collection..............*NO
+Package name..............*OBJLIB/*OBJ
+Path......................*NAMING
+SQL rules.................*DB2
+Created object type.......*MODULE
+Debugging view............*SOURCE
+Debugging encryption key..*NONE
+User profile .............*NAMING
+Dynamic user profile......*USER
+Sort sequence.............*JOB
+Language ID...............*JOB
+IBM SQL flagging..........*NOFLAG
+ANS flagging..............*NONE
+Text......................
+Source file CCSID.........37
+Job CCSID.................65535
+Decimal result options:
+  Maximum precision.......31
+  Maximum scale...........31
+  Minimum divide scale....0
+DECFLOAT rounding mode....*HALFEVEN
+Compiler options..........TGTCCSID(*JOB) OPTIMIZE() INCDIR('qrpglesrc')
+Source member changed on 09/17/25  18:58:03
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     2
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 ...+... 9 ...+... 0   SEQNBR  Last change
+    1   **FREE                                                                                                 000001   09/17/25
+    2   // REPMENU - Reporting Menu Program                                                                    000002   09/17/25
+    3   // This program provides a menu interface for accessing various reports                                000003   09/17/25
+    4                                                                                                          000004   09/17/25
+    5   CTL-OPT DFTACTGRP(*NO) ACTGRP(*NEW);                                                                   000005   09/17/25
+    6   CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                     000006   09/17/25
+    7   CTL-OPT DECEDIT('0.');                                                                                 000007   09/17/25
+    8   CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                      000008   09/17/25
+    9   CTL-OPT MAIN(Main);                                                                                    000009   09/17/25
+   10                                                                                                          000010   09/17/25
+   11   // Display file                                                                                        000011   09/17/25
+   12   DCL-F REPMENU WORKSTN SFILE(ERRORSFL:ERRRN) INDDS(DSPIND);                                             000012   09/17/25
+   13                                                                                                          000013   09/17/25
+   14   // Indicators                                                                                          000014   09/17/25
+   15   DCL-DS DSPIND;                                                                                         000015   09/17/25
+   16     Exit IND POS(3);                                                                                     000016   09/17/25
+   17     Cancel IND POS(12);                                                                                  000017   09/17/25
+   18   END-DS;                                                                                                000018   09/17/25
+   19                                                                                                          000019   09/17/25
+   20   // Program variables                                                                                   000020   09/17/25
+   21   DCL-S ProgramStatus CHAR(10) INZ('RUNNING');                                                           000021   09/17/25
+   22   DCL-S ERRRN PACKED(4:0);                                                                               000022   09/17/25
+   23   DCL-S Command VARCHAR(100);                                                                            000023   09/17/25
+   24                                                                                                          000024   09/17/25
+   25   // Main procedure                                                                                      000025   09/17/25
+   26   DCL-PROC Main;                                                                                         000026   09/17/25
+   27     // Process until exit                                                                                000027   09/17/25
+   28     DOW ProgramStatus = 'RUNNING';                                                                       000028   09/17/25
+   29       // Display menu                                                                                    000029   09/17/25
+   30       ExecDisplay();                                                                                     000030   09/17/25
+   31                                                                                                          000031   09/17/25
+   32       // Process selection                                                                               000032   09/17/25
+   33       ExecCommand();                                                                                     000033   09/17/25
+   34     ENDDO;                                                                                               000034   09/17/25
+   35                                                                                                          000035   09/17/25
+   36     // Clean up and exit                                                                                 000036   09/17/25
+   37     *INLR = *ON;                                                                                         000037   09/17/25
+   38     RETURN;                                                                                              000038   09/17/25
+   39   END-PROC;                                                                                              000039   09/17/25
+   40                                                                                                          000040   09/17/25
+   41   // Display the menu                                                                                    000041   09/17/25
+   42   DCL-PROC ExecDisplay;                                                                                  000042   09/17/25
+   43     // Clear option                                                                                      000043   09/17/25
+   44     OPTION = ' ';                                                                                        000044   09/17/25
+   45                                                                                                          000045   09/17/25
+   46     // Display menu screen                                                                               000046   09/17/25
+   47     EXFMT MENUSCR;                                                                                       000047   09/17/25
+   48                                                                                                          000048   09/17/25
+   49     // Check function keys                                                                               000049   09/17/25
+   50     IF Exit OR Cancel;                                                                                   000050   09/17/25
+   51       ProgramStatus = 'EXIT';                                                                            000051   09/17/25
+   52     ENDIF;                                                                                               000052   09/17/25
+   53                                                                                                          000053   09/17/25
+   54     RETURN;                                                                                              000054   09/17/25
+   55   END-PROC;                                                                                              000055   09/17/25
+   56                                                                                                          000056   09/17/25
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     3
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 ...+... 9 ...+... 0   SEQNBR  Last change
+   57   // Process menu selection                                                                              000057   09/17/25
+   58   DCL-PROC ExecCommand;                                                                                  000058   09/17/25
+   59     // If exit requested, return                                                                         000059   09/17/25
+   60     IF ProgramStatus = 'EXIT';                                                                           000060   09/17/25
+   61       RETURN;                                                                                            000061   09/17/25
+   62     ENDIF;                                                                                               000062   09/17/25
+   63                                                                                                          000063   09/17/25
+   64     // Process option                                                                                    000064   09/17/25
+   65     SELECT;                                                                                              000065   09/17/25
+   66       WHEN OPTION = '1';                                                                                 000066   09/17/25
+   67         // Monthly Sales and Profit Report                                                               000067   09/17/25
+   68         CallProgram('MONTHRPT');                                                                         000068   09/17/25
+   69                                                                                                          000069   09/17/25
+   70       WHEN OPTION = '2';                                                                                 000070   09/17/25
+   71         // Inventory Status Report                                                                       000071   09/17/25
+   72         CallProgram('INVRPT');                                                                           000072   09/17/25
+   73                                                                                                          000073   09/17/25
+   74       WHEN OPTION = '3';                                                                                 000074   09/17/25
+   75         // Vehicle Inventory Management                                                                  000075   09/17/25
+   76         CallProgram('VEHMGMT');                                                                          000076   09/17/25
+   77                                                                                                          000077   09/17/25
+   78       WHEN OPTION = '4';                                                                                 000078   09/17/25
+   79         // Exit                                                                                          000079   09/17/25
+   80         ProgramStatus = 'EXIT';                                                                          000080   09/17/25
+   81                                                                                                          000081   09/17/25
+   82       OTHER;                                                                                             000082   09/17/25
+   83         // Invalid option                                                                                000083   09/17/25
+   84         ShowError('Invalid option. Please enter 1, 2, 3, or 4.');                                        000084   09/17/25
+   85     ENDSL;                                                                                               000085   09/17/25
+   86                                                                                                          000086   09/17/25
+   87     RETURN;                                                                                              000087   09/17/25
+   88   END-PROC;                                                                                              000088   09/17/25
+   89                                                                                                          000089   09/17/25
+   90   // Call a program                                                                                      000090   09/17/25
+   91   DCL-PROC CallProgram;                                                                                  000091   09/17/25
+   92     DCL-PI *N;                                                                                           000092   09/17/25
+   93       ProgramName CHAR(10) CONST;                                                                        000093   09/17/25
+   94     END-PI;                                                                                              000094   09/17/25
+   95                                                                                                          000095   09/17/25
+   96     // Build command                                                                                     000096   09/17/25
+   97     Command = 'CALL PGM(' + %TRIM(ProgramName) + ')';                                                    000097   09/17/25
+   98                                                                                                          000098   09/17/25
+   99     // Execute command                                                                                   000099   09/17/25
+  100     EXEC SQL                                                                                             000100   09/17/25
+  101       CALL QCMDEXC(:Command, :(%LEN(%TRIM(Command))));                                                   000101   09/17/25
+  102                                                                                                          000102   09/17/25
+  103     RETURN;                                                                                              000103   09/17/25
+  104   END-PROC;                                                                                              000104   09/17/25
+  105                                                                                                          000105   09/17/25
+  106   // Show error message                                                                                  000106   09/17/25
+  107   DCL-PROC ShowError;                                                                                    000107   09/17/25
+  108     DCL-PI *N;                                                                                           000108   09/17/25
+  109       Message VARCHAR(100) CONST;                                                                        000109   09/17/25
+  110     END-PI;                                                                                              000110   09/17/25
+  111                                                                                                          000111   09/17/25
+  112     // Clear error subfile                                                                               000112   09/17/25
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     4
+Record  *...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 ...+... 9 ...+... 0   SEQNBR  Last change
+  113     ERRRN = 0;                                                                                           000113   09/17/25
+  114     WRITE ERRORCTL;                                                                                      000114   09/17/25
+  115                                                                                                          000115   09/17/25
+  116     // Add error message                                                                                 000116   09/17/25
+  117     ERRRN = 1;                                                                                           000117   09/17/25
+  118     ERRPGM = 'REPMENU';                                                                                  000118   09/17/25
+  119     ERRMSG = Message;                                                                                    000119   09/17/25
+  120     WRITE ERRORSFL;                                                                                      000120   09/17/25
+  121                                                                                                          000121   09/17/25
+  122     // Display error                                                                                     000122   09/17/25
+  123     EXFMT ERRORCTL;                                                                                      000123   09/17/25
+  124                                                                                                          000124   09/17/25
+  125     RETURN;                                                                                              000125   09/17/25
+  126   END-PROC;                                                                                              000126   09/17/25
+                                * * * * *  E N D  O F  S O U R C E  * * * * *
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     5
+                                               CROSS REFERENCE
+Data Names                    Define    Reference
+CALLPROGRAM                      91       RPG PROCEDURE
+CANCEL                           17       CHARACTER(1) IN DSPIND
+COMMAND                          23       VARCHAR(100)
+                                          101
+DSPIND                           15       STRUCTURE
+ERRRN                            22       DECIMAL(4,0)
+EXECCOMMAND                      58       RPG PROCEDURE
+EXECDISPLAY                      42       RPG PROCEDURE
+EXIT                             16       CHARACTER(1) IN DSPIND
+MAIN                             26       RPG PROCEDURE
+MESSAGE                          109      VARCHAR(100) CONSTANT IN RPG PROCEDURE SHOWERROR
+PROGRAMNAME                      93       CHARACTER(10) CONSTANT IN RPG PROCEDURE CALLPROGRAM
+PROGRAMSTATUS                    21       CHARACTER(10)
+SHOWERROR                        107      RPG PROCEDURE
+5770ST1 V7R4M0 190621            Create SQL ILE RPG Object         REPMENU                     09/17/25 18:58:03          Page     6
+                                             DIAGNOSTIC MESSAGES
+MSG ID  SEV  RECORD  TEXT
+SQL1001  30      12  External file definition for REPMENU not found.
+SQL0104  30     101  Position 29 Token ( was not valid. Valid tokens:
+                     <IDENTIFIER>.
+                    Message Summary
+  Total     Info   Warning      Error   Severe  Terminal
+      2        0         0          0        2         0
+30 level severity errors found in source
+  126 Source records processed
+                               * * * * *  E N D  O F  L I S T I N G  * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+

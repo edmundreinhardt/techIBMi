@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Vehicle Details - {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Vehicle Details</h1>
+    <div>
+        <a href="{{ url_for('inventory') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Inventory
+        </a>
+        <a href="{{ url_for('edit_vehicle', vehicle_id=vehicle.vehicle_id) }}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> Edit Vehicle
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }} {{ vehicle.trim }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Basic Information</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Vehicle ID:</th>
+                                <td>{{ vehicle.vehicle_id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Year:</th>
+                                <td>{{ vehicle.year }}</td>
+                            </tr>
+                            <tr>
+                                <th>Make:</th>
+                                <td>{{ vehicle.make }}</td>
+                            </tr>
+                            <tr>
+                                <th>Model:</th>
+                                <td>{{ vehicle.model }}</td>
+                            </tr>
+                            <tr>
+                                <th>Trim:</th>
+                                <td>{{ vehicle.trim }}</td>
+                            </tr>
+                            <tr>
+                                <th>VIN:</th>
+                                <td>{{ vehicle.vin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Color:</th>
+                                <td>{{ vehicle.color }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Condition & Pricing</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Odometer:</th>
+                                <td>{{ vehicle.odometer|default(0)|int }} miles</td>
+                            </tr>
+                            <tr>
+                                <th>Condition Rating:</th>
+                                <td>{{ vehicle.condition_rating }}/10</td>
+                            </tr>
+                            <tr>
+                                <th>Acquisition Price:</th>
+                                <td>{{ vehicle.acquisition_price|currency }}</td>
+                            </tr>
+                            <tr>
+                                <th>Asking Price:</th>
+                                <td>{{ vehicle.asking_price|currency }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date Acquired:</th>
+                                <td>{{ vehicle.date_acquired|format_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date Sold:</th>
+                                <td>{{ vehicle.date_sold|format_date if vehicle.date_sold else 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if vehicle.status == 'AVAILABLE' %}
+                                        <span class="badge bg-success">Available</span>
+                                    {% elif vehicle.status == 'SOLD' %}
+                                        <span class="badge bg-danger">Sold</span>
+                                    {% elif vehicle.status == 'PENDING' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ vehicle.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                {% if vehicle.notes %}
+                <div class="mb-3">
+                    <h6>Notes</h6>
+                    <p>{{ vehicle.notes }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="mb-3">
+                    <h6>Last Updated</h6>
+                    <p>{{ vehicle.last_updated }}</p>
+                </div>
+            </div>
+        </div>
+        
+        {% if history %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Vehicle History</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Event</th>
+                                <th>Status Change</th>
+                                <th>Price Change</th>
+                                <th>User</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in history %}
+                                <tr>
+                                    <td>{{ record.event_date|format_date }}</td>
+                                    <td>{{ record.event_type }}</td>
+                                    <td>
+                                        {% if record.old_status != record.new_status %}
+                                            {{ record.old_status }} → {{ record.new_status }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.old_price != record.new_price %}
+                                            {{ record.old_price|currency }} → {{ record.new_price|currency }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ record.user_id }}</td>
+                                    <td>{{ record.notes }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Update Status</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('update_vehicle_status', vehicle_id=vehicle.vehicle_id) }}">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">New Status</label>
+                        <select name="status" id="status" class="form-select" required>
+                            <option value="">Select Status</option>
+                            <option value="AVAILABLE" {% if vehicle.status == 'AVAILABLE' %}selected{% endif %}>Available</option>
+                            <option value="SOLD" {% if vehicle.status == 'SOLD' %}selected{% endif %}>Sold</option>
+                            <option value="PENDING" {% if vehicle.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3" id="dateSoldGroup" style="display: none;">
+                        <label for="date_sold" class="form-label">Date Sold</label>
+                        <input type="date" class="form-control" id="date_sold" name="date_sold" 
+                               value="{{ vehicle.date_sold|default('') }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.getElementById('status');
+        const dateSoldGroup = document.getElementById('dateSoldGroup');
+        
+        function updateDateSoldVisibility() {
+            if (statusSelect.value === 'SOLD') {
+                dateSoldGroup.style.display = 'block';
+            } else {
+                dateSoldGroup.style.display = 'none';
+            }
+        }
+        
+        statusSelect.addEventListener('change', updateDateSoldVisibility);
+        updateDateSoldVisibility();
+    });
+</script>
+{% endblock %}

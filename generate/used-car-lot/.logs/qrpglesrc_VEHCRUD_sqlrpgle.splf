@@ -1,0 +1,651 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CPC2198: Current library changed to ERCARLOT.
+
+>> executing command: crtsqlrpgi obj(ERCARLOT/VEHCRUD) srcstmf('/home/REINHARD/builds/used-car-lot/qrpglesrc/VEHCRUD.sqlrpgle') COMMIT(*NONE ) OBJTYPE(*MODULE) OPTION(*EVENTF) OUTPUT(*PRINT) TEXT('') TGTRLS() DBGVIEW(*SOURCE) RPGPPOPT(*LVL2) COMPILEOPT('TGTCCSID(*JOB) OPTIMIZE() INCDIR(''qrpglesrc'')')
+>> liblist: QSYS QSYS2 QHLPSYS QUSRSYS QSHELL ERCARLOT QGPL QTEMP
+>> executing time: 2025-09-17-18.57.57.00
+
+SQL9019: SQL precompile failed.
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      1
+  Command  . . . . . . . . . . . . :   CRTRPGMOD
+    Issued by  . . . . . . . . . . :     REINHARD
+  Module . . . . . . . . . . . . . :   VEHCRUD
+    Library  . . . . . . . . . . . :     ERCARLOT
+  Text 'description' . . . . . . . :
+  Source stream file   . . . . . . :   /home/REINHARD/builds/used-car-lot/qrpglesrc/VEHCR
+                                       UD.sqlrpgle
+    CCSID  . . . . . . . . . . . . :     1208
+  Target CCSID . . . . . . . . . . :   *JOB (37)
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   09/17/25  17:27:42
+  Generation severity level  . . . :   10
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *EVENTF
+  Debugging views  . . . . . . . . :   *ALL
+  Debug encryption key . . . . . . :   *NONE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *JOB
+  Language identifier  . . . . . . :   *JOB
+  Replace module . . . . . . . . . :   *YES
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   V7R4M0
+  Allow null values  . . . . . . . :   *NO
+  Storage model . . .  . . . . . . :   *INHERIT
+  Binding directory  . . . . . . . :   *NONE
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :   qrpglesrc
+  Preprocessor options . . . . . . :   *NORMVCOMMENT *EXPINCLUDE   *NOSEQSRC
+  Output source file . . . . . . . :   QSQLPRE
+    Library  . . . . . . . . . . . :     QTEMP
+  Output source member . . . . . . :   VEHCRUD
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      2
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1 **FREE                                                                                                               000001
+     2 // VEHCRUD - Vehicle CRUD Operations Implementation                                                                  000002
+     3 // This module implements the procedures for the VEHCRUD service program                                             000003
+     4 // which provides CRUD operations for the vehicle inventory system.                                                  000004
+     5                                                                                                                      000005
+     6 CTL-OPT NOMAIN;                                                                                                      000006
+     7 CTL-OPT DATFMT(*ISO) TIMFMT(*ISO);                                                                                   000007
+     8 CTL-OPT COPYRIGHT('Used Car Dealership Inventory System - 2025');                                                    000008
+     9 CTL-OPT DECEDIT('0.');                                                                                               000009
+    10 CTL-OPT ALWNULL(*USRCTL);                                                                                            000010
+    11 CTL-OPT BNDDIR('VEHBND');                                                                                            000011
+    12                                                                                                                      000012
+    13 /COPY QRPGLESRC,VEHCRUD_H                                                                                            000013
+======>      aaaaaaaaaaaaaaaaaaa
+*RNF0273 40 a      000013  Compiler not able to open the /COPY or /INCLUDE file;
+                           directive ignored.
+    14                                                                                                                      000014
+    15 // Global variables                                                                                                  000015
+    16 DCL-S SQLState CHAR(5);                                                                                              000016
+    17 DCL-S ErrorMsg VARCHAR(1000);                                                                                        000017
+    18                                                                                                                      000018
+    19 // Add a new vehicle to the inventory                                                                                000019
+    20 DCL-PROC AddVehicle EXPORT;                                                                                          000020
+    21   DCL-PI *N INT(10);                                                                                                 000021
+    22     VehicleData LIKEDS(VehicleDS) CONST;                                                                             000022
+    23     UserId VARCHAR(10) CONST;                                                                                        000023
+    24   END-PI;                                                                                                            000024
+    25                                                                                                                      000025
+    26   DCL-S NewVehicleId INT(10);                                                                                        000026
+    27   DCL-S Success IND;                                                                                                 000027
+    28                                                                                                                      000028
+    29   // Validate input parameters                                                                                       000029
+    30   IF VehicleData.Make = '' OR VehicleData.Model = '' OR                                                              000030
+    31      VehicleData.Year <= 0 OR VehicleData.VIN = '' THEN                                                              000031
+    32     RETURN VEHCRUD_INVALID_PARAM;                                                                                    000032
+    33   ENDIF;                                                                                                             000033
+    34                                                                                                                      000034
+    35   // Check if VIN already exists                                                                                     000035
+    36   EXEC SQL                                                                                                           000036
+    37     SELECT COUNT(*) INTO :Success                                                                                    000037
+    38     FROM VEHICLES                                                                                                    000038
+    39     WHERE VIN = :VehicleData.VIN;                                                                                    000039
+    40                                                                                                                      000040
+    41   IF SQLSTATE <> '00000' THEN                                                                                        000041
+    42     RETURN VEHCRUD_ERROR;                                                                                            000042
+    43   ENDIF;                                                                                                             000043
+    44                                                                                                                      000044
+    45   IF Success > 0 THEN                                                                                                000045
+    46     RETURN VEHCRUD_DUPLICATE;                                                                                        000046
+    47   ENDIF;                                                                                                             000047
+    48                                                                                                                      000048
+    49   // Insert new vehicle                                                                                              000049
+    50   EXEC SQL                                                                                                           000050
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      3
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+    51     INSERT INTO VEHICLES (                                                                                           000051
+    52       MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ODOMETER,                                                                 000052
+    53       CONDITION_RATING, ACQUISITION_PRICE, ASKING_PRICE,                                                             000053
+    54       DATE_ACQUIRED, STATUS, NOTES                                                                                   000054
+    55     ) VALUES (                                                                                                       000055
+    56       :VehicleData.Make, :VehicleData.Model, :VehicleData.Trim,                                                      000056
+    57       :VehicleData.Year, :VehicleData.VIN, :VehicleData.Color,                                                       000057
+    58       :VehicleData.Odometer, :VehicleData.ConditionRating,                                                           000058
+    59       :VehicleData.AcquisitionPrice, :VehicleData.AskingPrice,                                                       000059
+    60       :VehicleData.DateAcquired, :VehicleData.Status, :VehicleData.Notes                                             000060
+    61     );                                                                                                               000061
+    62                                                                                                                      000062
+    63   IF SQLSTATE <> '00000' THEN                                                                                        000063
+    64     RETURN VEHCRUD_ERROR;                                                                                            000064
+    65   ENDIF;                                                                                                             000065
+    66                                                                                                                      000066
+    67   // Get the generated ID                                                                                            000067
+    68   EXEC SQL                                                                                                           000068
+    69     SELECT IDENTITY_VAL_LOCAL() INTO :NewVehicleId FROM SYSIBM.SYSDUMMY1;                                            000069
+    70                                                                                                                      000070
+    71   IF SQLSTATE <> '00000' THEN                                                                                        000071
+    72     RETURN VEHCRUD_ERROR;                                                                                            000072
+    73   ENDIF;                                                                                                             000073
+    74                                                                                                                      000074
+    75   // Add entry to vehicle history                                                                                    000075
+    76   EXEC SQL                                                                                                           000076
+    77     INSERT INTO VEHICLE_HISTORY (                                                                                    000077
+    78       VEHICLE_ID, EVENT_TYPE, NEW_STATUS, NEW_PRICE, USER_ID, NOTES                                                  000078
+    79     ) VALUES (                                                                                                       000079
+    80       :NewVehicleId, 'ADDED', :VehicleData.Status, :VehicleData.AskingPrice,                                         000080
+    81       :UserId, 'Vehicle added to inventory'                                                                          000081
+    82     );                                                                                                               000082
+    83                                                                                                                      000083
+    84   IF SQLSTATE <> '00000' THEN                                                                                        000084
+    85     RETURN VEHCRUD_ERROR;                                                                                            000085
+    86   ENDIF;                                                                                                             000086
+    87                                                                                                                      000087
+    88   RETURN NewVehicleId;                                                                                               000088
+    89 END-PROC;                                                                                                            000089
+    90                                                                                                                      000090
+    91 // Get vehicle details by ID                                                                                         000091
+    92 DCL-PROC GetVehicleById EXPORT;                                                                                      000092
+    93   DCL-PI *N INT(10);                                                                                                 000093
+    94     VehicleId INT(10) CONST;                                                                                         000094
+    95     VehicleData LIKEDS(VehicleDS);                                                                                   000095
+    96   END-PI;                                                                                                            000096
+    97                                                                                                                      000097
+    98   DCL-S Found IND;                                                                                                   000098
+    99                                                                                                                      000099
+   100   EXEC SQL                                                                                                           000100
+   101     SELECT                                                                                                           000101
+   102       VEHICLE_ID, MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ODOMETER,                                                     000102
+   103       CONDITION_RATING, ACQUISITION_PRICE, ASKING_PRICE,                                                             000103
+   104       DATE_ACQUIRED, DATE_SOLD, STATUS, NOTES, LAST_UPDATED                                                          000104
+   105     INTO                                                                                                             000105
+   106       :VehicleData.VehicleId, :VehicleData.Make, :VehicleData.Model,                                                 000106
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      4
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   107       :VehicleData.Trim, :VehicleData.Year, :VehicleData.VIN,                                                        000107
+   108       :VehicleData.Color, :VehicleData.Odometer, :VehicleData.ConditionRating,                                       000108
+   109       :VehicleData.AcquisitionPrice, :VehicleData.AskingPrice,                                                       000109
+   110       :VehicleData.DateAcquired, :VehicleData.DateSold, :VehicleData.Status,                                         000110
+   111       :VehicleData.Notes, :VehicleData.LastUpdated                                                                   000111
+   112     FROM VEHICLES                                                                                                    000112
+   113     WHERE VEHICLE_ID = :VehicleId;                                                                                   000113
+   114                                                                                                                      000114
+   115   IF SQLSTATE = '02000' THEN                                                                                         000115
+   116     RETURN VEHCRUD_NOT_FOUND;                                                                                        000116
+   117   ELSEIF SQLSTATE <> '00000' THEN                                                                                    000117
+   118     RETURN VEHCRUD_ERROR;                                                                                            000118
+   119   ENDIF;                                                                                                             000119
+   120                                                                                                                      000120
+   121   RETURN VEHCRUD_SUCCESS;                                                                                            000121
+   122 END-PROC;                                                                                                            000122
+   123                                                                                                                      000123
+   124 // Update vehicle information                                                                                        000124
+   125 DCL-PROC UpdateVehicle EXPORT;                                                                                       000125
+   126   DCL-PI *N INT(10);                                                                                                 000126
+   127     VehicleData LIKEDS(VehicleDS) CONST;                                                                             000127
+   128     UserId VARCHAR(10) CONST;                                                                                        000128
+   129   END-PI;                                                                                                            000129
+   130                                                                                                                      000130
+   131   DCL-DS OldVehicleData LIKEDS(VehicleDS);                                                                           000131
+   132   DCL-S Result INT(10);                                                                                              000132
+   133                                                                                                                      000133
+   134   // Get current vehicle data for history tracking                                                                   000134
+   135   Result = GetVehicleById(VehicleData.VehicleId : OldVehicleData);                                                   000135
+   136                                                                                                                      000136
+   137   IF Result <> VEHCRUD_SUCCESS THEN                                                                                  000137
+   138     RETURN Result;                                                                                                   000138
+   139   ENDIF;                                                                                                             000139
+   140                                                                                                                      000140
+   141   // Update vehicle information                                                                                      000141
+   142   EXEC SQL                                                                                                           000142
+   143     UPDATE VEHICLES                                                                                                  000143
+   144     SET                                                                                                              000144
+   145       MAKE = :VehicleData.Make,                                                                                      000145
+   146       MODEL = :VehicleData.Model,                                                                                    000146
+   147       TRIM = :VehicleData.Trim,                                                                                      000147
+   148       YEAR = :VehicleData.Year,                                                                                      000148
+   149       COLOR = :VehicleData.Color,                                                                                    000149
+   150       ODOMETER = :VehicleData.Odometer,                                                                              000150
+   151       CONDITION_RATING = :VehicleData.ConditionRating,                                                               000151
+   152       ACQUISITION_PRICE = :VehicleData.AcquisitionPrice,                                                             000152
+   153       ASKING_PRICE = :VehicleData.AskingPrice,                                                                       000153
+   154       NOTES = :VehicleData.Notes,                                                                                    000154
+   155       LAST_UPDATED = CURRENT_TIMESTAMP                                                                               000155
+   156     WHERE VEHICLE_ID = :VehicleData.VehicleId;                                                                       000156
+   157                                                                                                                      000157
+   158   IF SQLSTATE <> '00000' THEN                                                                                        000158
+   159     RETURN VEHCRUD_ERROR;                                                                                            000159
+   160   ENDIF;                                                                                                             000160
+   161                                                                                                                      000161
+   162   // Add history entry if price changed                                                                              000162
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      5
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   163   IF OldVehicleData.AskingPrice <> VehicleData.AskingPrice THEN                                                      000163
+   164     EXEC SQL                                                                                                         000164
+   165       INSERT INTO VEHICLE_HISTORY (                                                                                  000165
+   166         VEHICLE_ID, EVENT_TYPE, OLD_PRICE, NEW_PRICE, USER_ID, NOTES                                                 000166
+   167       ) VALUES (                                                                                                     000167
+   168         :VehicleData.VehicleId, 'PRICE_CHANGE', :OldVehicleData.AskingPrice,                                         000168
+   169         :VehicleData.AskingPrice, :UserId, 'Price updated'                                                           000169
+   170       );                                                                                                             000170
+   171                                                                                                                      000171
+   172     IF SQLSTATE <> '00000' THEN                                                                                      000172
+   173       RETURN VEHCRUD_ERROR;                                                                                          000173
+   174     ENDIF;                                                                                                           000174
+   175   ENDIF;                                                                                                             000175
+   176                                                                                                                      000176
+   177   RETURN VEHCRUD_SUCCESS;                                                                                            000177
+   178 END-PROC;                                                                                                            000178
+   179                                                                                                                      000179
+   180 // Delete a vehicle from the inventory                                                                               000180
+   181 DCL-PROC DeleteVehicle EXPORT;                                                                                       000181
+   182   DCL-PI *N INT(10);                                                                                                 000182
+   183     VehicleId INT(10) CONST;                                                                                         000183
+   184     UserId VARCHAR(10) CONST;                                                                                        000184
+   185   END-PI;                                                                                                            000185
+   186                                                                                                                      000186
+   187   DCL-DS VehicleData LIKEDS(VehicleDS);                                                                              000187
+   188   DCL-S Result INT(10);                                                                                              000188
+   189                                                                                                                      000189
+   190   // Check if vehicle exists                                                                                         000190
+   191   Result = GetVehicleById(VehicleId : VehicleData);                                                                  000191
+   192                                                                                                                      000192
+   193   IF Result <> VEHCRUD_SUCCESS THEN                                                                                  000193
+   194     RETURN Result;                                                                                                   000194
+   195   ENDIF;                                                                                                             000195
+   196                                                                                                                      000196
+   197   // Add history entry before deletion                                                                               000197
+   198   EXEC SQL                                                                                                           000198
+   199     INSERT INTO VEHICLE_HISTORY (                                                                                    000199
+   200       VEHICLE_ID, EVENT_TYPE, USER_ID, NOTES                                                                         000200
+   201     ) VALUES (                                                                                                       000201
+   202       :VehicleId, 'DELETED', :UserId, 'Vehicle removed from inventory'                                               000202
+   203     );                                                                                                               000203
+   204                                                                                                                      000204
+   205   IF SQLSTATE <> '00000' THEN                                                                                        000205
+   206     RETURN VEHCRUD_ERROR;                                                                                            000206
+   207   ENDIF;                                                                                                             000207
+   208                                                                                                                      000208
+   209   // Delete the vehicle                                                                                              000209
+   210   EXEC SQL                                                                                                           000210
+   211     DELETE FROM VEHICLES                                                                                             000211
+   212     WHERE VEHICLE_ID = :VehicleId;                                                                                   000212
+   213                                                                                                                      000213
+   214   IF SQLSTATE <> '00000' THEN                                                                                        000214
+   215     RETURN VEHCRUD_ERROR;                                                                                            000215
+   216   ENDIF;                                                                                                             000216
+   217                                                                                                                      000217
+   218   RETURN VEHCRUD_SUCCESS;                                                                                            000218
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      6
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   219 END-PROC;                                                                                                            000219
+   220                                                                                                                      000220
+   221 // Update vehicle status (available, sold, on hold)                                                                  000221
+   222 DCL-PROC UpdateVehicleStatus EXPORT;                                                                                 000222
+   223   DCL-PI *N INT(10);                                                                                                 000223
+   224     VehicleId INT(10) CONST;                                                                                         000224
+   225     NewStatus VARCHAR(10) CONST;                                                                                     000225
+   226     DateSold DATE OPTIONS(*NOPASS);                                                                                  000226
+   227     UserId VARCHAR(10) CONST;                                                                                        000227
+   228     Notes VARCHAR(1000) OPTIONS(*NOPASS);                                                                            000228
+   229   END-PI;                                                                                                            000229
+   230                                                                                                                      000230
+   231   DCL-DS VehicleData LIKEDS(VehicleDS);                                                                              000231
+   232   DCL-S Result INT(10);                                                                                              000232
+   233   DCL-S NotesValue VARCHAR(1000);                                                                                    000233
+   234   DCL-S DateSoldValue DATE;                                                                                          000234
+   235                                                                                                                      000235
+   236   // Set default values for optional parameters                                                                      000236
+   237   IF %PARMS >= 5 AND %ADDR(Notes) <> *NULL THEN                                                                      000237
+   238     NotesValue = Notes;                                                                                              000238
+   239   ELSE                                                                                                               000239
+   240     NotesValue = 'Status updated';                                                                                   000240
+   241   ENDIF;                                                                                                             000241
+   242                                                                                                                      000242
+   243   // Check if vehicle exists and get current data                                                                    000243
+   244   Result = GetVehicleById(VehicleId : VehicleData);                                                                  000244
+   245                                                                                                                      000245
+   246   IF Result <> VEHCRUD_SUCCESS THEN                                                                                  000246
+   247     RETURN Result;                                                                                                   000247
+   248   ENDIF;                                                                                                             000248
+   249                                                                                                                      000249
+   250   // Validate status                                                                                                 000250
+   251   IF NewStatus <> 'AVAILABLE' AND NewStatus <> 'SOLD' AND NewStatus <> 'ON_HOLD' THEN                                000251
+   252     RETURN VEHCRUD_INVALID_PARAM;                                                                                    000252
+   253   ENDIF;                                                                                                             000253
+   254                                                                                                                      000254
+   255   // Set date sold if status is changing to SOLD                                                                     000255
+   256   IF NewStatus = 'SOLD' THEN                                                                                         000256
+   257     IF %PARMS >= 3 AND %ADDR(DateSold) <> *NULL THEN                                                                 000257
+   258       DateSoldValue = DateSold;                                                                                      000258
+   259     ELSE                                                                                                             000259
+   260       DateSoldValue = %DATE();                                                                                       000260
+   261     ENDIF;                                                                                                           000261
+   262                                                                                                                      000262
+   263     EXEC SQL                                                                                                         000263
+   264       UPDATE VEHICLES                                                                                                000264
+   265       SET STATUS = :NewStatus,                                                                                       000265
+   266           DATE_SOLD = :DateSoldValue,                                                                                000266
+   267           LAST_UPDATED = CURRENT_TIMESTAMP                                                                           000267
+   268       WHERE VEHICLE_ID = :VehicleId;                                                                                 000268
+   269   ELSE                                                                                                               000269
+   270     EXEC SQL                                                                                                         000270
+   271       UPDATE VEHICLES                                                                                                000271
+   272       SET STATUS = :NewStatus,                                                                                       000272
+   273           LAST_UPDATED = CURRENT_TIMESTAMP                                                                           000273
+   274       WHERE VEHICLE_ID = :VehicleId;                                                                                 000274
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      7
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   275   ENDIF;                                                                                                             000275
+   276                                                                                                                      000276
+   277   IF SQLSTATE <> '00000' THEN                                                                                        000277
+   278     RETURN VEHCRUD_ERROR;                                                                                            000278
+   279   ENDIF;                                                                                                             000279
+   280                                                                                                                      000280
+   281   // Add history entry                                                                                               000281
+   282   EXEC SQL                                                                                                           000282
+   283     INSERT INTO VEHICLE_HISTORY (                                                                                    000283
+   284       VEHICLE_ID, EVENT_TYPE, OLD_STATUS, NEW_STATUS, USER_ID, NOTES                                                 000284
+   285     ) VALUES (                                                                                                       000285
+   286       :VehicleId, 'STATUS_CHANGE', :VehicleData.Status,                                                              000286
+   287       :NewStatus, :UserId, :NotesValue                                                                               000287
+   288     );                                                                                                               000288
+   289                                                                                                                      000289
+   290   IF SQLSTATE <> '00000' THEN                                                                                        000290
+   291     RETURN VEHCRUD_ERROR;                                                                                            000291
+   292   ENDIF;                                                                                                             000292
+   293                                                                                                                      000293
+   294   RETURN VEHCRUD_SUCCESS;                                                                                            000294
+   295 END-PROC;                                                                                                            000295
+   296                                                                                                                      000296
+   297 // List vehicles with optional filtering                                                                             000297
+   298 DCL-PROC ListVehicles EXPORT;                                                                                        000298
+   299   DCL-PI *N INT(10);                                                                                                 000299
+   300     Filter LIKEDS(VehicleFilterDS) CONST OPTIONS(*NOPASS);                                                           000300
+   301     ResultArray LIKEDS(VehicleDS) DIM(999) OPTIONS(*VARSIZE);                                                        000301
+   302     ResultCount INT(10);                                                                                             000302
+   303   END-PI;                                                                                                            000303
+   304                                                                                                                      000304
+   305   DCL-S SQL_Statement VARCHAR(4000);                                                                                 000305
+   306   DCL-S WhereClause VARCHAR(2000);                                                                                   000306
+   307   DCL-S HasFilter IND;                                                                                               000307
+   308   DCL-S i INT(10);                                                                                                   000308
+   309                                                                                                                      000309
+   310   // Initialize result count                                                                                         000310
+   311   ResultCount = 0;                                                                                                   000311
+   312                                                                                                                      000312
+   313   // Build SQL statement with dynamic WHERE clause                                                                   000313
+   314   SQL_Statement = 'SELECT VEHICLE_ID, MAKE, MODEL, TRIM, YEAR, VIN, COLOR, ' +                                       000314
+   315                   'ODOMETER, CONDITION_RATING, ACQUISITION_PRICE, ' +                                                000315
+   316                   'ASKING_PRICE, DATE_ACQUIRED, DATE_SOLD, STATUS, ' +                                               000316
+   317                   'NOTES, LAST_UPDATED FROM VEHICLES';                                                               000317
+   318                                                                                                                      000318
+   319   // Apply filters if provided                                                                                       000319
+   320   IF %PARMS >= 1 AND %ADDR(Filter) <> *NULL THEN                                                                     000320
+   321     HasFilter = *OFF;                                                                                                000321
+   322     WhereClause = ' WHERE ';                                                                                         000322
+   323                                                                                                                      000323
+   324     // Make filter                                                                                                   000324
+   325     IF Filter.Make <> '' THEN                                                                                        000325
+   326       WhereClause += 'MAKE LIKE ''%' + %TRIM(Filter.Make) + '%''';                                                   000326
+   327       HasFilter = *ON;                                                                                               000327
+   328     ENDIF;                                                                                                           000328
+   329                                                                                                                      000329
+   330     // Model filter                                                                                                  000330
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      8
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   331     IF Filter.Model <> '' THEN                                                                                       000331
+   332       IF HasFilter THEN                                                                                              000332
+   333         WhereClause += ' AND ';                                                                                      000333
+   334       ENDIF;                                                                                                         000334
+   335       WhereClause += 'MODEL LIKE ''%' + %TRIM(Filter.Model) + '%''';                                                 000335
+   336       HasFilter = *ON;                                                                                               000336
+   337     ENDIF;                                                                                                           000337
+   338                                                                                                                      000338
+   339     // Year range filter                                                                                             000339
+   340     IF Filter.YearFrom > 0 THEN                                                                                      000340
+   341       IF HasFilter THEN                                                                                              000341
+   342         WhereClause += ' AND ';                                                                                      000342
+   343       ENDIF;                                                                                                         000343
+   344       WhereClause += 'YEAR >= ' + %CHAR(Filter.YearFrom);                                                            000344
+   345       HasFilter = *ON;                                                                                               000345
+   346     ENDIF;                                                                                                           000346
+   347                                                                                                                      000347
+   348     IF Filter.YearTo > 0 THEN                                                                                        000348
+   349       IF HasFilter THEN                                                                                              000349
+   350         WhereClause += ' AND ';                                                                                      000350
+   351       ENDIF;                                                                                                         000351
+   352       WhereClause += 'YEAR <= ' + %CHAR(Filter.YearTo);                                                              000352
+   353       HasFilter = *ON;                                                                                               000353
+   354     ENDIF;                                                                                                           000354
+   355                                                                                                                      000355
+   356     // Status filter                                                                                                 000356
+   357     IF Filter.Status <> '' THEN                                                                                      000357
+   358       IF HasFilter THEN                                                                                              000358
+   359         WhereClause += ' AND ';                                                                                      000359
+   360       ENDIF;                                                                                                         000360
+   361       WhereClause += 'STATUS = ''' + %TRIM(Filter.Status) + '''';                                                    000361
+   362       HasFilter = *ON;                                                                                               000362
+   363     ENDIF;                                                                                                           000363
+   364                                                                                                                      000364
+   365     // Date acquired range filter                                                                                    000365
+   366     IF Filter.DateAcquiredFrom <> *LOVAL THEN                                                                        000366
+   367       IF HasFilter THEN                                                                                              000367
+   368         WhereClause += ' AND ';                                                                                      000368
+   369       ENDIF;                                                                                                         000369
+   370       WhereClause += 'DATE_ACQUIRED >= ''' + %CHAR(Filter.DateAcquiredFrom) + '''';                                  000370
+   371       HasFilter = *ON;                                                                                               000371
+   372     ENDIF;                                                                                                           000372
+   373                                                                                                                      000373
+   374     IF Filter.DateAcquiredTo <> *LOVAL THEN                                                                          000374
+   375       IF HasFilter THEN                                                                                              000375
+   376         WhereClause += ' AND ';                                                                                      000376
+   377       ENDIF;                                                                                                         000377
+   378       WhereClause += 'DATE_ACQUIRED <= ''' + %CHAR(Filter.DateAcquiredTo) + '''';                                    000378
+   379       HasFilter = *ON;                                                                                               000379
+   380     ENDIF;                                                                                                           000380
+   381                                                                                                                      000381
+   382     // Date sold range filter                                                                                        000382
+   383     IF Filter.DateSoldFrom <> *LOVAL THEN                                                                            000383
+   384       IF HasFilter THEN                                                                                              000384
+   385         WhereClause += ' AND ';                                                                                      000385
+   386       ENDIF;                                                                                                         000386
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page      9
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   387       WhereClause += 'DATE_SOLD >= ''' + %CHAR(Filter.DateSoldFrom) + '''';                                          000387
+   388       HasFilter = *ON;                                                                                               000388
+   389     ENDIF;                                                                                                           000389
+   390                                                                                                                      000390
+   391     IF Filter.DateSoldTo <> *LOVAL THEN                                                                              000391
+   392       IF HasFilter THEN                                                                                              000392
+   393         WhereClause += ' AND ';                                                                                      000393
+   394       ENDIF;                                                                                                         000394
+   395       WhereClause += 'DATE_SOLD <= ''' + %CHAR(Filter.DateSoldTo) + '''';                                            000395
+   396       HasFilter = *ON;                                                                                               000396
+   397     ENDIF;                                                                                                           000397
+   398                                                                                                                      000398
+   399     // Price range filter                                                                                            000399
+   400     IF Filter.PriceFrom > 0 THEN                                                                                     000400
+   401       IF HasFilter THEN                                                                                              000401
+   402         WhereClause += ' AND ';                                                                                      000402
+   403       ENDIF;                                                                                                         000403
+   404       WhereClause += 'ASKING_PRICE >= ' + %CHAR(Filter.PriceFrom);                                                   000404
+   405       HasFilter = *ON;                                                                                               000405
+   406     ENDIF;                                                                                                           000406
+   407                                                                                                                      000407
+   408     IF Filter.PriceTo > 0 THEN                                                                                       000408
+   409       IF HasFilter THEN                                                                                              000409
+   410         WhereClause += ' AND ';                                                                                      000410
+   411       ENDIF;                                                                                                         000411
+   412       WhereClause += 'ASKING_PRICE <= ' + %CHAR(Filter.PriceTo);                                                     000412
+   413       HasFilter = *ON;                                                                                               000413
+   414     ENDIF;                                                                                                           000414
+   415                                                                                                                      000415
+   416     // Add WHERE clause if any filters were applied                                                                  000416
+   417     IF HasFilter THEN                                                                                                000417
+   418       SQL_Statement += WhereClause;                                                                                  000418
+   419     ENDIF;                                                                                                           000419
+   420   ENDIF;                                                                                                             000420
+   421                                                                                                                      000421
+   422   // Add ORDER BY clause                                                                                             000422
+   423   SQL_Statement += ' ORDER BY MAKE, MODEL, YEAR DESC';                                                               000423
+   424                                                                                                                      000424
+   425   // Prepare and execute the dynamic SQL                                                                             000425
+   426   EXEC SQL                                                                                                           000426
+   427     PREPARE VehicleStmt FROM :SQL_Statement;                                                                         000427
+   428                                                                                                                      000428
+   429   IF SQLSTATE <> '00000' THEN                                                                                        000429
+   430     RETURN VEHCRUD_ERROR;                                                                                            000430
+   431   ENDIF;                                                                                                             000431
+   432                                                                                                                      000432
+   433   EXEC SQL                                                                                                           000433
+   434     DECLARE VehicleCursor CURSOR FOR VehicleStmt;                                                                    000434
+   435                                                                                                                      000435
+   436   EXEC SQL                                                                                                           000436
+   437     OPEN VehicleCursor;                                                                                              000437
+   438                                                                                                                      000438
+   439   IF SQLSTATE <> '00000' THEN                                                                                        000439
+   440     RETURN VEHCRUD_ERROR;                                                                                            000440
+   441   ENDIF;                                                                                                             000441
+   442                                                                                                                      000442
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page     10
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   443   // Fetch results                                                                                                   000443
+   444   i = 0;                                                                                                             000444
+   445   DOW i < %ELEM(ResultArray) AND SQLSTATE = '00000';                                                                 000445
+   446     EXEC SQL                                                                                                         000446
+   447       FETCH NEXT FROM VehicleCursor INTO                                                                             000447
+   448         :ResultArray(i+1).VehicleId, :ResultArray(i+1).Make,                                                         000448
+   449         :ResultArray(i+1).Model, :ResultArray(i+1).Trim,                                                             000449
+   450         :ResultArray(i+1).Year, :ResultArray(i+1).VIN,                                                               000450
+   451         :ResultArray(i+1).Color, :ResultArray(i+1).Odometer,                                                         000451
+   452         :ResultArray(i+1).ConditionRating, :ResultArray(i+1).AcquisitionPrice,                                       000452
+   453         :ResultArray(i+1).AskingPrice, :ResultArray(i+1).DateAcquired,                                               000453
+   454         :ResultArray(i+1).DateSold, :ResultArray(i+1).Status,                                                        000454
+   455         :ResultArray(i+1).Notes, :ResultArray(i+1).LastUpdated;                                                      000455
+   456                                                                                                                      000456
+   457     IF SQLSTATE = '00000' THEN                                                                                       000457
+   458       i += 1;                                                                                                        000458
+   459     ENDIF;                                                                                                           000459
+   460   ENDDO;                                                                                                             000460
+   461                                                                                                                      000461
+   462   ResultCount = i;                                                                                                   000462
+   463                                                                                                                      000463
+   464   EXEC SQL                                                                                                           000464
+   465     CLOSE VehicleCursor;                                                                                             000465
+   466                                                                                                                      000466
+   467   RETURN ResultCount;                                                                                                000467
+   468 END-PROC;                                                                                                            000468
+   469                                                                                                                      000469
+   470 // Get vehicle history by vehicle ID                                                                                 000470
+   471 DCL-PROC GetVehicleHistory EXPORT;                                                                                   000471
+   472   DCL-PI *N INT(10);                                                                                                 000472
+   473     VehicleId INT(10) CONST;                                                                                         000473
+   474     HistoryArray LIKEDS(VehicleHistoryDS) DIM(999) OPTIONS(*VARSIZE);                                                000474
+   475     HistoryCount INT(10);                                                                                            000475
+   476   END-PI;                                                                                                            000476
+   477                                                                                                                      000477
+   478   DCL-S i INT(10);                                                                                                   000478
+   479                                                                                                                      000479
+   480   // Initialize result count                                                                                         000480
+   481   HistoryCount = 0;                                                                                                  000481
+   482                                                                                                                      000482
+   483   // Check if vehicle exists                                                                                         000483
+   484   EXEC SQL                                                                                                           000484
+   485     SELECT COUNT(*) INTO :i                                                                                          000485
+   486     FROM VEHICLES                                                                                                    000486
+   487     WHERE VEHICLE_ID = :VehicleId;                                                                                   000487
+   488                                                                                                                      000488
+   489   IF SQLSTATE <> '00000' THEN                                                                                        000489
+   490     RETURN VEHCRUD_ERROR;                                                                                            000490
+   491   ENDIF;                                                                                                             000491
+   492                                                                                                                      000492
+   493   IF i = 0 THEN                                                                                                      000493
+   494     RETURN VEHCRUD_NOT_FOUND;                                                                                        000494
+   495   ENDIF;                                                                                                             000495
+   496                                                                                                                      000496
+   497   // Fetch history records                                                                                           000497
+   498   EXEC SQL                                                                                                           000498
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page     11
+Line   <---------------------- Source Specifications ----------------------------------------------------->  Do  Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10  Num Date   Id  Number
+   499     DECLARE HistoryCursor CURSOR FOR                                                                                 000499
+   500     SELECT HISTORY_ID, VEHICLE_ID, EVENT_TYPE, EVENT_DATE,                                                           000500
+   501            OLD_STATUS, NEW_STATUS, OLD_PRICE, NEW_PRICE,                                                             000501
+   502            USER_ID, NOTES                                                                                            000502
+   503     FROM VEHICLE_HISTORY                                                                                             000503
+   504     WHERE VEHICLE_ID = :VehicleId                                                                                    000504
+   505     ORDER BY EVENT_DATE DESC;                                                                                        000505
+   506                                                                                                                      000506
+   507   EXEC SQL                                                                                                           000507
+   508     OPEN HistoryCursor;                                                                                              000508
+   509                                                                                                                      000509
+   510   IF SQLSTATE <> '00000' THEN                                                                                        000510
+   511     RETURN VEHCRUD_ERROR;                                                                                            000511
+   512   ENDIF;                                                                                                             000512
+   513                                                                                                                      000513
+   514   // Fetch results                                                                                                   000514
+   515   i = 0;                                                                                                             000515
+   516   DOW i < %ELEM(HistoryArray) AND SQLSTATE = '00000';                                                                000516
+   517     EXEC SQL                                                                                                         000517
+   518       FETCH NEXT FROM HistoryCursor INTO                                                                             000518
+   519         :HistoryArray(i+1).HistoryId, :HistoryArray(i+1).VehicleId,                                                  000519
+   520         :HistoryArray(i+1).EventType, :HistoryArray(i+1).EventDate,                                                  000520
+   521         :HistoryArray(i+1).OldStatus, :HistoryArray(i+1).NewStatus,                                                  000521
+   522         :HistoryArray(i+1).OldPrice, :HistoryArray(i+1).NewPrice,                                                    000522
+   523         :HistoryArray(i+1).UserId, :HistoryArray(i+1).Notes;                                                         000523
+   524                                                                                                                      000524
+   525     IF SQLSTATE = '00000' THEN                                                                                       000525
+   526       i += 1;                                                                                                        000526
+   527     ENDIF;                                                                                                           000527
+   528   ENDDO;                                                                                                             000528
+   529                                                                                                                      000529
+   530   HistoryCount = i;                                                                                                  000530
+   531                                                                                                                      000531
+   532   EXEC SQL                                                                                                           000532
+   533     CLOSE HistoryCursor;                                                                                             000533
+   534                                                                                                                      000534
+   535   RETURN HistoryCount;                                                                                               000535
+   536 END-PROC;                                                                                                            000536
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page     12
+Line   <---------------------- Data Records -------------------------------------------------------------->      Change Src Seq
+Number ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10      Date   Id  Number
+                       C o m p i l e   T i m e   D a t a
+    * * * * *   E N D   O F   C O M P I L E   T I M E   D A T A   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page     13
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+*RNF0273 40      1 Compiler not able to open the /COPY or /INCLUDE file;
+                   directive ignored.
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5770WDS V7R4M0  190419 RN        IBM ILE RPG             ERCARLOT/VEHCRUD         COMMON1    09/17/25 18:57:57        Page     14
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        1
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        1
+  Source Totals:
+    Records . . . . . . . . . . . . :      536
+    Specifications  . . . . . . . . :      382
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :      138
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Compilation stopped. Severity 40 errors found in program.
+          * * * * *   E N D   O F   C O M P I L A T I O N   * * * * *
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
