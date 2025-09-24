@@ -1,0 +1,54 @@
+**FREE
+//==============================================================================
+// Country Business Logic Interface
+// 
+// This module provides the interface for country operations.
+//==============================================================================
+
+// Result data structure
+dcl-ds ResultDS qualified template;
+  success ind;
+  error_code char(7);
+  error_msg varchar(1000);
+end-ds;
+
+// Country data structure
+dcl-ds CountryDS qualified template;
+  coid char(2);
+  countr varchar(50);
+  coiso char(3);
+  active char(1);
+  created_date timestamp;
+  created_by varchar(128);
+  updated_date timestamp;
+  updated_by varchar(128);
+end-ds;
+
+// Country array data structure
+dcl-ds CountryArrayDS qualified template;
+  count int(10);
+  countries pointer;
+end-ds;
+
+// Country procedures
+dcl-pr Country_GetAll extproc('Country_GetAll') likeds(CountryArrayDS) end-pr;
+
+dcl-pr Country_GetByCode extproc('Country_GetByCode') likeds(CountryDS);
+  p_code char(2) const;
+end-pr;
+
+dcl-pr Country_Create extproc('Country_Create') likeds(ResultDS);
+  p_country likeds(CountryDS) const;
+end-pr;
+
+dcl-pr Country_Update extproc('Country_Update') likeds(ResultDS);
+  p_country likeds(CountryDS) const;
+end-pr;
+
+dcl-pr Country_Delete extproc('Country_Delete') likeds(ResultDS);
+  p_code char(2) const;
+end-pr;
+
+dcl-pr Country_Exists extproc('Country_Exists') ind;
+  p_code char(2) const;
+end-pr;
