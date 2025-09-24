@@ -1,0 +1,5 @@
+-- Generated SQL DDL from DDS file COUNTR1.LF
+-- Country file - Index on country name
+
+DROP INDEX IF EXISTS COUNTR1;
+CREATE INDEX COUNTR1 ON COUNTRY (COUNTR);
