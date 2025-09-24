@@ -1,0 +1,6 @@
+-- %TEXT Country file - Index on country name
+
+CREATE OR REPLACE INDEX COUNTR1
+  ON COUNTRY (COUNTR);
+
+LABEL ON INDEX COUNTR1 IS 'Country Name Index';
