@@ -1,5 +1,6 @@
 {
   "description": "Sample Country Management Subsystem",
+  "curlib": "&CURLIB",
   "buildObjectCommand": "makei b -t {object}",
-  "curlib": "&CURLIB"
+  "buildCommand": "makei build"
 }
