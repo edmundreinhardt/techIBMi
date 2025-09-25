@@ -49,6 +49,6 @@ dcl-pr Country_Delete extproc('Country_Delete') likeds(ResultDS);
   p_code char(2) const;
 end-pr;
 
-dcl-pr Country_Exists extproc('Country_Exists') ind;
+dcl-pr Country_Exists ind extproc('Country_Exists');
   p_code char(2) const;
 end-pr;
