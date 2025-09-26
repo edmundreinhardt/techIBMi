@@ -9,17 +9,6 @@ ctl-opt thread(*concurrent);
 
 /copy COUNTRY
 
-// SQL Communication Area
-dcl-ds sqlca ext qualified;
-end-ds;
-
-// SQL Diagnostic Information
-dcl-ds diagnostics;
-  sqlCode int(10);
-  sqlState char(5);
-  message char(80);
-end-ds;
-
 // Country record structure
 dcl-ds countryRec qualified;
   coid char(2);
@@ -31,7 +20,7 @@ end-ds;
 // Get country name from country code
 //=============================================
 dcl-proc GetCountryName export;
-  dcl-pi *n like(countr);
+  dcl-pi *n like(countryRec.countr);
     P_COID char(2) value;
   end-pi;
   
@@ -42,7 +31,7 @@ dcl-proc GetCountryName export;
     FROM COUNTRY
     WHERE COID = :P_COID;
   
-  if sqlca.sqlcode <> 0;
+  if SQLCODE <> 0;
     // If not found, return blank
     return '';
   endif;
@@ -54,7 +43,7 @@ end-proc;
 // Get ISO3 code from country code
 //=============================================
 dcl-proc GetCountryIso3 export;
-  dcl-pi *n like(coiso);
+  dcl-pi *n like(countryRec.coiso);
     P_COID char(2) value;
   end-pi;
   
@@ -65,7 +54,7 @@ dcl-proc GetCountryIso3 export;
     FROM COUNTRY
     WHERE COID = :P_COID;
   
-  if sqlca.sqlcode <> 0;
+  if SQLCODE <> 0;
     // If not found, return blank
     return '';
   endif;
@@ -88,7 +77,7 @@ dcl-proc ExistCountry export;
     FROM COUNTRY
     WHERE COID = :P_COID;
   
-  if sqlca.sqlcode <> 0;
+  if SQLCODE <> 0;
     return *off;
   endif;
   

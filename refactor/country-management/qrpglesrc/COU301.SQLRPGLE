@@ -16,10 +16,6 @@ dcl-ds INFO;
   LRRN                 int(5) pos(378);
 end-ds;
 
-// SQL Communication Area
-dcl-ds sqlca ext qualified;
-end-ds;
-
 // Country record structure
 dcl-ds countryRec qualified;
   coid char(2);
@@ -166,7 +162,7 @@ dcl-proc sltcountry export;
       exec sql
         FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr;
       
-      sflend = (sqlca.sqlcode <> 0);
+      sflend = (SQLCODE <> 0);
     else;
       exec sql
         OPEN C_COUNTRY_BY_DESC;
@@ -175,7 +171,7 @@ dcl-proc sltcountry export;
       exec sql
         FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr;
       
-      sflend = (sqlca.sqlcode <> 0);
+      sflend = (SQLCODE <> 0);
     endif;
     
     // Save current record values
@@ -213,7 +209,7 @@ dcl-proc sltcountry export;
       endif;
       
       // Check if we reached end of file
-      hasMore = (sqlca.sqlcode = 0);
+      hasMore = (SQLCODE = 0);
       SflEnd = not hasMore;
       
       // Update current record values if we have more records
