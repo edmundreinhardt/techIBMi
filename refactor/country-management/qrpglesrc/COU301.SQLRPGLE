@@ -8,7 +8,7 @@ ctl-opt option(*srcstmt:*nodebugio);
 
 // File declarations - Keep display file, replace database files with SQL
 dcl-f cou301d workstn usage(*input:*output) infds(INFO)
-                             sfile(SFL01:RRN01)
+                             sfile(SFL01:subfileRecordNumber)
                              indds(indds);
 
 // Data structures
@@ -49,47 +49,48 @@ dcl-ds indds;
 end-ds;
 
 // Standalone fields
-dcl-s rrn01           int(5);
+dcl-s subfileRecordNumber int(5);
+dcl-s cursorPosition      int(5);
 
 // Constants
-dcl-c prp             'prp';
-dcl-c lod             'lod';
-dcl-c dsp             'dsp';
-dcl-c key             'key';
-dcl-c chk             'chk';
-dcl-c chkctl          'chc';
-dcl-c actctl          'acc';
-dcl-c act             'act';
+dcl-c PREPARE_STEP       'prp';
+dcl-c LOAD_STEP          'lod';
+dcl-c DISPLAY_STEP       'dsp';
+dcl-c PROCESS_KEYS_STEP  'key';
+dcl-c CHECK_SELECTIONS_STEP 'chk';
+dcl-c CHECK_CONTROL_STEP 'chc';
+dcl-c ACTION_CONTROL_STEP 'acc';
+dcl-c PROCESS_ACTION_STEP 'act';
 
 //=============================================
 // Select a Country code
 //=============================================
 dcl-proc sltcountry export;
   dcl-pi *n                  like(coid);
-    pcod                     like(coid);
+    paramCountryCode         like(coid);
   end-pi;
   
-  dcl-s dft             like(coid);
-  dcl-s step01          char(3) inz(prp);
-  dcl-s in08            ind;
-  dcl-s sts01           ind;
-  dcl-s rrs01           int(5);
-  dcl-s teller          int(5);
-  dcl-s err01           ind;
-  dcl-s slt01           ind;
-  dcl-s keycod          like(coid);
-  dcl-s savcod          like(coid);
-  dcl-s pdes            like(countr);
-  dcl-s keydes          like(countr);
-  dcl-s savdes          like(countr);
-  dcl-s hasMore         ind;
+  dcl-s returnCountryCode    like(coid);
+  dcl-s processStep          char(3) inz(PREPARE_STEP);
+  dcl-s f8KeyPressed         ind;
+  dcl-s optionSelected       ind;
+  dcl-s savedRecordNumber    int(5);
+  dcl-s recordCounter        int(5);
+  dcl-s errorFound           ind;
+  dcl-s selectionMade        ind;
+  dcl-s searchByCode         like(coid);
+  dcl-s savedCode            like(coid);
+  dcl-s paramDesc            like(countr);
+  dcl-s searchByDesc         like(countr);
+  dcl-s savedDesc            like(countr);
+  dcl-s moreRecordsExist     ind;
   
   // SQL cursor for countries ordered by code
   exec sql
     DECLARE C_COUNTRY_BY_CODE CURSOR FOR
     SELECT COID, COUNTR
     FROM COUNTRY
-    WHERE COID >= :keycod
+    WHERE COID >= :searchByCode
     ORDER BY COID
     FOR READ ONLY;
   
@@ -98,7 +99,7 @@ dcl-proc sltcountry export;
     DECLARE C_COUNTRY_BY_DESC CURSOR FOR
     SELECT COID, COUNTR
     FROM COUNTRY
-    WHERE COUNTR >= :keydes
+    WHERE COUNTR >= :searchByDesc
     ORDER BY COUNTR
     FOR READ ONLY;
   
@@ -106,24 +107,24 @@ dcl-proc sltcountry export;
     open cou301d;
   endif;
   
-  keycod = pcod;
-  dft = pcod;
+  searchByCode = paramCountryCode;
+  returnCountryCode = paramCountryCode;
   bydesc = *off;
   
-  dow step01 <> ' ';
+  dow processStep <> ' ';
     select;
-    when step01 = prp;
-      exsr s01prp;
-    when step01 = lod;
-      exsr s01lod;
-    when step01 = dsp;
-      exsr s01dsp;
-    when step01 = key;
-      exsr s01key;
-    when step01 = chk;
-      exsr s01chk;
-    when step01 = act;
-      exsr s01act;
+    when processStep = PREPARE_STEP;
+      exsr prepareSubfile;
+    when processStep = LOAD_STEP;
+      exsr loadSubfile;
+    when processStep = DISPLAY_STEP;
+      exsr displaySubfile;
+    when processStep = PROCESS_KEYS_STEP;
+      exsr processCommandKeys;
+    when processStep = CHECK_SELECTIONS_STEP;
+      exsr checkSubfileSelections;
+    when processStep = PROCESS_ACTION_STEP;
+      exsr processSubfileActions;
     endsl;
   enddo;
   
@@ -134,11 +135,11 @@ dcl-proc sltcountry export;
   exec sql
     CLOSE C_COUNTRY_BY_DESC;
   
-  return dft;
+  return returnCountryCode;
   
   //--- Clear Subfile  -----------------------------------------------------
-  begsr s01prp;
-    RRS01 = 0;
+  begsr prepareSubfile;
+    savedRecordNumber = 0;
     clear CTL01;
     sflclr = *on;
     sfldsp = *off;
@@ -175,28 +176,28 @@ dcl-proc sltcountry export;
     endif;
     
     // Save current record values
-    SAVCOD = countryRec.coid;
-    SAVDES = countryRec.countr;
-    Step01 = lod;
+    savedCode = countryRec.coid;
+    savedDesc = countryRec.countr;
+    processStep = LOAD_STEP;
   endsr;
   
   //--- Load Subfile  -----------------------------------------------------
-  begsr S01lod;
-    RRN01 = RRS01;
-    RRB01 = RRS01 + 1;
-    TELLER = 0;
+  begsr loadSubfile;
+    subfileRecordNumber = savedRecordNumber;
+    cursorPosition = savedRecordNumber + 1;
+    recordCounter = 0;
     OPT01 = 0;
     SflNxtChg = *OFF;
     
     // Set current record values
-    coid = SAVCOD;
-    countr = SAVDES;
+    coid = savedCode;
+    countr = savedDesc;
     
     // Load records into subfile
-    hasMore = not sflend;
-    dow hasMore and TELLER < 20;
-      RRN01 = RRN01 + 1;
-      TELLER = TELLER + 1;
+    moreRecordsExist = not sflend;
+    dow moreRecordsExist and recordCounter < 20;
+      subfileRecordNumber = subfileRecordNumber + 1;
+      recordCounter = recordCounter + 1;
       write SFL01;
       
       // Fetch next record
@@ -209,57 +210,57 @@ dcl-proc sltcountry export;
       endif;
       
       // Check if we reached end of file
-      hasMore = (SQLCODE = 0);
-      SflEnd = not hasMore;
+      moreRecordsExist = (SQLCODE = 0);
+      SflEnd = not moreRecordsExist;
       
       // Update current record values if we have more records
-      if hasMore;
+      if moreRecordsExist;
         coid = countryRec.coid;
         countr = countryRec.countr;
       endif;
     enddo;
     
     // Save current record values
-    SAVCOD = coid;
-    SAVDES = countr;
-    RRS01 = RRN01;
-    Step01 = dsp;
+    savedCode = coid;
+    savedDesc = countr;
+    savedRecordNumber = subfileRecordNumber;
+    processStep = DISPLAY_STEP;
   endsr;
   
   //--- Display Subfile  --------------------------------------------------
-  begsr S01dsp;
-    sfldsp = rrs01 > 0;
+  begsr displaySubfile;
+    sfldsp = savedRecordNumber > 0;
     sfldspctl = *on;
     write KEY01;
     exfmt CTL01;
-    IN08 = CF08;
-    RRB01 = LRRN;
-    Step01 = key;
+    f8KeyPressed = CF08;
+    cursorPosition = LRRN;
+    processStep = PROCESS_KEYS_STEP;
   endsr;
   
   //--- Command Keys  -----------------------------------------------------
-  begsr S01key;
+  begsr processCommandKeys;
     select;
     when exit;
-      step01 = ' ';
+      processStep = ' ';
     when cancel;
-      Step01 = ' ';
+      processStep = ' ';
     when PageDown;
-      Step01 = lod;
+      processStep = LOAD_STEP;
     other;
-      Step01 = chk;
+      processStep = CHECK_SELECTIONS_STEP;
     endsl;
   endsr;
   
   //--- Check Subfile  ----------------------------------------------------
-  begsr S01chk;
+  begsr checkSubfileSelections;
     // SET FLAG SELECTION MADE OFF
-    SLT01 = *OFF;
+    selectionMade = *OFF;
     // SET FLAG OPTION  MADE OFF
-    STS01 = *OFF;
+    optionSelected = *OFF;
     // SET FLAG ERROR   MADE OFF
-    ERR01 = *OFF;
-    Step01 = act;
+    errorFound = *OFF;
+    processStep = PROCESS_ACTION_STEP;
     
     readc(E) SFL01;
     SflNxtChg = *ON;
@@ -269,27 +270,27 @@ dcl-proc sltcountry export;
       when OPT01 = 0;
         // NO ERROR
       when OPT01 <> 1;
-        STS01 = *ON;
-        Step01 = dsp;
+        optionSelected = *ON;
+        processStep = DISPLAY_STEP;
         dspatrRi = *on;
         InvalidOpt = *on;
-        if ERR01 = *OFF;
-          RRB01 = RRN01;
-          ERR01 = *ON;
+        if errorFound = *OFF;
+          cursorPosition = subfileRecordNumber;
+          errorFound = *ON;
         endif;
       //OPTION = 1 BUT SELECTION ALREADY MADE
-      when SLT01 = *ON;
-        Step01 = dsp;
+      when selectionMade = *ON;
+        processStep = DISPLAY_STEP;
         dspatrRi = *on;
         OneSelect = *on;
-        if ERR01 = *OFF;
-          RRB01 = RRN01;
-          ERR01 = *ON;
+        if errorFound = *OFF;
+          cursorPosition = subfileRecordNumber;
+          errorFound = *ON;
         endif;
       other;
         //OPTION = 1
-        SLT01 = *ON;
-        STS01 = *ON;
+        selectionMade = *ON;
+        optionSelected = *ON;
       endsl;
       
       update SFL01;
@@ -300,34 +301,34 @@ dcl-proc sltcountry export;
     select;
     when OPTC1 <> 8 and OPTC1 <> 0;
       InvalidOptC = *ON;
-      Step01 = dsp;
-    when SLT01 = *ON and OPTC1 <> 0;
+      processStep = DISPLAY_STEP;
+    when selectionMade = *ON and OPTC1 <> 0;
       NotAvail = *ON;
-      Step01 = dsp;
-    when STS01 = *ON and IN08 = *ON;
-      Step01 = dsp;
+      processStep = DISPLAY_STEP;
+    when optionSelected = *ON and f8KeyPressed = *ON;
+      processStep = DISPLAY_STEP;
     endsl;
   endsr;
   
   //--- Write Subfile  ----------------------------------------------------
-  begsr S01act;
-    Step01 = dsp;
+  begsr processSubfileActions;
+    processStep = DISPLAY_STEP;
     
     select;
-    when IN08;
-      Step01 = prp;
+    when f8KeyPressed;
+      processStep = PREPARE_STEP;
       bydesc = not bydesc;
       if bydesc;
-        clear KEYdes;
+        clear searchByDesc;
       else;
-        clear KEYcod;
+        clear searchByCode;
       endif;
     when OPTC1 = 8;
-      Step01 = prp;
+      processStep = PREPARE_STEP;
       if not bydesc;
-        KEYCOD = POSCOD;
+        searchByCode = POSCOD;  // Position code from display file
       else;
-        KEYDES = POSDES;
+        searchByDesc = POSDES;  // Position description from display file
       endif;
     other;
       readc(E) SFL01;
