@@ -3,14 +3,29 @@
 // %TEXT Functions Country                                                           
 //%EMETADATA                                                                         
 ctl-opt nomain;
-
-dcl-f COUNTRY disk keyed usropn;
+ctl-opt datfmt(*iso) timfmt(*iso) decedit('0.');
+ctl-opt option(*srcstmt:*nodebugio);
+ctl-opt thread(*concurrent);
 
 /copy COUNTRY
 
-dcl-pr chainCOUNTRY;
-  P_COID char(2) value;
-end-pr;
+// SQL Communication Area
+dcl-ds sqlca ext qualified;
+end-ds;
+
+// SQL Diagnostic Information
+dcl-ds diagnostics;
+  sqlCode int(10);
+  sqlState char(5);
+  message char(80);
+end-ds;
+
+// Country record structure
+dcl-ds countryRec qualified;
+  coid char(2);
+  countr char(30);
+  coiso char(3);
+end-ds;
 
 //=============================================
 // Get country name from country code
@@ -20,8 +35,19 @@ dcl-proc GetCountryName export;
     P_COID char(2) value;
   end-pi;
   
-  chainCOUNTRY(P_COID);
-  return COUNTR;
+  clear countryRec;
+  
+  exec sql
+    SELECT COUNTR INTO :countryRec.countr
+    FROM COUNTRY
+    WHERE COID = :P_COID;
+  
+  if sqlca.sqlcode <> 0;
+    // If not found, return blank
+    return '';
+  endif;
+  
+  return countryRec.countr;
 end-proc;
 
 //=============================================
@@ -32,8 +58,19 @@ dcl-proc GetCountryIso3 export;
     P_COID char(2) value;
   end-pi;
   
-  chainCOUNTRY(P_COID);
-  return COISO;
+  clear countryRec;
+  
+  exec sql
+    SELECT COISO INTO :countryRec.coiso
+    FROM COUNTRY
+    WHERE COID = :P_COID;
+  
+  if sqlca.sqlcode <> 0;
+    // If not found, return blank
+    return '';
+  endif;
+  
+  return countryRec.coiso;
 end-proc;
 
 //=============================================
@@ -44,36 +81,17 @@ dcl-proc ExistCountry export;
     P_COID char(2) value;
   end-pi;
   
-  chainCOUNTRY(P_COID);
-  return %found(country);
+  dcl-s exists int(5);
+  
+  exec sql
+    SELECT COUNT(*) INTO :exists
+    FROM COUNTRY
+    WHERE COID = :P_COID;
+  
+  if sqlca.sqlcode <> 0;
+    return *off;
+  endif;
+  
+  return exists > 0;
 end-proc;
 
-//=============================================
-// Chain to COUNTRY file
-//=============================================
-dcl-proc chainCOUNTRY;
-  dcl-pi *n;
-    P_COID char(2) value;
-  end-pi;
-  
-  if not %open(COUNTRY);
-    open COUNTRY;
-  endif;
-  
-  if P_COID <> COID;
-    clear FCOUN;
-    chain (P_COID) COUNTRY;
-  endif;
-end-proc;
-
-//=============================================
-// Close COUNTRY file
-//=============================================
-dcl-proc closeCOUNTRY;
-  dcl-pi *n;
-  end-pi;
-  
-  if %open(COUNTRY);
-    close COUNTRY;
-  endif;
-end-proc;

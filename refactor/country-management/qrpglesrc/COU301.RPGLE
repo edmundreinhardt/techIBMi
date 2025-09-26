@@ -3,10 +3,10 @@
 //* %TEXT Select a Country code                                                       *
 //*%EMETADATA                                                                         *
 ctl-opt nomain;
+ctl-opt datfmt(*iso) timfmt(*iso) decedit('0.');
+ctl-opt option(*srcstmt:*nodebugio);
 
-// File declarations
-dcl-f country  disk keyed;
-dcl-f countr1 disk keyed rename(fcoun:REC52);
+// File declarations - Keep display file, replace database files with SQL
 dcl-f cou301d workstn usage(*input:*output) infds(INFO)
                              sfile(SFL01:RRN01)
                              indds(indds);
@@ -14,6 +14,17 @@ dcl-f cou301d workstn usage(*input:*output) infds(INFO)
 // Data structures
 dcl-ds INFO;
   LRRN                 int(5) pos(378);
+end-ds;
+
+// SQL Communication Area
+dcl-ds sqlca ext qualified;
+end-ds;
+
+// Country record structure
+dcl-ds countryRec qualified;
+  coid char(2);
+  countr char(30);
+  coiso char(3);
 end-ds;
 
 /copy country
@@ -75,6 +86,25 @@ dcl-proc sltcountry export;
   dcl-s pdes            like(countr);
   dcl-s keydes          like(countr);
   dcl-s savdes          like(countr);
+  dcl-s hasMore         ind;
+  
+  // SQL cursor for countries ordered by code
+  exec sql
+    DECLARE C_COUNTRY_BY_CODE CURSOR FOR
+    SELECT COID, COUNTR
+    FROM COUNTRY
+    WHERE COID >= :keycod
+    ORDER BY COID
+    FOR READ ONLY;
+  
+  // SQL cursor for countries ordered by description
+  exec sql
+    DECLARE C_COUNTRY_BY_DESC CURSOR FOR
+    SELECT COID, COUNTR
+    FROM COUNTRY
+    WHERE COUNTR >= :keydes
+    ORDER BY COUNTR
+    FOR READ ONLY;
   
   if not %open(cou301d);
     open cou301d;
@@ -101,6 +131,13 @@ dcl-proc sltcountry export;
     endsl;
   enddo;
   
+  // Close any open cursors
+  exec sql
+    CLOSE C_COUNTRY_BY_CODE;
+  
+  exec sql
+    CLOSE C_COUNTRY_BY_DESC;
+  
   return dft;
   
   //--- Clear Subfile  -----------------------------------------------------
@@ -113,18 +150,37 @@ dcl-proc sltcountry export;
     write CTL01;
     sflclr = *off;
     
+    // Close any open cursors
+    exec sql
+      CLOSE C_COUNTRY_BY_CODE;
+    
+    exec sql
+      CLOSE C_COUNTRY_BY_DESC;
+    
+    // Open appropriate cursor based on search mode
     if not bydesc;
-      setll KEYCOD country;
-      read country;
-      sflend = %EOF;
+      exec sql
+        OPEN C_COUNTRY_BY_CODE;
+      
+      // Fetch first record
+      exec sql
+        FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr;
+      
+      sflend = (sqlca.sqlcode <> 0);
     else;
-      setll KEYDES countr1;
-      read countr1;
-      SflEnd = %EOF;
+      exec sql
+        OPEN C_COUNTRY_BY_DESC;
+      
+      // Fetch first record
+      exec sql
+        FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr;
+      
+      sflend = (sqlca.sqlcode <> 0);
     endif;
     
-    SAVCOD = coid;
-    SAVDES = countr;
+    // Save current record values
+    SAVCOD = countryRec.coid;
+    SAVDES = countryRec.countr;
     Step01 = lod;
   endsr;
   
@@ -135,23 +191,39 @@ dcl-proc sltcountry export;
     TELLER = 0;
     OPT01 = 0;
     SflNxtChg = *OFF;
+    
+    // Set current record values
     coid = SAVCOD;
     countr = SAVDES;
     
-    dow not sflend and TELLER < 20;
+    // Load records into subfile
+    hasMore = not sflend;
+    dow hasMore and TELLER < 20;
       RRN01 = RRN01 + 1;
       TELLER = TELLER + 1;
       write SFL01;
       
+      // Fetch next record
       if not bydesc;
-        read country;
+        exec sql
+          FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr;
       else;
-        read countr1;
+        exec sql
+          FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr;
       endif;
       
-      SflEnd = %EOF;
+      // Check if we reached end of file
+      hasMore = (sqlca.sqlcode = 0);
+      SflEnd = not hasMore;
+      
+      // Update current record values if we have more records
+      if hasMore;
+        coid = countryRec.coid;
+        countr = countryRec.countr;
+      endif;
     enddo;
     
+    // Save current record values
     SAVCOD = coid;
     SAVDES = countr;
     RRS01 = RRN01;
