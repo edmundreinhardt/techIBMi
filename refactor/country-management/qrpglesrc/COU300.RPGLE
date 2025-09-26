@@ -1,74 +1,79 @@
-      *%METADATA                                                                          *
-      * %TEXT Functions Country                                                           *
-      *%EMETADATA                                                                         *
-     h nomain
+**free
+//%METADATA                                                                          
+// %TEXT Functions Country                                                           
+//%EMETADATA                                                                         
+ctl-opt nomain;
 
-     FCOUNTRY   if   e           k disk    usropn
+dcl-f COUNTRY disk keyed usropn;
 
-      /copy COUNTRY
+/copy COUNTRY
 
-     d chainCOUNTRY    pr
-     D P_COID                         2A    value
+dcl-pr chainCOUNTRY;
+  P_COID char(2) value;
+end-pr;
 
-     D K_COID          S                   LIKE(COID)
+//=============================================
+// Get country name from country code
+//=============================================
+dcl-proc GetCountryName export;
+  dcl-pi *n like(countr);
+    P_COID char(2) value;
+  end-pi;
+  
+  chainCOUNTRY(P_COID);
+  return COUNTR;
+end-proc;
 
-     C     kf            klist
-     C                   KFLD                    K_COID
+//=============================================
+// Get ISO3 code from country code
+//=============================================
+dcl-proc GetCountryIso3 export;
+  dcl-pi *n like(coiso);
+    P_COID char(2) value;
+  end-pi;
+  
+  chainCOUNTRY(P_COID);
+  return COISO;
+end-proc;
 
-      *=============================================
-     PGetCountryName   B                     export
-     DGetCountryName   PI                   like(countr)
-     D P_COID                         2A    value
-      /free
-         chainCOUNTRY(P_COID
-               );
-         return COUNTR;
-      /end-free
-     pGetCountryName   e
-      *=============================================
-     PGetCountryIso3   B                     export
-     DGetCountryIso3   PI                   like(coiso)
-     D P_COID                         2A    value
-      /free
-         chainCOUNTRY(P_COID
-               );
-         return COISO;
-      /end-free
-     pGetCountryIso3   e
+//=============================================
+// Check if country code exists
+//=============================================
+dcl-proc ExistCountry export;
+  dcl-pi *n ind;
+    P_COID char(2) value;
+  end-pi;
+  
+  chainCOUNTRY(P_COID);
+  return %found(country);
+end-proc;
 
-      *=============================================
-     P ExistCountry    B                     export
-     D ExistCountry    PI              n
-     D P_COID                         2A    value
-      /free
-         chainCOUNTRY(P_COID
-               );
-         return %found(country);
-      /end-free
-     p ExistCountry    e
+//=============================================
+// Chain to COUNTRY file
+//=============================================
+dcl-proc chainCOUNTRY;
+  dcl-pi *n;
+    P_COID char(2) value;
+  end-pi;
+  
+  if not %open(COUNTRY);
+    open COUNTRY;
+  endif;
+  
+  if P_COID <> COID;
+    clear FCOUN;
+    chain (P_COID) COUNTRY;
+  endif;
+end-proc;
 
-     p chainCOUNTRY    b
-     d chainCOUNTRY    pi
-     D P_COID                         2A    value
-      /free
-        if not %open(COUNTRY);
-          open COUNTRY;
-        endif;
-         if P_COID <> COID;
-           K_COID =  P_COID;
-           clear *all FCOUN;
-           chain kf COUNTRY;
-         endif;
-      /end-free
-     p chainCOUNTRY    e
-
-     p closeCOUNTRY    b
-     d closeCOUNTRY    pi
-      /free
-        if %open(COUNTRY);
-          close COUNTRY;
-        endif;
-      /end-free
-     p closeCOUNTRY    e
-
-
+//=============================================
+// Close COUNTRY file
+//=============================================
+dcl-proc closeCOUNTRY;
+  dcl-pi *n;
+  end-pi;
+  
+  if %open(COUNTRY);
+    close COUNTRY;
+  endif;
+end-proc;
