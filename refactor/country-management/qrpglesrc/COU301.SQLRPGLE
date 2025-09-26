@@ -153,8 +153,8 @@ end-proc;
 dcl-proc prepareSubfile;
   dcl-pi *n char(3);
     p_bydesc ind const;
-    p_searchByCode like(coid) const;
-    p_searchByDesc like(countr) const;
+    searchByCode like(coid) const;
+    searchByDesc like(countr) const;
     p_savedRecordNumber int(5);
     p_savedCode like(coid);
     p_savedDesc like(countr);
@@ -386,8 +386,8 @@ dcl-proc processSubfileActions;
     p_f8KeyPressed ind const;
     p_bydesc ind;
     p_OPTC1 int(5) const;
-    p_searchByCode like(coid);
-    p_searchByDesc like(countr);
+    searchByCode like(coid);
+    searchByDesc like(countr);
   end-pi;
   
   dcl-s l_selectedCountry like(coid);
@@ -396,16 +396,16 @@ dcl-proc processSubfileActions;
   when p_f8KeyPressed;
     p_bydesc = not p_bydesc;
     if p_bydesc;
-      clear p_searchByDesc;
+      clear searchByDesc;
     else;
-      clear p_searchByCode;
+      clear searchByCode;
     endif;
     return PREPARE_STEP;
   when p_OPTC1 = 8;
     if not p_bydesc;
-      p_searchByCode = POSCOD;  // Position code from display file
+      searchByCode = POSCOD;  // Position code from display file
     else;
-      p_searchByDesc = POSDES;  // Position description from display file
+      searchByDesc = POSDES;  // Position description from display file
     endif;
     return PREPARE_STEP;
   other;
