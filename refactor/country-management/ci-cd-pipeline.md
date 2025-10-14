@@ -42,6 +42,7 @@ jobs:
     - name: Install IBM i CI tools
       run: |
         npm install -g @ibm/ibmi-ci
+        npm install -g @ibm/itest
         
     - name: Create build directory
       run: mkdir -p builds/country-management
@@ -81,10 +82,12 @@ jobs:
       run: |
         echo "Running tests against COUTEST library..."
         
-        # Run tests using makei test or custom test command
-        ici --host $IBMI_HOST --user $IBMI_USER --password $IBMI_PASSWORD \
-            --rcwd "./builds/country-management" \
-            --cmd "CURLIB=COUTEST /QOpenSys/pkgs/bin/makei test" || exit 1
+        # Run tests using @ibm/itest
+        itest --host $IBMI_HOST --user $IBMI_USER --password $IBMI_PASSWORD \
+              --id ./builds/country-management \
+              --ll RPGUNIT QDEVTOOLS \
+              --cl COUTEST \
+              --cc --tr
         
         echo "Tests completed successfully"
       
@@ -179,6 +182,37 @@ ici --host hostname --user username --password password --cmd "COMMAND"
 
 # Execute a command with specific library
 ici --host hostname --user username --password password --cmd "CURLIB=MYLIB COMMAND"
+```
+
+## IBM i Test Tool
+
+This pipeline uses the `@ibm/itest` tool for unit testing, which is specifically designed for running unit tests on IBM i systems. It integrates with RPGUNIT and other testing frameworks to provide a comprehensive testing solution.
+
+### Installation
+
+```bash
+npm install -g @ibm/itest
+```
+
+### Key Features
+
+- Run unit tests on IBM i systems
+- Support for RPGUNIT and other testing frameworks
+- Generate test reports
+- Integration with CI/CD pipelines
+- Code coverage reporting
+
+### Common Usage Patterns
+
+```bash
+# Basic usage
+itest --host hostname --user username --password password --id /path/to/project
+
+# With library list and current library
+itest --host hostname --user username --password password --id /path/to/project --ll RPGUNIT QDEVTOOLS --cl TESTLIB
+
+# With code coverage and test reports
+itest --host hostname --user username --password password --id /path/to/project --cc --tr
 ```
 
 ## Customization
