@@ -87,7 +87,7 @@ dcl-proc sltcountry export;
   // SQL cursor for countries ordered by code
   exec sql
     DECLARE C_COUNTRY_BY_CODE CURSOR FOR
-    SELECT COID, COUNTR
+    SELECT COID, COUNTR, COISO
     FROM COUNTRY
     WHERE COID >= :keycod
     ORDER BY COID
@@ -96,7 +96,7 @@ dcl-proc sltcountry export;
   // SQL cursor for countries ordered by description
   exec sql
     DECLARE C_COUNTRY_BY_DESC CURSOR FOR
-    SELECT COID, COUNTR
+    SELECT COID, COUNTR, COISO
     FROM COUNTRY
     WHERE COUNTR >= :keydes
     ORDER BY COUNTR
@@ -160,7 +160,7 @@ dcl-proc sltcountry export;
       
       // Fetch first record
       exec sql
-        FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr;
+        FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr, :countryRec.coiso;
       
       sflend = (SQLCODE <> 0);
     else;
@@ -169,7 +169,7 @@ dcl-proc sltcountry export;
       
       // Fetch first record
       exec sql
-        FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr;
+        FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr, :countryRec.coiso;
       
       sflend = (SQLCODE <> 0);
     endif;
@@ -202,10 +202,10 @@ dcl-proc sltcountry export;
       // Fetch next record
       if not bydesc;
         exec sql
-          FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr;
+          FETCH C_COUNTRY_BY_CODE INTO :countryRec.coid, :countryRec.countr, :countryRec.coiso;
       else;
         exec sql
-          FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr;
+          FETCH C_COUNTRY_BY_DESC INTO :countryRec.coid, :countryRec.countr, :countryRec.coiso;
       endif;
       
       // Check if we reached end of file
